@@ -1,0 +1,36 @@
+{
+	"name": "@eelarveldaja/web",
+	"version": "0.0.0",
+	"private": true,
+
+	"dependencies": {
+		"oolong": "",
+		"j6pack": "",
+		"lodash": "",
+		"lazy-object": "",
+		"standard-error": "",
+		"standard-http-error": "",
+		"fetch-off": "",
+		"fetch-defaults": "",
+		"sqlite3": "",
+		"sqlate": "",
+		"heaven-sqlite": "",
+		"medium-type": "",
+		"date-fns": "",
+		"egal": "",
+		"co": "",
+		"co-next": "",
+		"express": "",
+		"undersign": "",
+		"cookie-parser": "",
+		"method-override": "",
+		"morgan": ""
+	},
+
+	"devDependencies": {
+		"mocha": ">= 2 < 4",
+		"co-mocha": ">= 1.1.0 < 2",
+		"must": ">= 0.13.0 < 0.14",
+		"livereload": ">= 0.6 < 0.7"
+	}
+}

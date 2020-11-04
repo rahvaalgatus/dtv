@@ -1,0 +1,11 @@
+{
+	"name": "@eelarveldaja/assets",
+	"version": "0.0.0",
+	"private": true,
+
+	"devDependencies": {
+		"node-sass": "~4",
+		"browserify": "",
+		"watchify": ""
+	}
+}

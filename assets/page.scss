@@ -1,0 +1,626 @@
+@import "reset";
+@import "fonts";
+$page-padding: 4rem;
+$page-width: 68rem + 2 * $page-padding;
+
+// https://brand.estonia.ee/et/disain/varvid/
+$body-font: Aino, sans-serif;
+$headline-font: Aino Headline, Aino, sans-serif;
+$blue: #0000F0;
+$link-blue: #0078ff;
+$light-grey: #f0f1f2;
+$eid-background: #fbfbfb;
+
+@mixin appearance($value) {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+}
+
+@mixin progress-bar() {
+	&::-moz-progress-bar { @content; }
+	&::-webkit-progress-value { @content; }
+	&::-ms-fill { @content; }
+}
+
+@mixin progress-bar-color($color) {
+	color: $color;
+	&::-moz-progress-bar { background-color: $color; }
+	&::-webkit-progress-value { background-color: $color; }
+}
+
+@mixin progress-bar-background-color($color) {
+	background-color: $color;
+	&::-webkit-progress-bar { background-color: $color; }
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	background-color: white;
+	font-family: $body-font;
+	font-size: 1.6rem;
+	color: black;
+}
+
+main {
+	flex: 1;
+	padding-bottom: 4rem;
+}
+
+main section {
+	& + section {
+		margin-top: 4rem;
+	}
+}
+
+.centered {
+	max-width: $page-width;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: $page-padding;
+	padding-right: $page-padding;
+}
+
+.section-heading {
+	font-size: 3rem;
+	font-family: $headline-font;
+
+	& + .section-paragraph {
+		margin-top: 2rem;
+	}
+}
+
+.section-paragraph {
+	line-height: 1.5;
+
+	& + .section-paragraph {
+		margin-top: 1rem;
+	}
+
+	& + .budget-table {
+		margin-top: 2rem;
+	}
+}
+
+%button {
+	display: inline-block;
+	padding: 1.2rem 2.5rem;
+	border: none;
+	border-radius: 0.5rem;
+	letter-spacing: 0.1rem;
+	line-height: 1;
+	font-weight: bold;
+	font-size: 1.6rem;
+
+	// Explicit center for when the buttons are displayed as blocks.
+	text-align: center;
+}
+
+.blue-button {
+	@extend %button;
+
+	background: $blue;
+	color: white;
+
+	&:focus { box-shadow: inset 0 0 0 .2rem white, 0 0 0 .2rem $blue; }
+}
+
+.link-button {
+	color: $blue;
+	text-decoration: underline;
+	cursor: pointer;
+	outline-offset: 0.2rem;
+	-moz-outline-radius: 2px;
+
+	&:focus { outline: 1px dashed $blue; }
+}
+
+.budget-table {
+	width: 100%;
+	border-collapse: separate;
+	line-height: 1.5;
+
+	th {
+		font-weight: bold;
+		padding: 0.5rem 1rem;
+	}
+
+	td {
+		border: 1px solid $light-grey;
+		padding: 0.5rem 1rem;
+
+		& + td { border-left: none; }
+	}
+
+	tr + tr td { border-top: none; }
+	tr:first-child td:first-child { border-top-left-radius: 0.5rem; }
+	tr:first-child td:last-child { border-top-right-radius: 0.5rem; }
+	tr:last-child td:first-child { border-bottom-left-radius: 0.5rem; }
+	tr:last-child td:last-child { border-bottom-right-radius: 0.5rem; }
+}
+
+.budget-form {
+	button[type=submit] {
+		@extend .blue-button;
+
+		margin-top: 1rem;
+	}
+}
+
+.budget-field {
+	display: block;
+	line-height: 1.5;
+
+	.label {
+		display: block;
+		margin-bottom: 0.2rem;
+		font-weight: bold;
+	}
+
+	p {
+		margin-bottom: 0.5rem;
+	}
+
+	& + label {
+		margin-top: 2rem;
+	}
+}
+
+input.budget-input {
+	border: 1px solid #ccc;
+	border-radius: 0.5rem;
+	padding: 0.7rem 1rem;
+
+	&:focus {
+		border-color: $blue;
+		box-shadow: 0 0 0 1px $blue;
+		outline: none;
+	}
+}
+
+textarea.budget-input {
+	padding: 1rem 1rem;
+	border: 1px solid #ccc;
+	border-radius: 0.5rem;
+	line-height: 1.5;
+
+	&:focus {
+		border-color: $blue;
+		box-shadow: 0 0 0 1px $blue;
+		outline: none;
+	}
+}
+
+.eid-view {
+	$methods: (id-card, mobile-id, smart-id);
+	$tab-radius: 0.5rem;
+	$input-height: 3.6rem;
+
+	.signature-methods {
+		.tab {
+			display: inline-block;
+			background-color: $eid-background;
+			border: 0.1rem solid $light-grey;
+			line-height: 4.9rem;
+			padding: 0 2rem;
+			font-size: 1.6rem;
+			margin-bottom: -0.1rem;
+			font-weight: 500;
+			color: #888;
+			cursor: pointer;
+
+			img {
+				max-height: 2rem;
+				vertical-align: middle;
+			}
+
+			& + .tab { margin-left: -0.1rem; }
+
+			&:first-child {
+				border-top-left-radius: $tab-radius;
+				border-bottom-left-radius: $tab-radius;
+			}
+
+			&:last-child {
+				border-top-right-radius: $tab-radius;
+				border-bottom-right-radius: $tab-radius;
+			}
+		}
+	}
+
+	fieldset {
+		padding: 2rem;
+		display: none;
+		border: 0.1rem solid $light-grey;
+		border-top-right-radius: 0.5rem;
+		border-bottom-left-radius: 0.5rem;
+		border-bottom-right-radius: 0.5rem;
+		line-height: 1.5;
+
+		label {
+			display: inline-block;
+			margin-right: 1rem;
+		}
+
+		input {
+			display: block;
+			margin-top: 0.5rem;
+			max-width: 30rem;
+			height: $input-height;
+		}
+
+		button {
+			vertical-align: bottom;
+			height: $input-height;
+		}
+
+		output { display: block; margin-top: 1rem; }
+
+		label + button { margin-top: 1rem; }
+	}
+
+	@each $method in $methods {
+		#signature-method-tab-#{$method}:checked {
+			& ~ ##{$method}-tab { display: block; }
+
+			& ~ .signature-methods .#{$method}-tab {
+				background: white;
+				border-bottom-color: white;
+				color: black;
+			}
+
+			& ~ .signature-methods .tab {
+				&:first-child { border-bottom-left-radius: 0; }
+				&:last-child { border-bottom-right-radius: 0; }
+			}
+		}
+	}
+}
+
+#nav {
+	padding: 2rem 0;
+	line-height: 3rem;
+	color: white;
+	background: $blue;
+
+	.home {
+		font-weight: bold;
+		font-size: 2rem;
+		font-family: $headline-font;
+		display: inline-block;
+		margin-right: 1rem;
+		vertical-align: middle;
+
+		-moz-outline-radius: 3px;
+		outline-offset: 0.2rem;
+
+		&:focus { outline: 1px dashed rgba(white, 0.8); }
+	}
+
+	.pages {
+		display: inline-block;
+		margin-left: 2rem;
+
+		li { display: inline-block; }
+	}
+	
+	.pages a,
+	.account a,
+	.account button {
+		border-radius: 0.3rem;
+		border: 1px solid transparent;
+		font-size: 1.5rem;
+		display: inline-block;
+		padding: 0 1rem;
+		outline-offset: 0.2rem;
+		background: transparent;
+		height: 3rem;
+
+		&.selected {
+			color: $blue;
+			background-color: white;
+			font-weight: bold;
+		}
+
+		&:focus {
+			outline: none;
+			border: 1px dashed rgba(white, 0.8);
+		}
+
+		&:hover { border-color: white; }
+
+		&.selected:focus {
+			border: 1px dashed $blue;
+		}
+
+		& + li {
+			margin-left: 1rem;
+		}
+	}
+
+	.account {
+		float: right;
+
+		.account-name { font-weight: bold; }
+		form { display: inline-block; }
+	}
+}
+
+#footer {
+	background: $blue;
+	color: white;
+	padding: 3rem 0;
+
+	a {
+		text-decoration: underline;
+		outline-offset: 0.2rem;
+		-moz-outline-radius: 2px;
+
+		&:focus { outline: 1px dashed white; }
+	}
+}
+
+#header {
+	padding: 3rem 0;
+	background: $blue;
+	color: white;
+	line-height: 1.5;
+
+	h1 {
+		font-size: 4.8rem;
+		font-family: $headline-font;
+	}
+
+	a {
+		outline-offset: 0.2rem;
+		-moz-outline-radius: 2px;
+
+		&:focus { outline: 1px dashed white; }
+	}
+
+	menu {
+		margin-top: 1rem;
+
+		a {
+			border-radius: 0.3rem;
+			border: 1px solid rgba(white, 0.7);
+			border: 1px solid transparent;
+			font-size: 1.4rem;
+			display: inline-block;
+			padding: 0.5rem 1rem;
+			outline-offset: 0.2rem;
+			border: 1px solid rgba(white, 0.8);
+
+			&.selected {
+				color: $blue;
+				background-color: white;
+				font-weight: bold;
+			}
+
+			&:hover { border-color: white; }
+		}
+	}
+
+	.subtitle {
+		font-size: 2.4rem;
+	}
+}
+
+#header + section {
+	margin-top: 4rem;
+}
+
+#schools-page main {
+	#schools {
+		line-height: 1.5;
+
+		a {
+			@extend .link-button;
+			font-size: 2rem;
+		}
+	}
+}
+
+#school-page main {
+	#school-description {
+		white-space: pre-wrap;
+	}
+
+	.create-idea-button {
+		@extend .blue-button;
+	}
+
+	.idea {
+		line-height: 1.5;
+
+		.idea-title {
+			font-size: 2rem;
+
+			a { @extend .link-button; }
+		}
+
+		.idea-vote-count {
+			display: block;
+
+			progress {
+				@include appearance(none);
+
+				width: 20rem;
+				height: 1.2rem;
+				vertical-align: middle;
+				border: none;
+				margin-right: 1rem;
+
+				@include progress-bar { border-radius: 1rem; }
+				@include progress-bar-color($blue);
+				@include progress-bar-background-color(transparent);
+			}
+
+			.count {
+				font-weight: bold;
+				font-size: 1.6rem;
+			}
+		}
+
+		.idea-author-names {
+			color: #888;
+		}
+
+		.idea-description {
+			margin-top: 1rem;
+			white-space: pre-wrap;
+		}
+
+		& + .idea {
+			margin-top: 2rem;
+		}
+	}
+
+	#viewable-ideas-section {
+		menu {
+			margin-top: 2rem;
+		}
+
+		#ideas {
+			margin-top: 2rem;
+		}
+	}
+
+	#votable-ideas-section {
+		#voting-form {
+			margin-top: 2rem;
+		}
+
+		.idea {
+			input[name=idea_id] {
+				margin: 1rem;
+				float: left;
+				cursor: pointer;
+				width: 2rem;
+				height: 2rem;
+				line-height: 3rem;
+			}
+
+			label {
+				display: block;
+				margin-left: 5rem;
+			}
+		}
+
+		#ideas {
+			& + p { margin-top: 2rem; }
+		}
+
+		.eid-view {
+			margin-top: 2rem;
+		}
+	}
+
+	#voted-ideas-section {
+		#ideas {
+			margin-top: 2rem;
+		}
+	}
+
+	#thanks {
+		font-weight: bold;
+		background: $eid-background;
+		padding: 1rem 2rem;
+		border-radius: 0.6rem;
+		margin-bottom: 2rem,;
+
+		&:target {
+			display: block;
+		}
+	}
+}
+
+#update-school-page main {
+	#school-form {
+		label[for=name] {
+			input {
+				width: 100%;
+				font-size: 2rem;
+				padding: 1rem 2rem;
+			}
+		}
+
+		label[for=description] {
+			textarea {
+				width: 100%;
+				resize: vertical;
+				min-height: 15rem;
+			}
+		}
+
+		label[for=voters] {
+			textarea {
+				width: 100%;
+				resize: vertical;
+				min-height: 15rem;
+			}
+
+			.budget-table {
+				margin-top: 1rem;
+			}
+		}
+
+		button[type=submit] {
+			margin-top: 2rem;
+		}
+	}
+}
+
+#idea-page main {
+	#idea-description {
+		white-space: pre-wrap;
+	}
+}
+
+#create-idea-page main,
+#update-idea-page main {
+	#idea-form {
+		label[for=title] {
+			input {
+				width: 100%;
+				font-size: 2rem;
+				padding: 1rem 1rem;
+			}
+		}
+
+		textarea {
+			width: 100%;
+			resize: vertical;
+			min-height: 15rem;
+		}
+
+		label[for=author_names] {
+			input { width: 100%; }
+		}
+	}
+}
+
+#create-session-page main {
+	.eid-view {
+		margin-top: 2rem;
+	}
+}
+
+#account-page main {
+	#account-form {
+		label[for=name] {
+			input {
+				width: 100%;
+				font-size: 2rem;
+				padding: 1rem 2rem;
+			}
+		}
+	}
+}

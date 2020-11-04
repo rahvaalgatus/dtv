@@ -1,0 +1,35 @@
+@font-face {
+  font-family: "Aino";
+  font-weight: normal;
+  font-style: normal;
+
+  src: url("/assets/aino-regular.eot");
+  src:
+		url("/assets/aino-regular.eot?#iefix") format("embedded-opentype"),
+		url("/assets/aino-regular.woff") format("woff"),
+		url("/assets/aino-regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Aino";
+  font-weight: bold;
+  font-style: normal;
+
+  src: url("/assets/aino-bold.eot");
+  src:
+		url("/assets/aino-bold.eot?#iefix") format("embedded-opentype"),
+		url("/assets/aino-bold.woff") format("woff"),
+		url("/assets/aino-bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Aino Headline";
+  font-weight: normal;
+  font-style: normal;
+
+  src: url("/assets/aino-headline.eot");
+  src:
+		url("/assets/aino-headline.eot?#iefix") format("embedded-opentype"),
+		url("/assets/aino-headline.woff") format("woff"),
+		url("/assets/aino-headline.ttf") format("truetype");
+}
