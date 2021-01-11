@@ -45,7 +45,6 @@ module.exports = function(attrs) {
 				req={req}
 				school={school}
 				ideas={ideas}
-				votesByIdea={votesByIdea}
 				thank={thank}
 			/>
 
@@ -110,9 +109,7 @@ function VotingSection(attrs) {
 	var {school} = attrs
 	var {ideas} = attrs
 	var {thank} = attrs
-	var {votesByIdea} = attrs
 	var schoolPath = req.baseUrl + req.path
-	var maxVoteCount = _.max(_.values(votesByIdea))
 
 	return <Section id="votable-ideas-section">
 		<Heading>Ideed</Heading>
@@ -142,8 +139,6 @@ function VotingSection(attrs) {
 			method="post"
 		>
 			<ul id="ideas">{ideas.map(function(idea) {
-				var voteCount = votesByIdea[idea.id] || 0
-
 				return <li class="idea">
 					<input
 						id={`idea-${idea.id}-checkbox`}
@@ -158,7 +153,6 @@ function VotingSection(attrs) {
 							<a href={`${schoolPath}/ideas/${idea.id}`}>{idea.title}</a>
 						</h3>
 
-						<VoteCountView count={voteCount} max={maxVoteCount} />
 						<span class="idea-author-names">{idea.author_names}</span>
 					</label>
 				</li>
