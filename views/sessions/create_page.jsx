@@ -14,6 +14,9 @@ module.exports = function(attrs) {
 		req={attrs.req}
 		title="Logi sisse"
 	>
+		<script src="/assets/html5.js" />
+		<script src="/assets/hwcrypto.js" />
+
 		<Header>
 			<h1>Logi sisse</h1>
 		</Header>
@@ -27,9 +30,9 @@ module.exports = function(attrs) {
 				<EidView
 					req={req}
 					formId="authentication-form"
+					action="auth"
 					pending="Login sisse…"
 					submit="Logi sisse"
-					withIdCard={false}
 				/>
 			</Form>
 		</Section>

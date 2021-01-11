@@ -1,10 +1,13 @@
 var _ = require("root/lib/underscore")
+var Certificate = require("undersign/lib/certificate")
+var Crypto = require("crypto")
 var Router = require("express").Router
 var HttpError = require("standard-http-error")
 var MobileId = require("undersign/lib/mobile_id")
 var MobileIdError = require("undersign/lib/mobile_id").MobileIdError
 var SmartId = require("undersign/lib/smart_id")
 var SmartIdError = require("undersign/lib/smart_id").SmartIdError
+var ExpiringMap = require("root/lib/expiring_map")
 var next = require("co-next")
 var {getRequestEidMethod} = require("root/lib/eid")
 var {ensureAreaCode} = require("root/lib/eid")
@@ -22,7 +25,7 @@ var logger = require("root").logger
 var mobileId = require("root").mobileId
 var smartId = require("root").smartId
 var hades = require("root").hades
-exports.router = Router({mergeParams: true})
+var votings = new ExpiringMap(process.env.ENV == "test" ? 5 : 5 * 60)
 
 var waitForMobileIdSession =
 	waitForSession.bind(null, mobileId.waitForSignature.bind(mobileId))
@@ -135,6 +138,9 @@ var SMART_ID_ERRORS = {
 	]
 }
 
+exports.router = Router({mergeParams: true})
+exports.router.use(require("root/lib/eid").parseSignatureBody)
+
 exports.router.post("/", assertVoting, next(function*(req, res) {
 	var {school} = req
 	var method = getRequestEidMethod(req)
@@ -161,6 +167,63 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 	var signable = `Hääletan idee "${idea.title}" poolt.`
 
 	switch (method) {
+		case "id-card":
+			var voteToken = req.query["vote-token"]
+
+			if (voteToken == null) {
+				cert = Certificate.parse(req.body)
+				if (err = validateCertificate(cert)) throw err
+
+				;[country, personalId] = getCertificatePersonalId(cert)
+				if (err = yield validateVoter(school, country, personalId)) throw err
+
+				var token = Crypto.randomBytes(16)
+				xades = newXades(cert, signable)
+
+				var signUrl = req.baseUrl
+				signUrl += `?idea_id=${idea.id}&vote-token=${token.toString("hex")}`
+				res.setHeader("Location", signUrl)
+				res.setHeader("Content-Type", "application/vnd.rahvaalgatus.signable")
+				res.status(202).end(xades.signableHash)
+
+				votings.set(token, {
+					school_id: idea.school_id,
+					idea_id: idea.id,
+					voter_country: country,
+					voter_personal_id: personalId,
+					voter_name: getCertificatePersonName(xades.certificate),
+					method: method,
+					created_at: new Date,
+					signable: signable,
+					xades: xades
+				})
+			}
+			else {
+				var vote = votings.delete(Buffer.from(voteToken || "", "hex"))
+
+				if (!vote) throw new HttpError(404, "Vote Not Found", {
+					description: "Kahjuks hääletamine aegus. Palun proovi uuesti."
+				})
+
+				xades = vote.xades
+
+				if (!xades.certificate.hasSigned(xades.signable, req.body))
+					throw new HttpError(409, "Invalid Signature", {
+						description: "Digiallkiri ei vasta sertifikaadile."
+					})
+
+				xades.setSignature(req.body)
+
+				console.info("Requesting timemark for %s.", vote.voter_personal_id)
+				xades.setOcspResponse(yield hades.timemark(xades))
+
+				yield replaceVote(vote)
+				var schoolUrl = "/schools/" + vote.school_id + "?voted=true#thanks"
+				res.setHeader("Content-Type", "application/json")
+				res.status(201).end(JSON.stringify({code: "OK", location: schoolUrl}))
+			}
+			break
+
 		case "mobile-id":
 			var phoneNumber = ensureAreaCode(req.body.phoneNumber)
 			personalId = req.body.personalId
@@ -181,7 +244,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			;[country, personalId] = getCertificatePersonalId(cert)
 			if (err = yield validateVoter(school, country, personalId)) throw err
 
-			xades = newXades(signable)
+			xades = newXades(cert, signable)
 
 			logger.info(
 				"Signing via Mobile-Id for %s and %s.",
@@ -228,7 +291,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			;[country, personalId] = getCertificatePersonalId(cert)
 			if (err = yield validateVoter(school, country, personalId)) throw err
 
-			xades = newXades(signable)
+			xades = newXades(cert, signable)
 
 			// The Smart-Id API returns any signing errors only when its status is
 			// queried, not when signing is initiated.
@@ -254,7 +317,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 		default: throw new HttpError(422, "Unknown Voting Method")
 	}
 
-	function newXades(signable) {
+	function newXades(cert, signable) {
 		return hades.new(cert, [{
 			path: "vote.txt",
 			type: "text/plain",

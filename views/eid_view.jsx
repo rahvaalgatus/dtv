@@ -15,19 +15,19 @@ var HWCRYPTO_ERRORS = {
 function EidView(attrs) {
 	var {req} = attrs
 	var {formId} = attrs
+	var {action} = attrs // "auth" or "sign"
 	var {pending} = attrs
 	var {submit} = attrs
 	var {personalId} = attrs
-	var withIdCard = attrs.withIdCard == null ? true : attrs.withIdCard
 
 	return <div class="eid-view">
-		{withIdCard ? <input
+		<input
 			type="radio"
 			id="signature-method-tab-id-card"
 			name="method"
 			value="id-card"
 			hidden
-		/> : null}
+		/>
 
 		<input
 			type="radio"
@@ -46,7 +46,7 @@ function EidView(attrs) {
 		/>
 
 		<div class="signature-methods">
-			{withIdCard ? <label
+			<label
 				for="signature-method-tab-id-card"
 				class="tab id-card-tab"
 			>
@@ -55,7 +55,7 @@ function EidView(attrs) {
 					title="Id-kaart"
 					alt="Id-kaart"
 				/>
-			</label> : null}
+			</label>
 
 			<label
 				for="signature-method-tab-mobile-id"
@@ -80,13 +80,13 @@ function EidView(attrs) {
 			</label>
 		</div>
 
-		{withIdCard ? <fieldset id="id-card-tab">
+		<fieldset id="id-card-tab">
 			<button id="id-card-button" class="blue-button">
 				{submit}
 			</button>
 
 			<output />
-		</fieldset> : null}
+		</fieldset>
 
 		<fieldset id="mobile-id-tab">
 			<label>
@@ -170,9 +170,9 @@ function EidView(attrs) {
 
 		<script>{javascript`
 			var reduce = Function.call.bind(Array.prototype.reduce)
+			var encode = encodeURIComponent
 
 			;(function() {
-				return
 				var Hwcrypto = require("@rahvaalgatus/hwcrypto")
 				var tab = document.getElementById("id-card-tab")
 				var button = tab.querySelector("button")
@@ -185,10 +185,16 @@ function EidView(attrs) {
 					notice(${pending})
 
 					var form = ev.target.form
-					var certificate = Hwcrypto.certificate("sign")
+					var certificate = Hwcrypto.certificate(${action})
+
+					var obj = serializeForm(form)
+					delete obj._csrf_token
+					delete obj.phoneNumber
+					delete obj.method
+					delete obj.personalId
 
 					var signable = certificate.then(function(certificate) {
-						return fetch(form.action, {
+						return fetch(form.action + "?" + serializeQuery(obj), {
 							method: "POST",
 							credentials: "same-origin",
 
@@ -217,7 +223,7 @@ function EidView(attrs) {
 						var signature = all[1]
 
 						return fetch(url, {
-							method: "PUT",
+							method: "POST",
 							credentials: "same-origin",
 
 							headers: {
@@ -307,6 +313,12 @@ function EidView(attrs) {
 					return obj
 				}, {})
 			}
+
+      function serializeQuery(obj) {
+        var parts = []
+        for (var key in obj) parts.push(key + "=" + encode(obj[key]))
+        return parts.join("&")
+      }
 
       function assertOk(res) {
         if (res.ok) return res

@@ -8,6 +8,8 @@ var MobileId = require("undersign/lib/mobile_id")
 var MobileIdError = require("undersign/lib/mobile_id").MobileIdError
 var SmartId = require("undersign/lib/smart_id")
 var SmartIdError = require("undersign/lib/smart_id").SmartIdError
+var Certificate = require("undersign/lib/certificate")
+var ExpiringMap = require("root/lib/expiring_map")
 var logger = require("root").logger
 var next = require("co-next")
 var mobileId = require("root").mobileId
@@ -23,7 +25,7 @@ var {getNormalizedMobileIdErrorCode} = require("root/lib/eid")
 var {waitForSession} = require("root/lib/eid")
 var co = require("co")
 var sql = require("sqlate")
-exports.router = Router({mergeParams: true})
+var authentications = new ExpiringMap(process.env.ENV == "test" ? 5 : 5 * 60)
 
 var waitForMobileIdSession =
 	waitForSession.bind(null, mobileId.waitForAuthentication.bind(mobileId))
@@ -148,6 +150,9 @@ var SMART_ID_ERRORS = {
 	]
 }
 
+exports.router = Router({mergeParams: true})
+exports.router.use(require("root/lib/eid").parseSignatureBody)
+
 exports.router.get("/new", function(req, res) {
 	if (req.account) res.redirect(302, referTo(req, req.headers.referer, "/"))
 	else res.render("sessions/create_page.jsx")
@@ -158,6 +163,56 @@ exports.router.post("/", next(function*(req, res) {
 	var cert, country, token, tokenHash, verificationCode, err, personalId
 
 	switch (method) {
+		case "id-card":
+			var authToken = req.query["authentication-token"]
+
+			if (authToken == null) {
+				cert = Certificate.parse(req.body)
+				if (err = validateCertificate(cert)) throw err
+
+				;[country, personalId] = getCertificatePersonalId(cert)
+				if (country != "EE") throw new HttpError(422, "Estonian Users Only")
+
+				token = Crypto.randomBytes(16)
+				tokenHash = _.sha256(token)
+
+				var authUrl = req.baseUrl
+				authUrl += "?authentication-token=" + token.toString("hex")
+				res.setHeader("Location", authUrl)
+				res.setHeader("Content-Type", "application/vnd.rahvaalgatus.signable")
+				res.status(202).end(tokenHash)
+
+				authentications.set(token, {
+					country: country,
+					personal_id: personalId,
+					method: "id-card",
+					certificate: cert,
+					token: token,
+					created_ip: req.ip,
+					created_user_agent: req.headers["user-agent"]
+				})
+			}
+			else {
+				var auth = authentications.delete(Buffer.from(authToken || "", "hex"))
+
+				if (!auth) throw new HttpError(404, "Authentication Not Found", {
+					description: "Kahjuks sisselogimine aegus. Palun proovi uuesti."
+				})
+
+				if (!auth.certificate.hasSigned(auth.token, req.body))
+					throw new HttpError(409, "Invalid Signature", {
+						description: "Digiallkiri ei vasta sertifikaadile."
+					})
+
+				var sessionToken = Crypto.randomBytes(16)
+				var account = yield readOrCreateAccount(auth)
+				yield createSession(auth, account, sessionToken)
+				signIn(sessionToken, req, res)
+				res.setHeader("Content-Type", "application/json")
+				res.status(201).end(JSON.stringify({code: "OK", location: "/"}))
+			}
+			break
+
 		case "mobile-id":
 			var phoneNumber = ensureAreaCode(req.body.phoneNumber)
 			personalId = req.body.personalId
@@ -232,12 +287,7 @@ exports.router.post("/", next(function*(req, res) {
 		res.setHeader("Content-Type", "application/json")
 
 		// TODO: Reuse signed token or generate new?
-		res.cookie(Config.sessionCookieName, token.toString("hex"), {
-			httpOnly: true,
-			secure: req.secure,
-			maxAge: 365 * 86400 * 1000
-		})
-
+		signIn(token, req, res)
 		res.write("\n")
 	}
 }), function(err, _req, res, next) {
@@ -339,7 +389,7 @@ function* waitForMobileIdAuthentication(authentication, sessionId, res) {
 
 		authentication.certificate = cert
 		var account = yield readOrCreateAccount(authentication)
-		yield createSession(authentication, account)
+		yield createSession(authentication, account, authentication.token)
 		res.end(JSON.stringify({code: "OK", location: "/"}))
 	}
 	catch (ex) {
@@ -373,7 +423,7 @@ function* waitForSmartIdAuthentication(authentication, session, res) {
 
 		authentication.certificate = cert
 		var account = yield readOrCreateAccount(authentication)
-		yield createSession(authentication, account)
+		yield createSession(authentication, account, authentication.token)
 		res.end(JSON.stringify({code: "OK", location: "/"}))
 	}
 	catch (ex) {
@@ -408,13 +458,21 @@ function* readOrCreateAccount(auth) {
 	})
 }
 
-function* createSession(authentication, account) {
+function* createSession(authentication, account, sessionToken) {
 	yield sessionsDb.create({
 		account_id: account.id,
-		token_sha256: _.sha256(authentication.token),
+		token_sha256: _.sha256(sessionToken),
 		method: authentication.method,
 		created_ip: authentication.created_ip,
 		created_user_agent: authentication.created_user_agent
+	})
+}
+
+function signIn(token, req, res) {
+	res.cookie(Config.sessionCookieName, token.toString("hex"), {
+		httpOnly: true,
+		secure: req.secure,
+		maxAge: 365 * 86400 * 1000
 	})
 }
 

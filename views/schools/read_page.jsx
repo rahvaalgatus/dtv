@@ -23,6 +23,9 @@ module.exports = function(attrs) {
 		req={attrs.req}
 		title={school.name}
 	>
+		<script src="/assets/html5.js" />
+		<script src="/assets/hwcrypto.js" />
+
 		<Header>
 			<h1>{school.name}</h1>
 
@@ -167,10 +170,10 @@ function VotingSection(attrs) {
 			<EidView
 				req={req}
 				formId="voting-form"
+				action="sign"
 				pending="Hääletan…"
 				submit="Hääleta"
 				personalId={account && account.personal_id}
-				withIdCard={false}
 			/>
 		</Form>
 	</Section>
