@@ -65,7 +65,11 @@ exports.router.get("/:id", next(function*(req, res) {
 	`), "idea_id"), (votes) => votes.count)
 
 	var ideas = yield ideasDb.search(sql`
-		SELECT * FROM ideas
+		SELECT
+			id, school_id, account_id, title, description, author_names,
+			created_at, updated_at, image_type
+
+		FROM ideas
 		WHERE school_id = ${school.id}
 	`)
 

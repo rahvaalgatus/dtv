@@ -608,6 +608,12 @@ textarea.budget-input {
 #idea-page main {
 	#idea-description {
 		white-space: pre-wrap;
+
+		img {
+			max-width: 100%;
+			margin-bottom: 3rem;
+			display: block;
+		}
 	}
 }
 
@@ -626,6 +632,14 @@ textarea.budget-input {
 			width: 100%;
 			resize: vertical;
 			min-height: 15rem;
+		}
+
+		label[for=image] {
+			img {
+				display: block;
+				max-width: 30rem;
+				margin-bottom: 1rem;
+			}
 		}
 
 		label[for=author_names] {

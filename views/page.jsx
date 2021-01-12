@@ -128,6 +128,7 @@ function FormButton(attrs, children) {
 	return <Form
 		req={attrs.req}
 		action={attrs.action}
+		enctype={attrs.enctype}
 		method={attrs.name == "_method" ? "post" : "put"}
 	>
 		<button

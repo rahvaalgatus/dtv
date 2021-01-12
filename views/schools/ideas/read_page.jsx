@@ -11,6 +11,7 @@ module.exports = function(attrs) {
 	var {account} = req
 	var {school} = attrs
 	var {idea} = attrs
+	var ideaPath = req.baseUrl + "/" + idea.id
 
 	return <IdeaPage
 		req={req}
@@ -24,6 +25,8 @@ module.exports = function(attrs) {
 	>
 		<Section>
 			<p id="idea-description" class="section-paragraph">
+				{idea.image_type ? <img src={ideaPath + "/image"} /> : null}
+
 				{Jsx.html(linkify(idea.description))}
 			</p>
 		</Section>

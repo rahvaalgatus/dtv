@@ -45,6 +45,7 @@ function IdeaForm(attrs) {
 	var {action} = attrs
 	var {method} = attrs
 	var {submit} = attrs
+	var ideaPath = req.baseUrl + "/" + idea.id
 
 	return <Form
 		action={action}
@@ -52,6 +53,7 @@ function IdeaForm(attrs) {
 		method={method}
 		id="idea-form"
 		class="budget-form"
+		enctype="multipart/form-data"
 	>
 		<label for="title" class="budget-field">
 			<span class="label">Pealkiri</span>
@@ -70,6 +72,22 @@ function IdeaForm(attrs) {
 			<textarea name="description" class="budget-input" required>
 				{idea.description}
 			</textarea>
+		</label>
+
+		<label for="image" class="budget-field">
+			<span class="label">Pilt</span>
+
+			<p>
+				{idea.image_type ? <img src={ideaPath + "/image"} /> : null}
+
+				JPEG, PNG või GIF formaadis pilt suurusega kuni 5 MiB.
+			</p>
+
+			<input
+				type="file"
+				name="image"
+				accept="image/jpeg, image/png, image/gif"
+			/>
 		</label>
 
 		<label for="author_names" class="budget-field">

@@ -73,7 +73,7 @@ CREATE TABLE ideas (
 	account_id INTEGER NOT NULL,
 	title TEXT NOT NULL,
 	description TEXT NOT NULL,
-	author_names TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+	author_names TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')), image BLOB, image_type TEXT,
 
 	FOREIGN KEY (school_id) REFERENCES schools (id),
 	FOREIGN KEY (account_id) REFERENCES accounts (id),
@@ -81,6 +81,10 @@ CREATE TABLE ideas (
 	CONSTRAINT title_length CHECK (length(title) > 0),
 	CONSTRAINT description_length CHECK (length(description) > 0),
 	CONSTRAINT author_names_length CHECK (length(author_names) > 0),
+
+	CONSTRAINT image_length CHECK (length(image) > 0),
+	CONSTRAINT image_type_length CHECK (length(image_type) > 0),
+	CONSTRAINT image_with_type CHECK ((image IS NULL) = (image_type IS NULL)),
 
 	CONSTRAINT created_at_format
 	CHECK (created_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z'),
@@ -149,4 +153,5 @@ INSERT INTO migrations VALUES('20201030120040');
 INSERT INTO migrations VALUES('20201030120050');
 INSERT INTO migrations VALUES('20201030120060');
 INSERT INTO migrations VALUES('20210112171756');
+INSERT INTO migrations VALUES('20210112182306');
 COMMIT;
