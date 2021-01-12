@@ -42,10 +42,9 @@ function IdeaPage(attrs, children) {
 		title={idea.title + " - " + school.name}
 	>
 		<Header>
+			<a href={schoolUrl} class="context">{school.name}</a>
 			<h1>{idea.title}</h1>
 			<span class="subtitle author-names">{idea.author_names}</span>
-			{" — "}
-			<a href={schoolUrl} class="subtitle">{school.name}</a>
 
 			{editable ? <menu>
 				<a href={`${ideaPath}/edit`}>Muuda ideed</a>

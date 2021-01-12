@@ -19,8 +19,8 @@ function CreatePage(attrs) {
 		title={"Uus idee - " + school.name}
 	>
 		<Header>
+			<a href={schoolUrl} class="context">{school.name}</a>
 			<h1>Esita uus idee</h1>
-			<a href={schoolUrl} class="subtitle">{school.name}</a>
 		</Header>
 
 		<Section>
