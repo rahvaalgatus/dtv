@@ -80,6 +80,10 @@ main section {
 .section-paragraph {
 	line-height: 1.5;
 
+	a {
+		@extend .link-button;
+	}
+
 	& + .section-paragraph {
 		margin-top: 1rem;
 	}

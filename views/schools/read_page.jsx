@@ -8,6 +8,7 @@ var {Heading} = Page
 var {Form} = Page
 var {DateElement} = Page
 var EidView = require("../eid_view")
+var linkify = require("root/lib/linkify")
 
 module.exports = function(attrs) {
 	var {req} = attrs
@@ -34,11 +35,11 @@ module.exports = function(attrs) {
 			</menu> : null}
 		</Header>
 
-		<Section>
+		{school.description ? <Section>
 			<p id="school-description" class="section-paragraph">
-				{school.description}
+				{Jsx.html(linkify(school.description))}
 			</p>
-		</Section>
+		</Section> : null}
 
 		{function() {
 			if (
