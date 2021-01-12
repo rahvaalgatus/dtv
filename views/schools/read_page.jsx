@@ -7,10 +7,15 @@ var {Section} = Page
 var {Heading} = Page
 var {Form} = Page
 var {DateElement} = Page
+var {serializeStyle} = Page
 var EidView = require("../eid_view")
 var linkify = require("root/lib/linkify")
+exports = module.exports = ReadPage
+exports.SchoolPage = SchoolPage
+exports.SchoolHeader = SchoolHeader
+exports.SchoolButton = SchoolButton
 
-module.exports = function(attrs) {
+function ReadPage(attrs) {
 	var {req} = attrs
 	var {role} = req
 	var {school} = attrs
@@ -19,15 +24,14 @@ module.exports = function(attrs) {
 	var {thank} = attrs
 	var schoolPath = req.baseUrl + req.path
 
-	return <Page
-		page="school"
-		req={attrs.req}
-		title={school.name}
-	>
+	return <SchoolPage page="school" req={attrs.req} school={school}>
 		<script src="/assets/html5.js" />
 		<script src="/assets/hwcrypto.js" />
 
-		<Header>
+		<Header
+			backgroundColor={school.background_color}
+			foregroundColor={school.foreground_color}
+		>
 			<h1>{school.name}</h1>
 
 			{role == "teacher" ? <menu>
@@ -68,7 +72,57 @@ module.exports = function(attrs) {
 				role={role}
 			/>
 		}()}
+	</SchoolPage>
+}
+
+function SchoolPage(attrs, children) {
+	var {school} = attrs
+
+	return <Page
+		page={attrs.page}
+		req={attrs.req}
+		title={(attrs.title ? attrs.title + " - " : "") + school.name}
+		headerBackgroundColor={school.background_color}
+		headerForegroundColor={school.foreground_color}
+	>
+		{children}
 	</Page>
+}
+
+function SchoolHeader(attrs, children) {
+	var {school} = attrs
+
+	return <Header
+		backgroundColor={school.background_color}
+		foregroundColor={school.foreground_color}
+	>
+		{children}
+	</Header>
+}
+
+function SchoolButton(attrs, children) {
+	var {school} = attrs
+	var klass = "blue-button " + (attrs.class || "")
+
+	var style = serializeStyle({
+		"background-color": school.background_color,
+		color: school.foreground_color
+	})
+
+	if (attrs.href) return <a
+		href={attrs.href}
+		class={klass}
+		style={style}
+	>
+		{children}
+	</a>
+	else return <button
+		type={attrs.type}
+		class={klass}
+		style={style}
+	>
+		{children}
+	</button>
 }
 
 function IdeasSection(attrs) {
@@ -90,9 +144,12 @@ function IdeasSection(attrs) {
 			(role == "teacher" || role == "voter") &&
 			(school.voting_starts_at == null || new Date < school.voting_starts_at)
 		) ? <menu>
-			<a href={`${schoolPath}/ideas/new`} class="create-idea-button">
+			<SchoolButton
+				school={school}
+				href={`${schoolPath}/ideas/new`}
+			>
 				Esita uus idee
-			</a>
+			</SchoolButton>
 		</menu> : null}
 
 		<ul id="ideas">{ideas.map(function(idea) {

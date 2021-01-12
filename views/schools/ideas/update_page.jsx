@@ -1,7 +1,8 @@
 /** @jsx Jsx */
 var Jsx = require("j6pack")
 var Page = require("../../page")
-var {Header} = Page
+var {SchoolPage} = require("../read_page")
+var {SchoolHeader} = require("../read_page")
 var {Section} = Page
 var {IdeaForm} = require("./create_page")
 
@@ -11,15 +12,16 @@ module.exports = function(attrs) {
 	var {idea} = attrs
 	var schoolUrl = "/schools/" + school.id
 
-	return <Page
+	return <SchoolPage
 		page="update-idea"
 		req={attrs.req}
-		title={idea.title + " - " + school.name}
+		title={idea.title}
+		school={school}
 	>
-		<Header>
+		<SchoolHeader school={school}>
 			<a href={schoolUrl} class="context">{school.name}</a>
 			<h1>{idea.title}</h1>
-		</Header>
+		</SchoolHeader>
 
 		<Section>
 			<IdeaForm
@@ -27,9 +29,10 @@ module.exports = function(attrs) {
 				action={req.baseUrl + "/" + idea.id}
 				method="put"
 				id="account-form"
+				school={school}
 				idea={idea}
 				submit={"Muuda ideed"}
 			/>
 		</Section>
-	</Page>
+	</SchoolPage>
 }

@@ -10,13 +10,19 @@ exports.Section = Section
 exports.Heading = Heading
 exports.Form = Form
 exports.DateElement = DateElement
+exports.serializeStyle = serializeStyle
 
 function Page(attrs, children) {
 	var req = attrs.req
 	var account = req.account
 	var session = req.session
-	var title = attrs.title
-	var page = attrs.page
+	var {title} = attrs
+	var {page} = attrs
+
+	var headerStyle = serializeStyle({
+		"background-color": attrs.headerBackgroundColor,
+		color: attrs.headerForegroundColor
+	})
 
 	return <html lang="en" class={attrs.class}>
 		<head>
@@ -28,7 +34,7 @@ function Page(attrs, children) {
 		</head>
 
 		<body id={page + "-page"}>
-			<nav id="nav">
+			<nav id="nav" style={headerStyle}>
 				<Centered>
 					<a href="/" class="home">Eelarveldaja</a>
 
@@ -50,7 +56,7 @@ function Page(attrs, children) {
 
 			<main id="main">{children}</main>
 
-			<footer id="footer">
+			<footer id="footer" style={headerStyle}>
 				<Centered>
 					<a href="https://kogu.ee" class="kogu-link">
 						<img width="100" src="/assets/kogu.png" alt="Eesti Koostöö Kogu" />
@@ -71,8 +77,13 @@ function Centered(_attrs, children) {
 	return <div class="centered">{children}</div>
 }
 
-function Header(_attrs, children) {
-	return <header id="header">
+function Header(attrs, children) {
+	var style = attrs && serializeStyle({
+		"background-color": attrs.backgroundColor,
+		color: attrs.foregroundColor
+	})
+
+	return <header id="header" style={style}>
 		<Centered>{children}</Centered>
 	</header>
 }
@@ -145,4 +156,10 @@ function LiveReload(attrs) {
 		async
 		defer
 	/>
+}
+
+function serializeStyle(styles) {
+	return _.map(styles, (value, key) => (
+		value ? key + ": " + value : null
+	)).filter(Boolean).join("; ")
 }

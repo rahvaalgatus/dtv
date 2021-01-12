@@ -2,8 +2,10 @@
 var _ = require("root/lib/underscore")
 var Jsx = require("j6pack")
 var Page = require("../page")
+var {SchoolPage} = require("./read_page")
+var {SchoolHeader} = require("./read_page")
+var {SchoolButton} = require("./read_page")
 var DateFns = require("date-fns")
-var {Header} = Page
 var {Section} = Page
 var {Heading} = Page
 var {Form} = Page
@@ -15,16 +17,16 @@ module.exports = function(attrs) {
 	var {voters} = attrs
 	var schoolPath = req.baseUrl + "/" + school.id
 
-	return <Page
+	return <SchoolPage
 		page="update-school"
 		req={attrs.req}
-		title={school.name}
+		school={school}
 	>
-		<Header>
+		<SchoolHeader school={school}>
 			<h1>
 				<a href={schoolPath}>{school.name}</a>
 			</h1>
-		</Header>
+		</SchoolHeader>
 
 		<Section>
 			<Form
@@ -56,6 +58,42 @@ module.exports = function(attrs) {
 					<textarea name="description" class="budget-input">
 						{school.description}
 					</textarea>
+				</label>
+
+				<label for="colors" class="budget-field">
+					<span class="label">Värvid</span>
+
+					<p>
+						Värve kasutatakse lehe päise, jaluse ja nuppude jaoks. Sisesta
+						värvid RGB formaadis (#aabbcc).  Sisutekst on aga alati mustas
+						kirjas valgel taustal.
+					</p>
+
+					<table class="budget-table"><tbody>
+						<tr>
+							<td>Taustavärv</td>
+							<td>
+								<input
+									name="background_color"
+									type="color"
+									class="budget-input"
+									value={school.background_color || "#000001"}
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td>Tekstivärv</td>
+							<td>
+								<input
+									name="foreground_color"
+									type="color"
+									class="budget-input"
+									value={school.foreground_color || "#000001"}
+								/>
+							</td>
+						</tr>
+					</tbody></table>
 				</label>
 
 				<label for="voting_starts_on" class="budget-field">
@@ -132,7 +170,7 @@ module.exports = function(attrs) {
 					</table> : null}
 				</label>
 
-				<button type="submit">Muuda</button>
+				<SchoolButton school={school} type="submit">Muuda</SchoolButton>
 			</Form>
 		</Section>
 
@@ -161,5 +199,5 @@ module.exports = function(attrs) {
 				})}</tbody>
 			</table>
 		</Section>
-	</Page>
+	</SchoolPage>
 }

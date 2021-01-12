@@ -139,6 +139,12 @@ function parse(obj) {
 		name: obj.name,
 		description: obj.description || null,
 
+		background_color:
+			obj.background_color ? parseColor(obj.background_color) : null,
+
+		foreground_color:
+			obj.foreground_color ? parseColor(obj.foreground_color) : null,
+
 		voting_starts_at: obj.voting_starts_on
 			? _.parseIsoDate(obj.voting_starts_on)
 			: null,
@@ -147,6 +153,14 @@ function parse(obj) {
 			? DateFns.addDays(_.parseIsoDate(obj.voting_ends_on), 1)
 			: null
 	}
+}
+
+function parseColor(color) {
+	// As <input type=color> always defaults to black if empty, pick one color to
+	// imply that it was not changed
+	if (color == "#000001") return null
+	if (/^#[A-Za-z0-9]{1,8}$/.test(color)) return color
+	return null
 }
 
 function parseVoterPersonalIds(personalIds) {

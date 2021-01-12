@@ -1,7 +1,8 @@
 /** @jsx Jsx */
 var Jsx = require("j6pack")
 var Page = require("../../page")
-var {Header} = Page
+var {SchoolPage} = require("../read_page")
+var {SchoolHeader} = require("../read_page")
 var {Section} = Page
 var linkify = require("root/lib/linkify")
 
@@ -36,12 +37,13 @@ function IdeaPage(attrs, children) {
 	var schoolUrl = "/schools/" + school.id
 	var ideaPath = schoolUrl + "/ideas/" + idea.id
 
-	return <Page
+	return <SchoolPage
 		page="idea"
 		req={attrs.req}
-		title={idea.title + " - " + school.name}
+		title={idea.title}
+		school={school}
 	>
-		<Header>
+		<SchoolHeader school={school}>
 			<a href={schoolUrl} class="context">{school.name}</a>
 			<h1>{idea.title}</h1>
 			<span class="subtitle author-names">{idea.author_names}</span>
@@ -49,8 +51,8 @@ function IdeaPage(attrs, children) {
 			{editable ? <menu>
 				<a href={`${ideaPath}/edit`}>Muuda ideed</a>
 			</menu> : null}
-		</Header>
+		</SchoolHeader>
 
 		{children}
-	</Page>
+	</SchoolPage>
 }

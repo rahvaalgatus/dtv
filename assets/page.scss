@@ -457,10 +457,6 @@ textarea.budget-input {
 		white-space: pre-wrap;
 	}
 
-	.create-idea-button {
-		@extend .blue-button;
-	}
-
 	.idea {
 		line-height: 1.5;
 
@@ -581,6 +577,13 @@ textarea.budget-input {
 				width: 100%;
 				resize: vertical;
 				min-height: 15rem;
+			}
+		}
+
+		label[for=colors] {
+			table {
+				width: auto;
+				td:first-child { width: 5rem; }
 			}
 		}
 

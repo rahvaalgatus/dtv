@@ -44,7 +44,7 @@ CREATE TABLE schools (
 	name TEXT NOT NULL,
 	description TEXT,
 	voting_starts_at TEXT,
-	voting_ends_at TEXT,
+	voting_ends_at TEXT, background_color TEXT, foreground_color TEXT,
 
 	CONSTRAINT name_length CHECK (length(name) > 0),
 	CONSTRAINT description_length CHECK (length(description) > 0),
@@ -148,4 +148,5 @@ INSERT INTO migrations VALUES('20201030120030');
 INSERT INTO migrations VALUES('20201030120040');
 INSERT INTO migrations VALUES('20201030120050');
 INSERT INTO migrations VALUES('20201030120060');
+INSERT INTO migrations VALUES('20210112171756');
 COMMIT;
