@@ -35,9 +35,8 @@ app.use(require("root/lib/middleware/cache_middleware"))
 app.use(require("root/lib/middleware/csrf_middleware"))
 app.use(require("root/lib/middleware/session_middleware"))
 
-app.get("/", (_req, res) => res.redirect(302, "/schools"))
-
 _.each({
+	"/": require("../controllers/home_controller").router,
 	"/account": require("../controllers/account_controller").router,
 	"/sessions": require("../controllers/sessions_controller").router,
 	"/schools": require("../controllers/schools_controller").router

@@ -2,19 +2,16 @@ var _ = require("root/lib/underscore")
 var Router = require("express").Router
 var HttpError = require("standard-http-error")
 var DateFns = require("date-fns")
-var next = require("co-next")
 var schoolsDb = require("root/db/schools_db")
 var teachersDb = require("root/db/teachers_db")
 var votersDb = require("root/db/voters_db")
 var votesDb = require("root/db/votes_db")
 var ideasDb = require("root/db/ideas_db")
+var next = require("co-next")
 var sql = require("sqlate")
 exports.router = Router({mergeParams: true})
 
-exports.router.get("/", next(function*(_req, res) {
-	var schools = yield schoolsDb.search(sql`SELECT * FROM schools`)
-	res.render("schools/index_page.jsx", {schools})
-}))
+exports.router.get("/", (_req, res) => res.redirect(301, "/"))
 
 exports.router.use("/:id", next(function*(req, _res, next) {
 	var school = yield schoolsDb.read(req.params.id)

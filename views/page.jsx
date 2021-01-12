@@ -17,7 +17,6 @@ function Page(attrs, children) {
 	var session = req.session
 	var title = attrs.title
 	var page = attrs.page
-	var path = (req.baseUrl || "") + req.path
 
 	return <html lang="en" class={attrs.class}>
 		<head>
@@ -32,10 +31,6 @@ function Page(attrs, children) {
 			<nav id="nav">
 				<Centered>
 					<a href="/" class="home">Eelarveldaja</a>
-
-					<menu class="pages">
-						<a class={prefixed("/schools", path)} href="/schools">Koolid</a>
-					</menu>
 
 					<menu class="account">{account ? <Fragment>
 						<a class="account-name" href="/account">{account.name}</a>
@@ -150,8 +145,4 @@ function LiveReload(attrs) {
 		async
 		defer
 	/>
-}
-
-function prefixed(prefix, path) {
-	return path == prefix || path.startsWith(prefix + "/") ? "selected" : ""
 }
