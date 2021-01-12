@@ -3,6 +3,7 @@ var Jsx = require("j6pack")
 var Page = require("../../page")
 var {Header} = Page
 var {Section} = Page
+var linkify = require("root/lib/linkify")
 
 module.exports = function(attrs) {
 	var {req} = attrs
@@ -22,7 +23,7 @@ module.exports = function(attrs) {
 	>
 		<Section>
 			<p id="idea-description" class="section-paragraph">
-				{idea.description}
+				{Jsx.html(linkify(idea.description))}
 			</p>
 		</Section>
 	</IdeaPage>
