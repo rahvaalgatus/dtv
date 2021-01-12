@@ -359,6 +359,15 @@ textarea.budget-input {
 	padding: 3rem 0;
 	line-height: 1.5;
 
+	.kogu-link {
+		float: right;
+		margin-left: 4rem;
+	}
+
+	p {
+		text-align: left;
+	}
+
 	a {
 		text-decoration: underline;
 		outline-offset: 0.2rem;

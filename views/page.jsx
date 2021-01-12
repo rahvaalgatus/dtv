@@ -57,10 +57,13 @@ function Page(attrs, children) {
 
 			<footer id="footer">
 				<Centered>
+					<a href="https://kogu.ee" class="kogu-link">
+						<img width="100" src="/assets/kogu.png" alt="Eesti Koostöö Kogu" />
+					</a>
+
 					<p>
 						Küsimuste või ettepanekute korral võta meiega ühendust aadressil <a
 						href="mailto:info@rahvaalgatus.ee">info@rahvaalgatus.ee</a>.
-						<br />
 						Eelarveldaja lähtekoodi leiad <a href="https://github.com/rahvaalgatus/eelarveldaja">GitHubist</a>, kus saad ka <a href="https://github.com/rahvaalgatus/eelarveldaja/issues">ettepanekuid teha</a>.
 					</p>
 				</Centered>
