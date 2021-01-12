@@ -5,6 +5,6 @@ var next = require("co-next")
 exports.router = Router({mergeParams: true})
 
 exports.router.get("/", next(function*(_req, res) {
-	var schools = yield schoolsDb.search(sql`SELECT * FROM schools`)
+	var schools = yield schoolsDb.search(sql`SELECT id, name FROM schools`)
 	res.render("index_page.jsx", {schools})
 }))

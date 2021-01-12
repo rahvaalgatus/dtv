@@ -44,10 +44,14 @@ CREATE TABLE schools (
 	name TEXT NOT NULL,
 	description TEXT,
 	voting_starts_at TEXT,
-	voting_ends_at TEXT, background_color TEXT, foreground_color TEXT,
+	voting_ends_at TEXT, background_color TEXT, foreground_color TEXT, logo BLOB, logo_type TEXT,
 
 	CONSTRAINT name_length CHECK (length(name) > 0),
 	CONSTRAINT description_length CHECK (length(description) > 0),
+
+	CONSTRAINT logo_length CHECK (length(logo) > 0),
+	CONSTRAINT logo_type_length CHECK (length(logo_type) > 0),
+	CONSTRAINT logo_with_type CHECK ((logo IS NULL) = (logo_type IS NULL)),
 
 	CONSTRAINT voting_starts_at_format
 	CHECK (voting_starts_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z'),
@@ -154,4 +158,5 @@ INSERT INTO migrations VALUES('20201030120050');
 INSERT INTO migrations VALUES('20201030120060');
 INSERT INTO migrations VALUES('20210112171756');
 INSERT INTO migrations VALUES('20210112182306');
+INSERT INTO migrations VALUES('20210112185326');
 COMMIT;

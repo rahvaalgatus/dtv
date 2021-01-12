@@ -453,6 +453,16 @@ textarea.budget-input {
 }
 
 #school-page main {
+	#header {
+		.logo {
+			float: right;
+			width: 10rem;
+			margin-top: 2rem;
+			margin-left: 2rem;
+			margin-bottom: 2rem;
+		}
+	}
+
 	#school-description {
 		white-space: pre-wrap;
 	}
@@ -562,6 +572,18 @@ textarea.budget-input {
 	}
 }
 
+.school-page {
+	#header {
+		.logo {
+			float: right;
+			width: 10rem;
+			margin-top: 2rem;
+			margin-left: 2rem;
+			margin-bottom: 2rem;
+		}
+	}
+}
+
 #update-school-page main {
 	#school-form {
 		label[for=name] {
@@ -584,6 +606,14 @@ textarea.budget-input {
 			table {
 				width: auto;
 				td:first-child { width: 5rem; }
+			}
+		}
+
+		label[for=logo] {
+			img {
+				display: block;
+				max-width: 15rem;
+				margin-bottom: 1rem;
 			}
 		}
 

@@ -32,6 +32,11 @@ function ReadPage(attrs) {
 			backgroundColor={school.background_color}
 			foregroundColor={school.foreground_color}
 		>
+			{school.logo_type
+				? <img src={schoolPath + "/logo"} class="logo" />
+				: null
+			}
+
 			<h1>{school.name}</h1>
 
 			{role == "teacher" ? <menu>
@@ -79,6 +84,7 @@ function SchoolPage(attrs, children) {
 	var {school} = attrs
 
 	return <Page
+		class="school-page"
 		page={attrs.page}
 		req={attrs.req}
 		title={(attrs.title ? attrs.title + " - " : "") + school.name}
@@ -91,11 +97,17 @@ function SchoolPage(attrs, children) {
 
 function SchoolHeader(attrs, children) {
 	var {school} = attrs
+	var schoolPath = "/schools/" + school.id
 
 	return <Header
 		backgroundColor={school.background_color}
 		foregroundColor={school.foreground_color}
 	>
+		{school.logo_type
+			? <img src={schoolPath + "/logo"} class="logo" />
+			: null
+		}
+
 		{children}
 	</Header>
 }

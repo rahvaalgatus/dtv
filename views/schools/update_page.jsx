@@ -33,6 +33,7 @@ module.exports = function(attrs) {
 				action={schoolPath}
 				req={req}
 				method="put"
+				enctype="multipart/form-data"
 				id="school-form"
 				class="budget-form"
 			>
@@ -94,6 +95,22 @@ module.exports = function(attrs) {
 							</td>
 						</tr>
 					</tbody></table>
+				</label>
+
+				<label for="logo" class="budget-field">
+					<span class="label">Logo</span>
+
+					<p>
+						{school.logo_type ? <img src={schoolPath + "/logo"} /> : null}
+
+						JPEG, PNG või GIF formaadis pilt suurusega kuni 5 MiB.
+					</p>
+
+					<input
+						type="file"
+						name="logo"
+						accept="image/jpeg, image/png, image/gif"
+					/>
 				</label>
 
 				<label for="voting_starts_on" class="budget-field">

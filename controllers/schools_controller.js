@@ -7,6 +7,7 @@ var teachersDb = require("root/db/teachers_db")
 var votersDb = require("root/db/voters_db")
 var votesDb = require("root/db/votes_db")
 var ideasDb = require("root/db/ideas_db")
+var {isValidImageType} = require("root/lib/image")
 var next = require("co-next")
 var sql = require("sqlate")
 exports.router = Router({mergeParams: true})
@@ -14,7 +15,14 @@ exports.router = Router({mergeParams: true})
 exports.router.get("/", (_req, res) => res.redirect(301, "/"))
 
 exports.router.use("/:id", next(function*(req, _res, next) {
-	var school = yield schoolsDb.read(req.params.id)
+	var school = yield schoolsDb.read(sql`
+		SELECT
+			id, name, description, voting_starts_at, voting_ends_at,
+			background_color, foreground_color, logo_type
+
+		FROM schools
+		WHERE id = ${req.params.id}
+	`)
 
 	if (school == null) throw new HttpError(404, "School Not Found", {
 		description: "Kooli ei leitud."
@@ -83,6 +91,20 @@ exports.router.get("/:id", next(function*(req, res) {
 	})
 }))
 
+exports.router.get("/:id/logo", next(function*(req, res) {
+	var {school} = req
+
+	var logo = yield schoolsDb.read(sql`
+		SELECT logo AS data, logo_type AS type FROM schools WHERE id = ${school.id}
+	`)
+
+	if (logo.data == null) throw new HttpError(404)
+
+	res.setHeader("Content-Type", logo.type)
+	res.setHeader("Content-Length", logo.data.length)
+	res.end(logo.data)
+}))
+
 exports.router.get("/:id/edit",
 	assertAccount,
 	assertTeacher,
@@ -124,7 +146,7 @@ exports.router.put("/:id",
 	assertTeacher,
 	next(function*(req, res) {
 	var {school} = req
-	var attrs = parse(req.body)
+	var attrs = parse(req.body, req.files)
 	var voters = parseVoterPersonalIds(req.body.voters)
 	voters.forEach((voter) => voter.school_id = school.id)
 
@@ -138,8 +160,8 @@ exports.router.put("/:id",
 exports.router.use("/:id/ideas", require("./schools/ideas_controller").router)
 exports.router.use("/:id/votes", require("./schools/votes_controller").router)
 
-function parse(obj) {
-	return {
+function parse(obj, files) {
+	var attrs = {
 		name: obj.name,
 		description: obj.description || null,
 
@@ -157,6 +179,13 @@ function parse(obj) {
 			? DateFns.addDays(_.parseIsoDate(obj.voting_ends_on), 1)
 			: null
 	}
+
+	if (files.logo && isValidImageType(files.logo.mimetype)) {
+		attrs.logo = files.logo.buffer
+		attrs.logo_type = files.logo.mimetype
+	}
+
+	return attrs
 }
 
 function parseColor(color) {
