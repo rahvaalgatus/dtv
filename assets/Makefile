@@ -33,7 +33,7 @@ public/assets/html5.js: public/assets
 public/assets/hwcrypto.js: public/assets
 	@echo "Compiling $@…"
 	@$(BROWSERIFY) $(BROWSERIFY_OPTS) \
-		--require ./$(@F:%.js=%):@rahvaalgatus/$(@F:%.js=%) \
+		--require ./$(@F:%.js=%):@kaasavkool/$(@F:%.js=%) \
 		--outfile "$@"
 
 shrinkwrap:

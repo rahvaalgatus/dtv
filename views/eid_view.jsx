@@ -173,7 +173,7 @@ function EidView(attrs) {
 			var encode = encodeURIComponent
 
 			;(function() {
-				var Hwcrypto = require("@rahvaalgatus/hwcrypto")
+				var Hwcrypto = require("@kaasavkool/hwcrypto")
 				var tab = document.getElementById("id-card-tab")
 				var button = tab.querySelector("button")
 				var output = tab.querySelector("output")

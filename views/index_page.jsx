@@ -13,10 +13,10 @@ module.exports = function(attrs) {
 	return <Page
 		page="home"
 		req={attrs.req}
-		title="Eelarveldaja"
+		title="Kaasav Kool"
 	>
 		<Header>
-			<h1>Eelarveldaja</h1>
+			<h1>Kaasav Kool</h1>
 		</Header>
 
 		<Section id="intro-section">

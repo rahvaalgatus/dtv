@@ -29,14 +29,14 @@ function Page(attrs, children) {
 			<meta charset="utf-8" />
 			<meta name="viewport" content="width=device-width" />
 			<link rel="stylesheet" href="/assets/page.css?t=1" type="text/css" />
-			<title>{title == null ? "" : title + " - "} Eelarveldaja</title>
+			<title>{title == null ? "" : title + " - "} Kaasav Kool</title>
 			<LiveReload req={req} />
 		</head>
 
 		<body id={page + "-page"}>
 			<nav id="nav" style={headerStyle}>
 				<Centered>
-					<a href="/" class="home">Eelarveldaja</a>
+					<a href="/" class="home">Kaasav Kool</a>
 
 					<menu class="account">{account ? <Fragment>
 						<a class="account-name" href="/account">{account.name}</a>
@@ -65,7 +65,7 @@ function Page(attrs, children) {
 					<p>
 						Küsimuste või ettepanekute korral võta meiega ühendust aadressil <a
 						href="mailto:info@rahvaalgatus.ee">info@rahvaalgatus.ee</a>.
-						Eelarveldaja lähtekoodi leiad <a href="https://github.com/rahvaalgatus/eelarveldaja">GitHubist</a>, kus saad ka <a href="https://github.com/rahvaalgatus/eelarveldaja/issues">ettepanekuid teha</a>.
+						Kaasav Kool lähtekoodi leiad <a href="https://github.com/rahvaalgatus/kaasavkool">GitHubist</a>, kus saad ka <a href="https://github.com/rahvaalgatus/kaasavkool/issues">ettepanekuid teha</a>.
 					</p>
 				</Centered>
 			</footer>

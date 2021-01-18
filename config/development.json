@@ -1,5 +1,6 @@
 {
 	"cookieSecret": "py8mG85TczmKTQYtoCPa8nkjnkuKHEjB",
+	"sessionCookieName": "kaasavkool_session_token",
 	"timemarkUrl": "http://demo.sk.ee/ocsp",
 
 	"issuers": [[

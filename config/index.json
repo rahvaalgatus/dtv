@@ -1,6 +1,6 @@
 {
 	"cookieSecret": null,
-	"sessionCookieName": "eelarveldaja_session_token",
+	"sessionCookieName": "session_token",
 
 	"smartIdUser": null,
 	"smartIdPassword": null,
