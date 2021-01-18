@@ -79,6 +79,7 @@ main section {
 
 .section-paragraph {
 	line-height: 1.5;
+	text-align: justify;
 
 	a {
 		@extend .link-button;
@@ -464,7 +465,7 @@ textarea.budget-input {
 	}
 
 	#school-description {
-		white-space: pre-wrap;
+		white-space: pre-line;
 	}
 
 	.idea {
@@ -505,7 +506,7 @@ textarea.budget-input {
 
 		.idea-description {
 			margin-top: 1rem;
-			white-space: pre-wrap;
+			white-space: pre-line;
 		}
 
 		& + .idea {
@@ -637,7 +638,7 @@ textarea.budget-input {
 
 #idea-page main {
 	#idea-description {
-		white-space: pre-wrap;
+		white-space: pre-line;
 
 		img {
 			max-width: 100%;
