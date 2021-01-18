@@ -18,6 +18,12 @@ $eid-background: #fbfbfb;
 	appearance: none;
 }
 
+@mixin ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 @mixin progress-bar() {
 	&::-moz-progress-bar { @content; }
 	&::-webkit-progress-value { @content; }
@@ -421,6 +427,10 @@ textarea.budget-input {
 			}
 
 			&:hover { border-color: white; }
+
+			& + a {
+				margin-left: 1rem;
+			}
 		}
 	}
 
@@ -636,6 +646,43 @@ textarea.budget-input {
 	}
 }
 
+#paper-votes-page main {
+	#paper-votes {
+		.edit-button {
+			@extend .link-button;
+			display: inline-block;
+		}
+
+		strong { font-weight: bold; }
+
+		.edit-row td {
+			padding: 0.5rem 1rem;
+			text-align: center;
+
+			#edit-paper-votes-toggle:checked + label,
+			#edit-paper-votes-toggle:not(:checked) ~ form { display: none; }
+
+			form {
+				margin: 1rem 0;
+			}
+
+			textarea {
+				display: block;
+				margin: 0.5rem auto;
+				width: 100%;
+				max-width: 60rem;
+				min-height: 10rem;
+				resize: vertical;
+			}
+
+			button {
+				margin: 1rem auto;
+				display: block;
+			}
+		}
+	}
+}
+
 #idea-page main {
 	#idea-description {
 		white-space: pre-line;
@@ -694,5 +741,11 @@ textarea.budget-input {
 				padding: 1rem 2rem;
 			}
 		}
+	}
+}
+
+#error-page main {
+	.description {
+		white-space: pre-line;
 	}
 }

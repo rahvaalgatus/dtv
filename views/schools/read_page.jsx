@@ -41,6 +41,7 @@ function ReadPage(attrs) {
 
 			{role == "teacher" ? <menu>
 				<a href={`${schoolPath}/edit`}>Muuda kooli</a>
+				<a href={`${schoolPath}/paper-votes`}>Muuda paberhääli</a>
 			</menu> : null}
 		</Header>
 

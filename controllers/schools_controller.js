@@ -11,6 +11,8 @@ var {isValidImageType} = require("root/lib/image")
 var next = require("co-next")
 var sql = require("sqlate")
 exports.router = Router({mergeParams: true})
+exports.assertAccount = assertAccount
+exports.assertTeacher = assertTeacher
 
 exports.router.get("/", (_req, res) => res.redirect(301, "/"))
 
@@ -67,8 +69,26 @@ exports.router.get("/:id", next(function*(req, res) {
 	`) : null
 
 	var votesByIdea = _.mapValues(_.indexBy(yield votesDb.search(sql`
-		SELECT idea_id, COUNT(*) AS count FROM votes
-		WHERE school_id = ${school.id}
+		WITH merged_votes AS (
+			SELECT vote.idea_id
+			FROM votes AS vote
+
+			LEFT JOIN paper_votes AS paper_vote
+			ON paper_vote.school_id = vote.school_id
+			AND paper_vote.voter_country = vote.voter_country
+			AND paper_vote.voter_personal_id = vote.voter_personal_id
+
+			WHERE vote.school_id = ${school.id}
+			AND paper_vote.voter_personal_id IS NULL
+
+			UNION ALL
+
+			SELECT idea_id FROM paper_votes
+			WHERE school_id = ${school.id}
+		)
+
+		SELECT idea_id, COUNT(*) AS count
+		FROM merged_votes
 		GROUP BY idea_id
 	`), "idea_id"), (votes) => votes.count)
 
@@ -157,8 +177,12 @@ exports.router.put("/:id",
 	res.redirect(303, req.baseUrl + req.path + "/edit")
 }))
 
-exports.router.use("/:id/ideas", require("./schools/ideas_controller").router)
-exports.router.use("/:id/votes", require("./schools/votes_controller").router)
+
+_.each({
+	"/:id/ideas": require("./schools/ideas_controller").router,
+	"/:id/votes": require("./schools/votes_controller").router,
+	"/:id/paper-votes": require("./schools/paper_votes_controller").router,
+}, (router, path) => exports.router.use(path, router))
 
 function parse(obj, files) {
 	var attrs = {

@@ -13,6 +13,10 @@ module.exports = function(attrs) {
 			<h1>{title || "Vabandust!"}</h1>
 		</Header>
 
-		<Section>{message ? <p>{message}</p> : null}</Section>
+		<Section>
+			{message ? <p class="section-paragraph description">
+				{message}
+			</p> : null}
+		</Section>
 	</Page>
 }

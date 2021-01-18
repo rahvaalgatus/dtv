@@ -97,8 +97,6 @@ CREATE TABLE ideas (
 	CHECK (updated_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z')
 
 );
-CREATE INDEX index_ideas_on_school_id
-ON ideas (school_id);
 CREATE INDEX index_ideas_on_account_id
 ON ideas (account_id);
 CREATE TABLE teachers (
@@ -126,7 +124,7 @@ CREATE TABLE votes (
 	xades TEXT,
 
 	FOREIGN KEY (school_id) REFERENCES schools (id),
-	FOREIGN KEY (idea_id) REFERENCES ideas (id),
+	FOREIGN KEY (school_id, idea_id) REFERENCES ideas (school_id, id),
 
 	CONSTRAINT voter_country_format CHECK (voter_country GLOB '[A-Z][A-Z]'),
 	CONSTRAINT voter_personal_id_length CHECK (length(voter_personal_id) > 0),
@@ -143,6 +141,24 @@ CREATE UNIQUE INDEX index_votes_on_school_and_voter
 ON votes (school_id, voter_country, voter_personal_id);
 CREATE INDEX index_votes_on_voter
 ON votes (voter_country, voter_personal_id);
+CREATE UNIQUE INDEX index_ideas_on_school_id_and_id
+ON ideas (school_id, id);
+CREATE TABLE paper_votes (
+	school_id INTEGER NOT NULL,
+	idea_id INTEGER NOT NULL,
+	voter_country TEXT NOT NULL,
+	voter_personal_id TEXT NOT NULL,
+
+	FOREIGN KEY (school_id) REFERENCES schools (id),
+	FOREIGN KEY (school_id, idea_id) REFERENCES ideas (school_id, id),
+
+	CONSTRAINT voter_country_format CHECK (voter_country GLOB '[A-Z][A-Z]'),
+	CONSTRAINT voter_personal_id_length CHECK (length(voter_personal_id) > 0),
+	CONSTRAINT voter_personal_id_format
+	CHECK (voter_personal_id NOT GLOB '*[^0-9]*')
+);
+CREATE UNIQUE INDEX index_paper_votes_on_school_and_voter
+ON paper_votes (school_id, voter_country, voter_personal_id);
 
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
@@ -159,4 +175,6 @@ INSERT INTO migrations VALUES('20201030120060');
 INSERT INTO migrations VALUES('20210112171756');
 INSERT INTO migrations VALUES('20210112182306');
 INSERT INTO migrations VALUES('20210112185326');
+INSERT INTO migrations VALUES('20210118145358');
+INSERT INTO migrations VALUES('20210118155512');
 COMMIT;

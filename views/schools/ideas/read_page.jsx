@@ -37,8 +37,8 @@ function IdeaPage(attrs, children) {
 	var {school} = attrs
 	var {idea} = attrs
 	var {editable} = attrs
-	var schoolUrl = "/schools/" + school.id
-	var ideaPath = schoolUrl + "/ideas/" + idea.id
+	var schoolPath = "/schools/" + school.id
+	var ideaPath = schoolPath + "/ideas/" + idea.id
 
 	return <SchoolPage
 		page="idea"
@@ -47,7 +47,7 @@ function IdeaPage(attrs, children) {
 		school={school}
 	>
 		<SchoolHeader school={school}>
-			<a href={schoolUrl} class="context">{school.name}</a>
+			<a href={schoolPath} class="context">{school.name}</a>
 			<h1>{idea.title}</h1>
 			<span class="subtitle author-names">{idea.author_names}</span>
 

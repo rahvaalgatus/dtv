@@ -151,7 +151,8 @@ module.exports = function(attrs) {
 					/>
 				</label>
 
-				<label for="voters" class="budget-field">
+				{/* The id is for linking from the paper-votes page. */}
+				<label id="voters" for="voters" class="budget-field">
 					<span class="label">Ideede esitajad ja hääletajad</span>
 
 					<p>
