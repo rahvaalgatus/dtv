@@ -358,7 +358,7 @@ exports.router.delete("/:id", next(function*(req, res) {
 	})
 
 	var to = req.headers.referer
-	if (to && Url.parse(to).pathname == "/user") to = "/"
+	if (to && Url.parse(to).pathname == "/account") to = "/"
 	else if (!to) to = "/"
 	res.redirect(303, to)
 }))
