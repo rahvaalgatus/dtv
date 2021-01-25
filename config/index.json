@@ -2,6 +2,8 @@
 	"cookieSecret": null,
 	"sessionCookieName": "session_token",
 
+	"mobileIdUser": null,
+	"mobileIdPassword": null,
 	"smartIdUser": null,
 	"smartIdPassword": null,
 	"timemarkUrl": null,
