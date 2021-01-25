@@ -57,8 +57,7 @@ lazy(exports, "mobileId", function() {
 	var password = Config.mobileIdPassword
 
   switch (ENV) {
-		case "development":
-		case "production": return MobileId.demo
+		case "development": return MobileId.demo
 		default: return new MobileId({user: user, password: password})
   }
 })
@@ -69,8 +68,7 @@ lazy(exports, "smartId", function() {
 	var password = Config.smartIdPassword
 
   switch (ENV) {
-		case "development":
-		case "production": return SmartId.demo
+		case "development": return SmartId.demo
 		default: return new SmartId({user: user, password: password})
   }
 })
