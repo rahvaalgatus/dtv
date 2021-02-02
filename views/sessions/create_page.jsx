@@ -30,7 +30,7 @@ module.exports = function(attrs) {
 				<EidView
 					req={req}
 					formId="authentication-form"
-					action="sign"
+					action="auth"
 					pending="Login sisse…"
 					submit="Logi sisse"
 				/>

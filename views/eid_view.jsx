@@ -185,7 +185,11 @@ function EidView(attrs) {
 					notice(${pending})
 
 					var form = ev.target.form
-					var certificate = Hwcrypto.certificate(${action})
+
+					var certificate = Hwcrypto.certificate(${action}).catch(function(err) {
+						if (err.message != "invalid_argument") throw err
+						return Hwcrypto.certificate("sign")
+					})
 
 					var obj = serializeForm(form)
 					delete obj._csrf_token
