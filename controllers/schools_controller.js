@@ -226,7 +226,10 @@ function parseVoterPersonalIds(personalIds) {
 }
 
 function assertAccount(req, _res, next) {
-	if (req.account == null) throw new HttpError(401)
+	if (req.account == null) throw new HttpError(401, {
+		description: "Palun logi lehe nägemiseks sisse."
+	})
+
 	else next()
 }
 
