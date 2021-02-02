@@ -44,6 +44,7 @@ module.exports = function(attrs) {
 						type="text"
 						name="name"
 						class="budget-input"
+						required
 						value={school.name}
 					/>
 				</label>
