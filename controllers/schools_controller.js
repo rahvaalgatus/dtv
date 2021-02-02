@@ -14,7 +14,7 @@ exports.router = Router({mergeParams: true})
 exports.assertAccount = assertAccount
 exports.assertTeacher = assertTeacher
 
-exports.router.get("/", (_req, res) => res.redirect(301, "/"))
+exports.router.get("/", (_req, res) => res.redirect(302, "/"))
 
 exports.router.use("/:id", next(function*(req, _res, next) {
 	var school = yield schoolsDb.read(sql`
