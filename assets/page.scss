@@ -177,6 +177,12 @@ main section {
 
 	p {
 		margin-bottom: 0.5rem;
+
+		code {
+			background: #efefef;
+			padding: 0.5rem;
+			font-family: monospace;
+		}
 	}
 
 	& + label {

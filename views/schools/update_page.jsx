@@ -118,7 +118,8 @@ module.exports = function(attrs) {
 					<span class="label">Hääletamise algus</span>
 
 					<p>
-						Ideid saab lisada ja muuta kuni hääletamise alguseni.
+						Ideid saab lisada ja muuta kuni hääletamise alguseni.<br />
+						Vali kuupäev kalendrist või sisesta see formaadis <code>2021-01-31</code>.
 					</p>
 
 					<input
@@ -137,7 +138,8 @@ module.exports = function(attrs) {
 					<span class="label">Hääletamise lõpp</span>
 
 					<p>
-						Hääletada saab südaööni.
+						Hääletada saab südaööni.<br />
+						Vali kuupäev kalendrist või sisesta see formaadis <code>2021-01-31</code>.
 					</p>
 
 					<input
