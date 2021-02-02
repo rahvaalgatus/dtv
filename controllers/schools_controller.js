@@ -192,15 +192,35 @@ function parse(obj, files) {
 			obj.background_color ? parseColor(obj.background_color) : null,
 
 		foreground_color:
-			obj.foreground_color ? parseColor(obj.foreground_color) : null,
+			obj.foreground_color ? parseColor(obj.foreground_color) : null
+	}
 
-		voting_starts_at: obj.voting_starts_on
+	try {
+		attrs.voting_starts_at = obj.voting_starts_on
 			? _.parseIsoDate(obj.voting_starts_on)
-			: null,
+			: null
+	}
+	catch (ex) {
+		if (ex.message.startsWith("Invalid Date:"))
+			throw new HttpError(422, "Invalid Attributes", {
+				description: "Hääletamise algus ei tundu õiges formaadis."
+			})
 
-		voting_ends_at: obj.voting_ends_on
+		else throw ex
+	}
+
+	try {
+		attrs.voting_ends_at = obj.voting_ends_on
 			? DateFns.addDays(_.parseIsoDate(obj.voting_ends_on), 1)
 			: null
+	}
+	catch (ex) {
+		if (ex.message.startsWith("Invalid Date:"))
+			throw new HttpError(422, "Invalid Attributes", {
+				description: "Hääletamise lõpp ei tundu õiges formaadis."
+			})
+
+		else throw ex
 	}
 
 	if (files.logo && isValidImageType(files.logo.mimetype)) {
