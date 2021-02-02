@@ -138,7 +138,7 @@ module.exports = function(attrs) {
 					<span class="label">Hääletamise lõpp</span>
 
 					<p>
-						Hääletada saab südaööni.<br />
+						Hääletada saab südaööni ehk kl 23:59ni.<br />
 						Vali kuupäev kalendrist või sisesta see formaadis <code>2021-01-31</code>.
 					</p>
 

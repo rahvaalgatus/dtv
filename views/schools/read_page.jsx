@@ -2,6 +2,7 @@
 var _ = require("root/lib/underscore")
 var Jsx = require("j6pack")
 var Page = require("../page")
+var DateFns = require("date-fns")
 var {Header} = Page
 var {Section} = Page
 var {Heading} = Page
@@ -202,7 +203,8 @@ function VotingSection(attrs) {
 
 			{school.voting_ends_at ? <span>
 				{" "}Hääletada saad
-				kuni <DateElement at={school.voting_ends_at} /> südaööni.
+				kuni <DateElement at={DateFns.addDays(school.voting_ends_at, -1)} /> kl
+				23:59.
 			</span> : null}
 		</p>
 
@@ -264,7 +266,8 @@ function ResultsSection(attrs) {
 		<Heading>Ideed</Heading>
 
 		<p class="section-paragraph">
-			Hääletamine lõppes <DateElement at={school.voting_ends_at} /> südaöösel.
+			Hääletamine lõppes <DateElement
+			at={DateFns.addDays(school.voting_ends_at, -1)} /> kl 23:59.
 			Kokku anti {voteCount} {_.plural(voteCount, "hääl", "häält")}.
 		</p>
 
