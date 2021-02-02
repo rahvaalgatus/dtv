@@ -177,7 +177,6 @@ exports.router.put("/:id",
 	res.redirect(303, req.baseUrl + req.path + "/edit")
 }))
 
-
 _.each({
 	"/:id/ideas": require("./schools/ideas_controller").router,
 	"/:id/votes": require("./schools/votes_controller").router,
