@@ -241,6 +241,7 @@ function parseColor(color) {
 
 function parseVoterPersonalIds(personalIds) {
 	personalIds = _.uniq(personalIds.trim().split(/\s+/g).map(cleanPersonalId))
+	personalIds = personalIds.filter(Boolean)
 	return personalIds.map((id) => ({country: "EE", personal_id: id}))
 }
 
