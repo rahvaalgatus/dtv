@@ -44,6 +44,7 @@ _.each({
 }, (router, path) => app.use(path, router))
 
 app.use(function(_req, _res, next) { next(new HttpError(404)) })
+app.use(require("root/lib/middleware/error_reporter_middleware"))
 
 app.use(require("root/lib/middleware/error_handler_middleware").bind(null,
 	function(err, _req, res) {
