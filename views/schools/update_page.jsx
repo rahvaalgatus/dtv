@@ -66,9 +66,9 @@ module.exports = function(attrs) {
 					<span class="label">Värvid</span>
 
 					<p>
-						Värve kasutatakse lehe päise, jaluse ja nuppude jaoks. Sisesta
-						värvid RGB formaadis (#aabbcc).  Sisutekst on aga alati mustas
-						kirjas valgel taustal.
+						Värve kasutatakse lehe päise, jaluse ja nuppude jaoks. Vali värv
+						värvikaardilt või selle puudumisel sisesta värvid RGB formaadis
+						(#aabbcc). Sisutekst on aga alati mustas kirjas valgel taustal.
 					</p>
 
 					<table class="budget-table"><tbody>
@@ -119,7 +119,7 @@ module.exports = function(attrs) {
 
 					<p>
 						Ideid saab lisada ja muuta kuni hääletamise alguseni.<br />
-						Vali kuupäev kalendrist või sisesta see formaadis <code>2021-01-31</code>.
+						Vali kuupäev kalendrist või selle puudumisel sisesta see formaadis <code>2021-01-31</code>.
 					</p>
 
 					<input
@@ -139,7 +139,7 @@ module.exports = function(attrs) {
 
 					<p>
 						Hääletada saab südaööni ehk kl 23:59ni.<br />
-						Vali kuupäev kalendrist või sisesta see formaadis <code>2021-01-31</code>.
+						Vali kuupäev kalendrist või selle puudumisel sisesta see formaadis <code>2021-01-31</code>.
 					</p>
 
 					<input
