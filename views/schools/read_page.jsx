@@ -25,6 +25,11 @@ function ReadPage(attrs) {
 	var {thank} = attrs
 	var schoolPath = req.baseUrl + req.path
 
+	var headerButtonStyle = serializeStyle({
+		"border-color": school.foreground_color,
+		color: school.foreground_color
+	})
+
 	return <SchoolPage page="school" req={attrs.req} school={school}>
 		<script src="/assets/html5.js" />
 		<script src="/assets/hwcrypto.js" />
@@ -41,8 +46,12 @@ function ReadPage(attrs) {
 			<h1>{school.name}</h1>
 
 			{role == "teacher" ? <menu>
-				<a href={`${schoolPath}/edit`}>Muuda kooli</a>
-				<a href={`${schoolPath}/paper-votes`}>Muuda paberhääli</a>
+				<a href={`${schoolPath}/edit`} style={headerButtonStyle}>
+					Muuda kooli
+				</a>
+				<a href={`${schoolPath}/paper-votes`} style={headerButtonStyle}>
+					Muuda paberhääli
+					</a>
 			</menu> : null}
 		</Header>
 
@@ -120,7 +129,11 @@ function SchoolButton(attrs, children) {
 
 	var style = serializeStyle({
 		"background-color": school.background_color,
-		color: school.foreground_color
+		color: school.foreground_color,
+
+		"border": school.background_color == "#ffffff"
+			? "1px solid currentcolor"
+			: null
 	})
 
 	if (attrs.href) return <a

@@ -4,6 +4,7 @@ var Page = require("../../page")
 var {SchoolPage} = require("../read_page")
 var {SchoolHeader} = require("../read_page")
 var {Section} = Page
+var {serializeStyle} = Page
 var linkify = require("root/lib/linkify")
 
 module.exports = function(attrs) {
@@ -40,6 +41,11 @@ function IdeaPage(attrs, children) {
 	var schoolPath = "/schools/" + school.id
 	var ideaPath = schoolPath + "/ideas/" + idea.id
 
+	var headerButtonStyle = serializeStyle({
+		"border-color": school.foreground_color,
+		color: school.foreground_color
+	})
+
 	return <SchoolPage
 		page="idea"
 		req={attrs.req}
@@ -52,7 +58,7 @@ function IdeaPage(attrs, children) {
 			<span class="subtitle author-names">{idea.author_names}</span>
 
 			{editable ? <menu>
-				<a href={`${ideaPath}/edit`}>Muuda ideed</a>
+				<a href={`${ideaPath}/edit`} style={headerButtonStyle}>Muuda ideed</a>
 			</menu> : null}
 		</SchoolHeader>
 
