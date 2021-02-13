@@ -462,16 +462,6 @@ textarea.budget-input {
 }
 
 #school-page main {
-	#header {
-		.logo {
-			float: right;
-			width: 10rem;
-			margin-top: 2rem;
-			margin-left: 2rem;
-			margin-bottom: 2rem;
-		}
-	}
-
 	#school-description {
 		white-space: pre-line;
 	}
@@ -583,12 +573,22 @@ textarea.budget-input {
 
 .school-page {
 	#header {
+		overflow: hidden;
+
 		.logo {
 			float: right;
 			width: 10rem;
-			margin-top: 2rem;
+			margin-top: -2rem;
 			margin-left: 2rem;
-			margin-bottom: 2rem;
+
+			@media only screen and (max-width: 650px) {
+				display: block;
+				float: none;
+				margin-top: 0;
+				margin-left: 0;
+				margin-bottom: 2rem;
+				width: 7rem;
+			}
 		}
 	}
 }
