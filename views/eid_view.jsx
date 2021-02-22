@@ -188,7 +188,10 @@ function EidView(attrs) {
 
 					var certificate = Hwcrypto.certificate(${action}).catch(function(err) {
 						if (err.message != "invalid_argument") throw err
-						return Hwcrypto.certificate("sign")
+
+						// ID-software bugs out if you immediately ask for a new
+						// certificate.
+						return delay(1).then(Hwcrypto.certificate.bind(null, "sign"))
 					})
 
 					var obj = serializeForm(form)
@@ -340,6 +343,12 @@ function EidView(attrs) {
 					})
         else throw err
       }
+
+			function delay(seconds) {
+				return new Promise(function(resolve) {
+					setTimeout(resolve, seconds * 1000)
+				})
+			}
 		`}</script>
 	</div>
 }
