@@ -68,7 +68,9 @@ function ReadPage(attrs) {
 			) return <VotingSection
 				req={req}
 				school={school}
+				role={role}
 				ideas={ideas}
+				votesByIdea={votesByIdea}
 				thank={thank}
 			/>
 
@@ -196,7 +198,10 @@ function VotingSection(attrs) {
 	var {account} = req
 	var {school} = attrs
 	var {ideas} = attrs
+	var {role} = attrs
+	var {votesByIdea} = attrs
 	var {thank} = attrs
+	var maxVoteCount = _.max(_.values(votesByIdea))
 	var schoolPath = req.baseUrl + req.path
 
 	return <Section id="votable-ideas-section">
@@ -219,6 +224,10 @@ function VotingSection(attrs) {
 				kuni <DateElement at={DateFns.addDays(school.voting_ends_at, -1)} /> kl
 				23:59.
 			</span> : null}
+
+			{role == "teacher" ? <span>
+				{" "}Häälte arv on hääletamise ajal nähtav vaid sulle kui õpetajale.
+			</span> : null}
 		</p>
 
 		<Form
@@ -228,6 +237,8 @@ function VotingSection(attrs) {
 			method="post"
 		>
 			<ul id="ideas">{ideas.map(function(idea) {
+				var voteCount = votesByIdea[idea.id] || 0
+
 				return <li class="idea">
 					<input
 						id={`idea-${idea.id}-checkbox`}
@@ -241,6 +252,10 @@ function VotingSection(attrs) {
 						<h3 class="idea-title">
 							<a href={`${schoolPath}/ideas/${idea.id}`}>{idea.title}</a>
 						</h3>
+
+						{role == "teacher" ?
+							<VoteCountView count={voteCount} max={maxVoteCount} />
+						: null}
 
 						<span class="idea-author-names">{idea.author_names}</span>
 					</label>
