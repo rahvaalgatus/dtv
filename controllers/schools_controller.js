@@ -143,7 +143,11 @@ exports.router.get("/:id/edit",
 	`)
 
 	var voters = yield votersDb.search(sql`
-		SELECT voter.*, COALESCE(account.name, vote.voter_name) AS name
+		SELECT
+			voter.*,
+			COALESCE(account.name, vote.voter_name) AS name,
+			vote.voter_personal_id IS NOT NULL AS has_voted
+
 		FROM voters AS voter
 
 		LEFT JOIN accounts AS account
@@ -157,6 +161,10 @@ exports.router.get("/:id/edit",
 
 		WHERE voter.school_id = ${school.id}
 	`)
+
+	voters.forEach(function(voter) {
+		voter.has_voted = Boolean(voter.has_voted)
+	})
 
 	res.render("schools/update_page.jsx", {school, voters, teachers})
 }))

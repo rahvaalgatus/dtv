@@ -16,6 +16,7 @@ module.exports = function(attrs) {
 	var {teachers} = attrs
 	var {voters} = attrs
 	var schoolPath = req.baseUrl + "/" + school.id
+	var votedCounts = _.countBy(voters, "has_voted")
 
 	return <SchoolPage
 		page="update-school"
@@ -174,11 +175,15 @@ module.exports = function(attrs) {
 						{voters.map((voter) => voter.personal_id).join("\n")}
 					</textarea>
 
-					{voters.length > 0 ? <table id="voters" class="budget-table">
+					{voters.length > 0 ? <table
+						id="voters"
+						class="budget-table with-footer"
+					>
 						<thead>
 							<tr>
 								<th>Isikukood</th>
 								<th>Nimi</th>
+								<th class="voted-column">Hääletanud</th>
 							</tr>
 						</thead>
 
@@ -186,8 +191,20 @@ module.exports = function(attrs) {
 							return <tr>
 								<td>{voter.personal_id}</td>
 								<td>{voter.name}</td>
+								<td class="voted-column">{voter.has_voted ? "✅" : ""}</td>
 							</tr>
 						})}</tbody>
+
+						<tfoot>
+							<tr>
+								<td colspan="2" />
+
+								<td class="voted-column">
+									Hääletanud on {votedCounts.true}.<br />
+									Hääletamata veel {votedCounts.false}.
+								</td>
+							</tr>
+						</tfoot>
 					</table> : null}
 				</label>
 
