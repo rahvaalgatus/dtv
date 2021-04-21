@@ -12,6 +12,7 @@
 		"standard-http-error": "",
 		"fetch-off": "",
 		"fetch-parse": "",
+		"fetch-formify": "",
 		"fetch-defaults": "",
 		"sqlite3": "",
 		"sqlate": "",

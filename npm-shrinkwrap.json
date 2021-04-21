@@ -495,6 +495,11 @@
       "from": "https://registry.npmjs.org/fetch-error/-/fetch-error-1.0.0.tgz",
       "resolved": "https://registry.npmjs.org/fetch-error/-/fetch-error-1.0.0.tgz"
     },
+    "fetch-formify": {
+      "version": "1.0.0",
+      "from": "https://registry.npmjs.org/fetch-formify/-/fetch-formify-1.0.0.tgz",
+      "resolved": "https://registry.npmjs.org/fetch-formify/-/fetch-formify-1.0.0.tgz"
+    },
     "fetch-jsonify": {
       "version": "1.0.0",
       "from": "https://registry.npmjs.org/fetch-jsonify/-/fetch-jsonify-1.0.0.tgz",

@@ -45,7 +45,7 @@ exports.router.put("/", next(function*(req, res) {
 		school_id: school.id
 	})))
 
-	res.redirect(303, req.baseUrl + req.path)
+	res.redirect(303, req.baseUrl)
 }))
 
 function parse(obj) {
