@@ -4,6 +4,7 @@ var Web = require("root/bin/web")
 var fetchDefaults = require("fetch-defaults")
 
 var request = require("fetch-off")
+request = require("fetch-parse")(request, {"text/html": true})
 
 request = _.wrap(request, function(request, url, opts) {
 	return request(url, opts).then(nodeify)
