@@ -93,7 +93,7 @@ module.exports = function(attrs) {
 							<p>
 								Paberhääli saad lisada CSV (komaga eraldatud) formaadis, kus
 								esimeses tulbas on hääletaja isikukood ja teises idee
-								identifikaator. Hääletajad <strong>ei pea</strong> olema
+								identifikaator. Hääletajad peavad olema
 								eelnevalt lisatud <a href={schoolPath + "/edit#voters"}
 								class="link-button">lubatud hääletajate nimekirja</a>.
 							</p>

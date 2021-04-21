@@ -110,6 +110,28 @@ describe("PaperVotesController", function() {
 			var el = dom.querySelector("main .description")
 			el.textContent.must.include("38706180001")
 		})
+
+		it("must err given personal id not in voters", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+			yield createTeacher(school, this.account)
+
+			var idea = yield ideasDb.create(new ValidIdea({
+				school_id: school.id,
+				account_id: this.account.id
+			}))
+
+			var res = yield this.request(`/schools/${school.id}/paper-votes`, {
+				method: "PUT",
+				form: {"paper-votes": `38706180001, ${idea.id}`}
+			})
+
+			res.statusCode.must.equal(422)
+			res.statusMessage.must.equal("Invalid Voters")
+
+			var dom = parseDom(res.body)
+			var el = dom.querySelector("main .description")
+			el.textContent.must.include("38706180001")
+		})
 	})
 })
 
