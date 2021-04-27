@@ -1,9 +1,12 @@
 var ValidSchool = require("root/test/valid_school")
+var FormData = require("form-data")
 var schoolsDb = require("root/db/schools_db")
 var teachersDb = require("root/db/teachers_db")
 var votersDb = require("root/db/voters_db")
 var outdent = require("root/lib/outdent")
 var sql = require("sqlate")
+var LOGO_SIZE_LIMIT = 128
+var PNG = new Array(LOGO_SIZE_LIMIT + 1 + 1).join("_")
 
 describe("SchoolsController", function() {
 	require("root/test/web")()
@@ -62,6 +65,27 @@ describe("SchoolsController", function() {
 				{school_id: school.id, country: "EE", personal_id: "38706180002"},
 				{school_id: school.id, country: "EE", personal_id: "38706180003"}
 			])
+		})
+
+		it("must render error if logo size too large", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+			yield createTeacher(school, this.account)
+
+			var form = new FormData
+
+			form.append("logo", PNG, {
+				filename: "image.png",
+				contentType: "image/png"
+			})
+
+			var res = yield this.request(`/schools/${school.id}`, {
+				method: "PUT",
+				headers: form.getHeaders(),
+				body: form.getBuffer()
+			})
+
+			res.statusCode.must.equal(422)
+			res.statusMessage.must.equal("File Too Large")
 		})
 	})
 })
