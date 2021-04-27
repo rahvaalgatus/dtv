@@ -26,7 +26,9 @@ module.exports = function(attrs) {
 	>
 		<Section>
 			<p id="idea-description" class="section-paragraph">
-				{idea.image_type ? <img src={ideaPath + "/image"} /> : null}
+				{idea.image_type ? <a href={ideaPath + "/image"}>
+					<img src={ideaPath + "/image"} />
+				</a> : null}
 
 				{Jsx.html(linkify(idea.description))}
 			</p>
