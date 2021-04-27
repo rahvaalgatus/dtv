@@ -12,7 +12,10 @@ request = require("fetch-formify")(request)
 request = require("root/lib/fetch_cook")(request)
 request = fetchSession(request)
 
-request = require("fetch-parse")(request, {"text/html": true})
+request = require("fetch-parse")(request, {
+	"text/plain": true,
+	"text/html": true
+})
 
 request = _.wrap(request, function(request, url, opts) {
 	return request(url, opts).then(fetchNodeify)
