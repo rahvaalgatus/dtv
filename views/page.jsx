@@ -58,9 +58,19 @@ function Page(attrs, children) {
 
 			<footer id="footer" style={headerStyle}>
 				<Centered>
-					<a href="https://kogu.ee" class="kogu-link">
-						<img width="100" src="/assets/kogu.png" alt="Eesti Koostöö Kogu" />
-					</a>
+					<div class="logos">
+						<a href="https://kogu.ee" title="Eesti Koostöö Kogu">
+							<img width="100" src="/assets/kogu.png" alt="Eesti Koostöö Kogu" />
+						</a>
+
+						<a href="https://transparency.ee" title="Korruptsioonivaba Eesti">
+							<img
+								width="100"
+								src="/assets/transparency-international.png"
+								alt="Korruptsioonivaba Eesti"
+							/>
+						</a>
+					</div>
 
 					<p>
 						Küsimuste või ettepanekute korral võta meiega ühendust aadressil <a
