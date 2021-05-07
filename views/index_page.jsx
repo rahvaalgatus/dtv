@@ -21,11 +21,29 @@ module.exports = function(attrs) {
 
 		<Section id="intro-section">
 			<p class="section-paragraph">
-				2020.-2021. õppeaastal ühingu Korruptsioonivaba Eesti eestveetav kaasava eelarvestamise projekt koolides on esimene Eestis, kus kohalike omavalitsuste kaasava eelarvestamise eeskujul saavad õpilased välja töötada, arendada ja esitleda ideesid, mille vahel kooli kogukond valib kõige sobilikuma viisi eelarve kasutamiseks. Eesti Koostöö Kogu pakub projekti raames koolidele keskkonda, mis võimaldab õpilastel ettepanekuid esitada ja nende üle hääletada digitaalsel kujul.
+				2020-2021. õppeaastal toetavad <a href="https://www.transparency.ee">SA Korruptsioonivaba Eesti</a> ja <a href="https://kogu.ee">SA Eesti Koostöö Kogu</a> kaasava kooli pilootprojekti läbiviimist neljas erinevas Eesti koolis (Tallinna Rahumäe Põhikool, Keeni Põhikool, Rapla Gümnaasium, Tartu Annelinna Gümnaasium).
 			</p>
 
 			<p class="section-paragraph">
-				Ettevõtmise kaudu on õpilastel võimalus saada osa avatud (kooli)valitsemisest, kogukonnana otsustamisest ja enda elu puudutavates otsustes osalemisest, arendades sealhulgas ka infoühiskonnas toimimiseks vajalikke digipädevusi. Eesmärk on, et õpilased lihtsalt ei õpiks koolis, mis on demokraatia, vaid saaksid ka päriselulise demokraatias osalemise ja selle toimimises kaasa löömise kogemuse, mis loob loodetavasti eeldused ka hiljem väljaspool koolikeskkonda demokraatlikes protsessides osalemiseks.
+				Inspireerituna kohalikes omavalitsustes laialdaselt rakendatavast kaasava eelarve meetodist, katsetatakse pilootprojekti raames sarnast mudelit ka koolikeskkonnas. Projekti raames eraldavad koolid oma eelarvest summa, mille kasutamiseks saavad õpilased ise välja pakkuda ja esitleda kooli elu parandavaid ideekavandeid. Ideekavandite vahel toimub konkurss, mil kogukond saab anda hääle enim meeldivale või vajalikule projektile. Enim hääli saanud ideed teostatakse.
+			</p>
+
+			<p class="section-paragraph">
+				<a href="https://kogu.ee">Eesti Koostöö Kogu</a> pakub projekti raames koolidele keskkonda, mis võimaldab õpilastel ettepanekuid esitada ja nende üle hääletada digitaalsel kujul. Ettevõtmise eesmärk on suurendada õpilaste teadlikkust demokraatlikest otsustusprotsessidest ning aktiveerida neid koolielus kaasa rääkima.
+			</p>
+
+			<p class="section-paragraph">
+				Projekti kaudu saavad õpilased osa:
+			</p>
+
+			<ul class="section-list">
+				<li>avatud (kooli)valitsemisest;</li>
+				<li>kogukonnana otsustamisest ja enda elu puudutavates otsustes osalemisest;</li>
+				<li>vajalike digipädevuste arendamisest.</li>
+			</ul>
+
+			<p class="section-paragraph">
+				Eesmärk on, et õpilased lihtsalt ei õpiks koolis teoreetiliselt, mis on demokraatia, vaid saaksid ka päriselulise kaasa rääkimise ja koos otsustamise kogemuse. See loob eeldused tugevama kogukonna ja kodanikuühiskonna arenguks.
 			</p>
 
 			<p class="section-paragraph">
