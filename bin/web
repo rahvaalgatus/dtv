@@ -9,7 +9,7 @@ var Http = require("http")
 var Express = require("express")
 var Config = require("root/config")
 var HttpError = require("standard-http-error")
-var ENV = process.env.NODE_ENV
+var ENV = process.env.ENV
 var PORT = process.env.PORT || 3030
 
 var app = module.exports = Express()
