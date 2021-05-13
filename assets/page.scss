@@ -474,6 +474,17 @@ textarea.budget-input {
 }
 
 #home-page main {
+	#cover-image {
+		display: block;
+		margin-bottom: 2rem;
+
+		outline-offset: 0.2rem;
+		-moz-outline-radius: 2px;
+
+		img { width: 100%; }
+		&:focus { outline: 1px dashed $blue; }
+	}
+
 	#schools {
 		margin-top: 2rem;
 		line-height: 1.5;
