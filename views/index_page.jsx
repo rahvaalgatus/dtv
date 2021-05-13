@@ -47,7 +47,7 @@ module.exports = function(attrs) {
 			</p>
 
 			<p class="section-paragraph">
-				Projekt on saanud innustust Rootsi DigiDem Labi ning Transparency Internationali Leedu ühingu samasugustest ettevõtmistest. Projekti toetab Põhjamaade Ministrite Nõukogu.
+				Projekt on saanud innustust <a href="https://digidemlab.org/en/">Rootsi DigiDem</a> Labi ning <a href="https://www.transparency.lt/en/">Transparency Internationali Leedu</a> ühingu samasugustest ettevõtmistest. Projekti toetab <a href="https://www.norden.ee/et/">Põhjamaade Ministrite Nõukogu</a>.
 			</p>
 		</Section>
 
