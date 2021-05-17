@@ -25,7 +25,7 @@ module.exports = function(attrs) {
 			</a>
 
 			<p class="section-paragraph">
-				2020-2021. õppeaastal toetavad <a href="https://www.transparency.ee">SA Korruptsioonivaba Eesti</a> ja <a href="https://kogu.ee">SA Eesti Koostöö Kogu</a> kaasava kooli pilootprojekti läbiviimist neljas erinevas Eesti koolis (Tallinna Rahumäe Põhikool, Keeni Põhikool, Rapla Gümnaasium, Tartu Annelinna Gümnaasium).
+				2020-2021. õppeaastal toetavad <a href="https://www.transparency.ee">MTÜ Korruptsioonivaba Eesti</a> ja <a href="https://kogu.ee">SA Eesti Koostöö Kogu</a> kaasava kooli pilootprojekti läbiviimist neljas erinevas Eesti koolis (Tallinna Rahumäe Põhikool, Keeni Põhikool, Rapla Gümnaasium, Tartu Annelinna Gümnaasium).
 			</p>
 
 			<p class="section-paragraph">
