@@ -25,15 +25,16 @@ module.exports = function(attrs) {
 			</a>
 
 			<p class="section-paragraph">
-				2020-2021. õppeaastal toetavad <a href="https://www.transparency.ee">MTÜ Korruptsioonivaba Eesti</a> ja <a href="https://kogu.ee">SA Eesti Koostöö Kogu</a> kaasava kooli pilootprojekti läbiviimist neljas erinevas Eesti koolis (Tallinna Rahumäe Põhikool, Keeni Põhikool, Rapla Gümnaasium, Tartu Annelinna Gümnaasium).
+				Ühingu <a href="https://www.transparency.ee">MTÜ Korruptsioonivaba Eesti</a> ning <a href="https://kogu.ee">SA Eesti Koostöö Kogu</a> algatatud kaasava eelarvestamise projekt koolides on esimene laiaulatuslikum ettevõtmine Eestis, kus kohalike omavalitsuste kaasava eelarvestamise eeskujul saavad õpilased välja töötada, arendada ja esitleda ideesid, mille vahel kooli kogukond valib kõige sobilikuma viisi eelarve kasutamiseks.
 			</p>
 
 			<p class="section-paragraph">
-				Inspireerituna kohalikes omavalitsustes laialdaselt rakendatavast kaasava eelarve meetodist, katsetatakse pilootprojekti raames sarnast mudelit ka koolikeskkonnas. Projekti raames eraldavad koolid oma eelarvest summa, mille kasutamiseks saavad õpilased ise välja pakkuda ja esitleda kooli elu parandavaid ideekavandeid. Ideekavandite vahel toimub konkurss, mil kogukond saab anda hääle enim meeldivale või vajalikule projektile. Enim hääli saanud ideed teostatakse.
+				Käesoleva lehe puhul on tegemist koolidele loodud keskkonnaga, kus õpilased saavad digitaalselt ettepanekuid esitada ja nende üle kaasaegseid e-vahendeid kasutades demokraatlikult hääletada. 
+
 			</p>
 
 			<p class="section-paragraph">
-				<a href="https://kogu.ee">Eesti Koostöö Kogu</a> pakub projekti raames koolidele keskkonda, mis võimaldab õpilastel ettepanekuid esitada ja nende üle hääletada digitaalsel kujul. Ettevõtmise eesmärk on suurendada õpilaste teadlikkust demokraatlikest otsustusprotsessidest ning aktiveerida neid koolielus kaasa rääkima.
+				Ettevõtmise eesmärk on suurendada õpilaste teadlikkust demokraatlikest otsustusprotsessidest ning aktiveerida neid koolielus kaasa rääkima.
 			</p>
 
 			<p class="section-paragraph">
@@ -50,9 +51,7 @@ module.exports = function(attrs) {
 				Eesmärk on, et õpilased lihtsalt ei õpiks koolis teoreetiliselt, mis on demokraatia, vaid saaksid ka päriselulise kaasa rääkimise ja koos otsustamise kogemuse. See loob eeldused tugevama kogukonna ja kodanikuühiskonna arenguks.
 			</p>
 
-			<p class="section-paragraph">
-				Projekt on saanud innustust <a href="https://digidemlab.org/en/">Rootsi DigiDem</a> Labi ning <a href="https://www.transparency.lt/en/">Transparency Internationali Leedu</a> ühingu samasugustest ettevõtmistest. Projekti toetab <a href="https://www.norden.ee/et/">Põhjamaade Ministrite Nõukogu</a>.
-			</p>
+			
 		</Section>
 
 		<Section id="schools-section">
