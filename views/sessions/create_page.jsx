@@ -1,6 +1,7 @@
 /** @jsx Jsx */
 var Jsx = require("j6pack")
 var Page = require("../page")
+var Config = require("root/config")
 var {Header} = Page
 var {Section} = Page
 var {Form} = Page
@@ -26,11 +27,17 @@ module.exports = function(attrs) {
 				Sisselogimiseks vali autentimismeetod.
 			</p>
 
-			<Form req={req} action={req.baseUrl} id="authentication-form">
+			<Form
+				req={req}
+				action={req.baseUrl}
+				method="post"
+				id="authentication-form"
+			>
 				<EidView
 					req={req}
 					formId="authentication-form"
 					action="auth"
+					idCardAuthenticationUrl={Config.idCardAuthenticationUrl + req.baseUrl}
 					pending="Login sisse…"
 					submit="Logi sisse"
 				/>

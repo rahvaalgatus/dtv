@@ -1,6 +1,7 @@
 {
 	"cookieSecret": "py8mG85TczmKTQYtoCPa8nkjnkuKHEjB",
-	"sessionCookieName": "kaasavkool_session_token",
+	"cookieDomain": "kaasavkool.rahvaalgatus.test",
+	"idCardAuthenticationUrl": "/sessions",
 	"timemarkUrl": "http://demo.sk.ee/ocsp",
 
 	"issuers": [[

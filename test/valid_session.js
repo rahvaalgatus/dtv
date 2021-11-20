@@ -7,11 +7,12 @@ module.exports = function(attrs) {
 	var session = _.assign({
 		created_at: new Date,
 		token_sha256: _.sha256(token),
-		method: "id-card"
+		method: "id-card",
+		deleted_at: null
 	}, attrs)
 
 	Object.defineProperty(session, "token", {
-		value: token, configurable: true, writable: true
+		value: token, configurable: true, writable: true, enumerable: false
 	})
 
 	return session

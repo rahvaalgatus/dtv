@@ -5,12 +5,12 @@ var {Header} = Page
 var {Section} = Page
 
 module.exports = function(attrs) {
-	var {title} = attrs
+	var title = attrs.title || "Vabandust!"
 	var {message} = attrs
 
-	return <Page page="error" req={attrs.req} title="Vabandust!">
+	return <Page page="error" req={attrs.req} title={title}>
 		<Header>
-			<h1>{title || "Vabandust!"}</h1>
+			<h1>{title}</h1>
 		</Header>
 
 		<Section>

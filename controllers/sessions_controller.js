@@ -9,7 +9,6 @@ var MobileIdError = require("undersign/lib/mobile_id").MobileIdError
 var SmartId = require("undersign/lib/smart_id")
 var SmartIdError = require("undersign/lib/smart_id").SmartIdError
 var Certificate = require("undersign/lib/certificate")
-var ExpiringMap = require("root/lib/expiring_map")
 var logger = require("root").logger
 var next = require("co-next")
 var mobileId = require("root").mobileId
@@ -25,7 +24,7 @@ var {getNormalizedMobileIdErrorCode} = require("root/lib/eid")
 var {waitForSession} = require("root/lib/eid")
 var co = require("co")
 var sql = require("sqlate")
-var authentications = new ExpiringMap(process.env.ENV == "test" ? 5 : 5 * 60)
+var outdent = require("root/lib/outdent")
 
 var waitForMobileIdSession =
 	waitForSession.bind(null, mobileId.waitForAuthentication.bind(mobileId))
@@ -153,64 +152,63 @@ var SMART_ID_ERRORS = {
 exports.router = Router({mergeParams: true})
 exports.router.use(require("root/lib/eid").parseSignatureBody)
 
-exports.router.get("/new", function(req, res) {
+exports.router.get("/", function(req, res) {
 	if (req.account) res.redirect(302, referTo(req, req.headers.referer, "/"))
+	else res.redirect(302, "/sessions/new")
+})
+
+exports.router.get("/new", function(req, res) {
+	if (req.account) {
+		res.statusMessage = "Already Signed In"
+		res.redirect(302, referTo(req, req.headers.referer, "/"))
+	}
 	else res.render("sessions/create_page.jsx")
 })
 
 exports.router.post("/", next(function*(req, res) {
 	var method = getRequestEidMethod(req)
-	var cert, country, token, tokenHash, verificationCode, err, personalId
+	var cert, country, personalId
+	var sessionToken, sessionTokenHash, verificationCode
+	var err
 
 	switch (method) {
 		case "id-card":
-			var authToken = req.query["authentication-token"]
+			var pem = req.headers["x-client-certificate"]
+			if (pem == null) throw new HttpError(400, "Missing Certificate", {
+				description: "Tundub, et kas veebilehitseja ei alustanud ID-kaardiga autentimist või otsustasid autentimise katkestada. Kas ID-kaardi tarkvara on installitud ja mujal töötab? Vahel on abi veebilehitseja taasavamisest. Kui vajad abi, palun võta meiega ühendust."
+			})
 
-			if (authToken == null) {
-				cert = Certificate.parse(req.body)
-				if (err = validateCertificate(cert)) throw err
+			cert = Certificate.parse(pem.replace(/\t/g, "\n"))
+			if (err = validateCertificate(cert)) throw err
 
-				;[country, personalId] = getCertificatePersonalId(cert)
-				if (country != "EE") throw new HttpError(422, "Estonian Users Only")
-
-				token = Crypto.randomBytes(16)
-				tokenHash = _.sha256(token)
-
-				var authUrl = req.baseUrl
-				authUrl += "?authentication-token=" + token.toString("hex")
-				res.setHeader("Location", authUrl)
-				res.setHeader("Content-Type", "application/vnd.rahvaalgatus.signable")
-				res.status(202).end(tokenHash)
-
-				authentications.set(token, {
-					country: country,
-					personal_id: personalId,
-					method: "id-card",
-					certificate: cert,
-					token: token,
-					created_ip: req.ip,
-					created_user_agent: req.headers["user-agent"]
-				})
-			}
-			else {
-				var auth = authentications.delete(Buffer.from(authToken || "", "hex"))
-
-				if (!auth) throw new HttpError(404, "Authentication Not Found", {
-					description: "Kahjuks sisselogimine aegus. Palun proovi uuesti."
+			if (req.headers["x-client-certificate-verification"] != "SUCCESS")
+				throw new HttpError(422, "Invalid Signature", {
+					description: outdent`
+						Kahjuks autentimine ei õnnestunud.
+						See võib olla tingitud nii valest digiallkirjast kui ka tühistatud ID-kaardist.
+						Kui arvad, et tegu on eksitusega, palun võta meiega ühendust.
+					`
 				})
 
-				if (!auth.certificate.hasSigned(auth.token, req.body))
-					throw new HttpError(409, "Invalid Signature", {
-						description: "Digiallkiri ei vasta sertifikaadile."
-					})
+			;[country, personalId] = getCertificatePersonalId(cert)
+			sessionToken = Crypto.randomBytes(16)
 
-				var sessionToken = Crypto.randomBytes(16)
-				var account = yield readOrCreateAccount(auth)
-				yield createSession(auth, account, sessionToken)
-				signIn(sessionToken, req, res)
-				res.setHeader("Content-Type", "application/json")
-				res.status(201).end(JSON.stringify({code: "OK", location: "/"}))
+			var auth = {
+				country: country,
+				personal_id: personalId,
+				method: "id-card",
+				token: sessionToken,
+				certificate: cert,
+				created_ip: req.ip,
+				created_user_agent: req.headers["user-agent"]
 			}
+
+			var account = yield readOrCreateAccount(auth)
+			yield createSession(auth, account)
+			signIn(sessionToken, req, res)
+
+			res.statusMessage = "Signed In"
+			res.redirect(302, "/")
 			break
 
 		case "mobile-id":
@@ -230,26 +228,26 @@ exports.router.post("/", next(function*(req, res) {
 			;[country, personalId] = getCertificatePersonalId(cert)
 			if (country != "EE") throw new HttpError(422, "Estonian Users Only")
 
-			token = Crypto.randomBytes(16)
-			tokenHash = _.sha256(token)
+			sessionToken = Crypto.randomBytes(16)
+			sessionTokenHash = _.sha256(sessionToken)
 
-			var sessionId = yield mobileId.authenticate(
+			var mobileIdSession = yield mobileId.authenticate(
 				phoneNumber,
 				personalId,
-				tokenHash
+				sessionTokenHash
 			)
 
-			verificationCode = MobileId.confirmation(tokenHash)
-			respondWithVerificationCode(token, verificationCode, res)
+			verificationCode = MobileId.confirmation(sessionTokenHash)
+			respondWithVerificationCode(sessionToken, verificationCode, res)
 
 			co(waitForMobileIdAuthentication({
 				country: country,
 				personal_id: personalId,
 				method: "mobile-id",
-				token: token,
+				token: sessionToken,
 				created_ip: req.ip,
 				created_user_agent: req.headers["user-agent"]
-			}, sessionId, res))
+			}, mobileIdSession, res))
 			break
 
 		case "smart-id":
@@ -258,78 +256,48 @@ exports.router.post("/", next(function*(req, res) {
 			// Log Smart-Id requests to confirm SK's billing.
 			logger.info("Authenticating via Smart-Id for %s.", personalId)
 
-			token = Crypto.randomBytes(16)
-			tokenHash = _.sha256(token)
+			sessionToken = Crypto.randomBytes(16)
+			sessionTokenHash = _.sha256(sessionToken)
 
-			var session = yield smartId.authenticate("PNOEE-" + personalId, tokenHash)
+			var smartIdSession = yield smartId.authenticate(
+				"PNOEE-" + personalId,
+				sessionTokenHash
+			)
 
-			verificationCode = SmartId.verification(tokenHash)
-			respondWithVerificationCode(token, verificationCode, res)
+			verificationCode = SmartId.verification(sessionTokenHash)
+			respondWithVerificationCode(sessionToken, verificationCode, res)
 
 			co(waitForSmartIdAuthentication({
 				country: "EE",
 				personal_id: personalId,
 				method: "smart-id",
-				token: token,
+				token: sessionToken,
 				created_ip: req.ip,
 				created_user_agent: req.headers["user-agent"]
-			}, session, res))
+			}, smartIdSession, res))
 			break
 
 		default: throw new HttpError(422, "Unknown Authentication Method")
 	}
 
-	function respondWithVerificationCode(token, verificationCode, res) {
+	function respondWithVerificationCode(sessionToken, verificationCode, res) {
 		// Without a byte of body, Firefox won't resolve the Fetch promise.
 		res.statusCode = 202
 		res.setHeader("X-Accel-Buffering", "no")
 		res.setHeader("X-Verification-Code", _.padLeft(verificationCode, 4, 0))
 		res.setHeader("Content-Type", "application/json")
 
-		// TODO: Reuse signed token or generate new?
-		signIn(token, req, res)
+		// Reuse signed token or generate new?
+		signIn(sessionToken, req, res)
 		res.write("\n")
 	}
-}), function(err, _req, res, next) {
-	if (err instanceof HttpError) {
-		res.statusCode = err.code
-		res.statusMessage = err.message
+}), function(err, _req, _res, next) {
+	if (
+		err instanceof MobileIdError ||
+		err instanceof SmartIdError
+	) err = serializeError(err)
 
-		res.json({
-			code: err.code,
-			message: err.message,
-			description: err.description
-		})
-	}
-	else if (err instanceof MobileIdError) {
-		var code = getNormalizedMobileIdErrorCode(err)
-
-		if (code in MOBILE_ID_ERRORS) {
-			res.statusCode = MOBILE_ID_ERRORS[code][0]
-			res.statusMessage = MOBILE_ID_ERRORS[code][1]
-
-			res.json({
-				code: res.statusCode,
-				message: res.statusMessage,
-				description: MOBILE_ID_ERRORS[code][2]
-			})
-		}
-		else throw new HttpError(500, "Unknown Mobile-Id Error", {error: err})
-	}
-	else if (err instanceof SmartIdError) {
-		if (err.code in SMART_ID_ERRORS) {
-			res.statusCode = SMART_ID_ERRORS[err.code][0]
-			res.statusMessage = SMART_ID_ERRORS[err.code][1]
-
-			res.json({
-				code: res.statusCode,
-				message: res.statusMessage,
-				description: SMART_ID_ERRORS[err.code][2]
-			})
-		}
-		else throw new HttpError(500, "Unknown Smart-Id Error", {error: err})
-	}
-	else next(err)
+	next(err)
 })
 
 exports.router.use("/:id", next(function*(req, _res, next) {
@@ -354,7 +322,8 @@ exports.router.delete("/:id", next(function*(req, res) {
 	// NOTE: There's no security benefit in resetting the CSRF token on signout.
 	if (req.session.id == session.id) res.clearCookie(Config.sessionCookieName, {
 		httpOnly: true,
-		secure: req.secure
+		secure: req.secure,
+		domain: Config.cookieDomain
 	})
 
 	var to = req.headers.referer
@@ -369,9 +338,11 @@ function referTo(req, referrer, fallback) {
 	return req.hostname == referrerHost ? referrer : fallback
 }
 
-function* waitForMobileIdAuthentication(authentication, sessionId, res) {
+function* waitForMobileIdAuthentication(authentication, mobileIdSession, res) {
 	try {
-		var certAndSignatureHash = yield waitForMobileIdSession(120, sessionId)
+		var certAndSignatureHash =
+			yield waitForMobileIdSession(120, mobileIdSession)
+
 		if (certAndSignatureHash == null) throw new MobileIdError("TIMEOUT")
 		var [cert, signatureHash] = certAndSignatureHash
 
@@ -389,7 +360,7 @@ function* waitForMobileIdAuthentication(authentication, sessionId, res) {
 
 		authentication.certificate = cert
 		var account = yield readOrCreateAccount(authentication)
-		yield createSession(authentication, account, authentication.token)
+		yield createSession(authentication, account)
 		res.end(JSON.stringify({code: "OK", location: "/"}))
 	}
 	catch (ex) {
@@ -399,13 +370,13 @@ function* waitForMobileIdAuthentication(authentication, sessionId, res) {
 			getNormalizedMobileIdErrorCode(ex) in MOBILE_ID_ERRORS
 		)) logger.error(ex)
 
-		res.end(serializeError(ex))
+		res.end(jsonfiyError(serializeError(ex)))
 	}
 }
 
-function* waitForSmartIdAuthentication(authentication, session, res) {
+function* waitForSmartIdAuthentication(authentication, smartIdSession, res) {
 	try {
-		var certAndSignatureHash = yield waitForSmartIdSession(120, session)
+		var certAndSignatureHash = yield waitForSmartIdSession(120, smartIdSession)
 		if (certAndSignatureHash == null) throw new SmartIdError("TIMEOUT")
 		var [cert, signature] = certAndSignatureHash
 
@@ -423,7 +394,7 @@ function* waitForSmartIdAuthentication(authentication, session, res) {
 
 		authentication.certificate = cert
 		var account = yield readOrCreateAccount(authentication)
-		yield createSession(authentication, account, authentication.token)
+		yield createSession(authentication, account)
 		res.end(JSON.stringify({code: "OK", location: "/"}))
 	}
 	catch (ex) {
@@ -432,7 +403,7 @@ function* waitForSmartIdAuthentication(authentication, session, res) {
 			ex instanceof SmartIdError && ex.code in SMART_ID_ERRORS
 		)) logger.error(ex)
 
-		res.end(serializeError(ex))
+		res.end(jsonfiyError(serializeError(ex)))
 	}
 }
 
@@ -458,10 +429,10 @@ function* readOrCreateAccount(auth) {
 	})
 }
 
-function* createSession(authentication, account, sessionToken) {
+function* createSession(authentication, account) {
 	yield sessionsDb.create({
 		account_id: account.id,
-		token_sha256: _.sha256(sessionToken),
+		token_sha256: _.sha256(authentication.token),
 		method: authentication.method,
 		created_ip: authentication.created_ip,
 		created_user_agent: authentication.created_user_agent
@@ -472,10 +443,37 @@ function signIn(token, req, res) {
 	res.cookie(Config.sessionCookieName, token.toString("hex"), {
 		httpOnly: true,
 		secure: req.secure,
+		domain: Config.cookieDomain,
 		maxAge: 365 * 86400 * 1000
 	})
 }
 
 function serializeError(err) {
-	return JSON.stringify({code: err.code, message: err.message})
+	if (err instanceof MobileIdError) {
+		var code = getNormalizedMobileIdErrorCode(err)
+
+		if (code in MOBILE_ID_ERRORS) return new HttpError(
+			MOBILE_ID_ERRORS[code][0],
+			MOBILE_ID_ERRORS[code][1],
+			{description: MOBILE_ID_ERRORS[code][2]}
+		)
+		else return new HttpError(500, "Unknown Mobile-Id Error", {error: err})
+	}
+	else if (err instanceof SmartIdError) {
+		if (err.code in SMART_ID_ERRORS) return new HttpError(
+			SMART_ID_ERRORS[err.code][0],
+			SMART_ID_ERRORS[err.code][1],
+			{description: SMART_ID_ERRORS[err.code][2]}
+		)
+		else return new HttpError(500, "Unknown Smart-Id Error", {error: err})
+	}
+	else return err
+}
+
+function jsonfiyError(err) {
+	return JSON.stringify({
+		code: err.code,
+		message: err.message,
+		description: err.description
+	})
 }

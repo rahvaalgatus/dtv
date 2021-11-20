@@ -16,6 +16,7 @@ function EidView(attrs) {
 	var {req} = attrs
 	var {formId} = attrs
 	var {action} = attrs // "auth" or "sign"
+	var {idCardAuthenticationUrl} = attrs
 	var {pending} = attrs
 	var {submit} = attrs
 	var {personalId} = attrs
@@ -46,7 +47,7 @@ function EidView(attrs) {
 		/>
 
 		<div class="signature-methods">
-			<label
+			{action != "auth" || idCardAuthenticationUrl ? <label
 				for="signature-method-tab-id-card"
 				class="tab id-card-tab"
 			>
@@ -55,7 +56,7 @@ function EidView(attrs) {
 					title="Id-kaart"
 					alt="Id-kaart"
 				/>
-			</label>
+			</label> : null}
 
 			<label
 				for="signature-method-tab-mobile-id"
@@ -80,13 +81,17 @@ function EidView(attrs) {
 			</label>
 		</div>
 
-		<fieldset id="id-card-tab">
-			<button id="id-card-button" class="blue-button">
+		{action != "auth" || idCardAuthenticationUrl ? <fieldset id="id-card-tab">
+			<button
+				id="id-card-button"
+				class="blue-button"
+				formaction={action == "auth" ? idCardAuthenticationUrl : null}
+			>
 				{submit}
 			</button>
 
 			<output />
-		</fieldset>
+		</fieldset> : null}
 
 		<fieldset id="mobile-id-tab">
 			<label>
@@ -95,7 +100,6 @@ function EidView(attrs) {
 				<input
 					type="tel"
 					name="phoneNumber"
-					required
 					class="budget-input"
 				/>
 			</label>
@@ -108,7 +112,6 @@ function EidView(attrs) {
 					pattern="[0-9]*"
 					inputmode="numeric"
 					name="personalId"
-					required
 					value={personalId}
 					class="budget-input"
 				/>
@@ -118,7 +121,12 @@ function EidView(attrs) {
 				{submit}
 			</button>
 
-			<output />
+			<output>
+				<noscript>
+					Mobiil-ID kaudu sisselogimine vajab kahjuks JavaScripti.
+					Palun lülita see brauseris ajutiselt sisse.
+				</noscript>
+			</output>
 		</fieldset>
 
 		<fieldset id="smart-id-tab">
@@ -131,7 +139,6 @@ function EidView(attrs) {
 					inputmode="numeric"
 					name="personalId"
 					value={personalId}
-					required
 					class="budget-input"
 				/>
 			</label>
@@ -140,7 +147,12 @@ function EidView(attrs) {
 				{submit}
 			</button>
 
-			<output />
+			<output>
+				<noscript>
+					Mobiil-ID kaudu sisselogimine vajab kahjuks JavaScripti.
+					Palun lülita see brauseris ajutiselt sisse.
+				</noscript>
+			</output>
 		</fieldset>
 
 		<script>{javascript`
@@ -148,9 +160,10 @@ function EidView(attrs) {
 			var form = document.getElementById(${formId})
 
 			form.addEventListener("submit", function(ev) {
-				ev.preventDefault()
-
 				var tab = ev.target.elements.method.value
+				if (tab == "id-card") return
+
+				ev.preventDefault()
 				document.getElementById(tab + "-tab").querySelector("button").click()
 			})
 
@@ -172,7 +185,7 @@ function EidView(attrs) {
 			var reduce = Function.call.bind(Array.prototype.reduce)
 			var encode = encodeURIComponent
 
-			;(function() {
+			if (${action == "sign"}) (function() {
 				var Hwcrypto = require("@kaasavkool/hwcrypto")
 				var tab = document.getElementById("id-card-tab")
 				var button = tab.querySelector("button")

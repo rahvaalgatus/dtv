@@ -1,3 +1,4 @@
+var _ = require("root/lib/underscore")
 var Fs = require("fs")
 var Config = require("root/config")
 var lazy = require("lazy-object").defineLazyProperty
@@ -15,7 +16,7 @@ lazy(exports, "sqlite", function() {
 
 	switch (ENV) {
 		case "test":
-			var sqlite = connect(":memory:")	
+			var sqlite = connect(":memory:")
 			var sql = require("sqlate")
 			sqlite.batch(String(Fs.readFileSync(__dirname + "/db/schema.sql")))
 			sqlite(sql`PRAGMA foreign_keys = ON`) // Schema resets foreign_keys.
@@ -38,10 +39,29 @@ lazy(exports, "tsl", function() {
 
   switch (ENV) {
 		case "development":
-		case "production":
 			var testPath = __dirname + "/config/tsl/ee_test.xml"
 			var test = Tsl.parse(Fs.readFileSync(testPath))
 			test.certificates.forEach(certificates.add.bind(certificates))
+			return certificates
+
+		case "test":
+			var Pem = require("undersign/lib/pem")
+			var X509Asn = require("undersign/lib/x509_asn")
+			var ISSUER_KEYS = require("root/test/fixtures").ISSUER_KEYS
+
+			var certsByCn = _.fromEntries(certificates.toArray().map((cert) => [
+				_.merge({}, ...cert.subject).commonName,
+				cert
+			]))
+
+			for (var commonName in ISSUER_KEYS) if (commonName in certsByCn) {
+				var keys = ISSUER_KEYS[commonName]
+				var publicKeyDer = Pem.parse(keys.publicKey)
+				var publicKeyAsn = X509Asn.SubjectPublicKeyInfo.decode(publicKeyDer)
+				var cert = certsByCn[commonName]
+				cert.asn.tbsCertificate.subjectPublicKeyInfo = publicKeyAsn
+			}
+
 			return certificates
 
 		default: return certificates

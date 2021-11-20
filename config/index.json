@@ -1,7 +1,10 @@
 {
 	"cookieSecret": null,
-	"sessionCookieName": "session_token",
+	"cookieDomain": "kaasavkool.rahvaalgatus.ee",
+	"sessionCookieName": "kaasavkool_2021_session_token",
+	"csrfCookieName": "kaasavkool_2021_csrf_token",
 
+	"idCardAuthenticationUrl": null,
 	"mobileIdUser": null,
 	"mobileIdPassword": null,
 	"smartIdUser": null,

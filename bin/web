@@ -9,6 +9,7 @@ var Http = require("http")
 var Express = require("express")
 var Config = require("root/config")
 var HttpError = require("standard-http-error")
+var outdent = require("root/lib/outdent")
 var ENV = process.env.ENV
 var PORT = process.env.PORT || 3030
 
@@ -43,19 +44,68 @@ _.each({
 	"/schools": require("../controllers/schools_controller").router
 }, (router, path) => app.use(path, router))
 
-app.use(function(_req, _res, next) { next(new HttpError(404)) })
+app.use((_req, _res, next) => next(new HttpError(404, "Not Found", {
+	title: "404 vabandust",
+
+	description: outdent`
+		Paistab, et siit aadressilt ei leia ühtegi lehte.
+		Kui arvad, et tegemist on veaga, palun anna sellest meile teada!
+	`
+})))
+
 app.use(require("root/lib/middleware/error_reporter_middleware"))
 
-app.use(require("root/lib/middleware/error_handler_middleware").bind(null,
-	function(err, _req, res) {
-	if (err instanceof HttpError) res.render("error_page.jsx", {
-		message: err.description || err.message
-	})
-	else res.render("error_page.jsx", {
-		title: "Vabandust!",
-		message: "Süsteemi viga. Palun proovi uuesti, ja kui probleem kordub, võta meiega ühendust!"
-	})
-}))
+app.use(function(err, req, res, _next) {
+	// Stop handling here if there was an error, but it's been responded to
+	// already.
+	if (res.headersSent) return
+
+	if (err instanceof HttpError) {
+		res.statusCode = err.code
+		res.statusMessage = err.message
+
+		switch (req.accepts(["html", "json"])) {
+			case "json": return void res.json({
+				code: err.code,
+				message: err.message,
+				description: err.description
+			})
+
+			default: return void res.render("error_page.jsx", {
+				title: err.title || err.code + " vabandust",
+				message: err.description || err.message
+			})
+		}
+	}
+
+	res.statusCode = 500
+
+	switch (ENV) {
+		case "development":
+		case "test":
+			res.setHeader("Content-Type", "text/plain")
+			return void res.end(err.stack)
+
+		default:
+			var description = outdent`
+				Tundub, et me süsteemil on mingi viga.
+				Palun proovi korra uuesti, ja kui probleem kordub, võta meiega ühendust. Aitäh!
+			`
+
+			switch (req.accepts(["html", "json"])) {
+				case "json": return void res.json({
+					code: 500,
+					message: "Internal Server Error",
+					description
+				})
+
+				default: return void res.render("error_page.jsx", {
+					title: "500 vabandust",
+					message: description
+				})
+			}
+	}
+})
 
 if (module.parent) return
 runServer(app, PORT)
