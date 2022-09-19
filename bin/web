@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 void require("j6pack/register")
-process.title = "budget/web"
+process.title = "eelarveldaja/web"
 
 var _ = require("root/lib/underscore")
 var Fs = require("fs")
