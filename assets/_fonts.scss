@@ -5,9 +5,9 @@
 
   src: url("/assets/aino-regular.eot");
   src:
-		url("/assets/aino-regular.eot?#iefix") format("embedded-opentype"),
 		url("/assets/aino-regular.woff") format("woff"),
-		url("/assets/aino-regular.ttf") format("truetype");
+		url("/assets/aino-regular.woff2") format("woff2"),
+		url("/assets/aino-regular.otf") format("opentype");
 }
 
 @font-face {
@@ -17,9 +17,9 @@
 
   src: url("/assets/aino-bold.eot");
   src:
-		url("/assets/aino-bold.eot?#iefix") format("embedded-opentype"),
 		url("/assets/aino-bold.woff") format("woff"),
-		url("/assets/aino-bold.ttf") format("truetype");
+		url("/assets/aino-bold.woff2") format("woff2"),
+		url("/assets/aino-bold.otf") format("opentype");
 }
 
 @font-face {
@@ -29,7 +29,7 @@
 
   src: url("/assets/aino-headline.eot");
   src:
-		url("/assets/aino-headline.eot?#iefix") format("embedded-opentype"),
 		url("/assets/aino-headline.woff") format("woff"),
-		url("/assets/aino-headline.ttf") format("truetype");
+		url("/assets/aino-headline.woff2") format("woff2"),
+		url("/assets/aino-headline.otf") format("opentype");
 }
