@@ -1,12 +1,22 @@
 @import "reset";
 @import "fonts";
 $page-padding: 4rem;
-$page-width: 68rem + 2 * $page-padding;
+$phablet-page-padding: 3rem;
+$mobile-page-padding: 2.2rem;
+$hero-header-vertical-breakpoint: 767px;
+$mobile-breakpoint: 399px;
+$phablet-breakpoint: 599px;
 
 // https://brand.estonia.ee/et/disain/varvid/
-$body-font: Aino, sans-serif;
-$headline-font: Aino Headline, Aino, sans-serif;
+$aino: Aino, sans-serif;
+$aino-headline: Aino Headline, Aino, sans-serif;
+$museo-sans: "Museo Sans Cyrl", "Museo Sans", sans-serif;
+$headline-font: $museo-sans;
+$body-font: $aino;
+$cover-blue: #8ddced;
+$cover-green: #87df77;
 $blue: #004367;
+$yellow: #feef7f;
 $link-blue: #0078ff;
 $light-grey: #f0f1f2;
 $eid-background: #fbfbfb;
@@ -22,6 +32,12 @@ $eid-background: #fbfbfb;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+@mixin hyphens($value) {
+	-webkit-hyphens: $value;
+	-moz-hyphens: $value;
+	hyphens: $value;
 }
 
 @mixin progress-bar() {
@@ -67,16 +83,28 @@ main section {
 }
 
 .centered {
-	max-width: $page-width;
+	max-width: 68rem + 2 * $page-padding;
 	margin-left: auto;
 	margin-right: auto;
 	padding-left: $page-padding;
 	padding-right: $page-padding;
+
+	@media only screen and (max-width: $phablet-breakpoint) {
+		padding-left: $phablet-page-padding;
+		padding-right: $phablet-page-padding;
+	}
+
+	@media only screen and (max-width: $mobile-breakpoint) {
+		padding-left: $mobile-page-padding;
+		padding-right: $mobile-page-padding;
+	}
 }
 
 .section-heading {
 	font-size: 3rem;
 	font-family: $headline-font;
+	font-weight: 900;
+	text-align: center;
 
 	& + .section-paragraph {
 		margin-top: 2rem;
@@ -87,20 +115,23 @@ main section {
 	line-height: 1.5;
 	text-align: justify;
 
-	a {
-		@extend .link-button;
-	}
+	a { @extend .link-button; }
+	strong { font-weight: bold; }
 
-	& + .section-paragraph { margin-top: 1rem; }
+	& + .section-paragraph { margin-top: 1.5rem; }
+	& + .section-block { margin-top: 1.5rem; }
 	& + .section-list { margin-top: 1rem; }
 	& + .budget-table { margin-top: 2rem; }
 }
+
+.section-block + .section-paragraph { margin-top: 2rem; }
 
 ul.section-list {
 	padding-left: 2rem;
 	line-height: 1.5;
 
 	li {
+		margin-left: 1.5rem;
 		list-style: disc;
 	}
 
@@ -112,13 +143,22 @@ ul.section-list {
 	padding: 1.2rem 2.5rem;
 	border: none;
 	border-radius: 0.5rem;
-	letter-spacing: 0.1rem;
 	line-height: 1;
+	font-family: $museo-sans;
 	font-weight: bold;
 	font-size: 1.6rem;
 
 	// Explicit center for when the buttons are displayed as blocks.
 	text-align: center;
+
+	&:focus {
+		outline-style: dashed;
+		outline-width: 0.1rem;
+		outline-offset: 0.2rem;
+		-moz-outline-radius: 0.7rem;
+	}
+
+	&:active { outline: none; }
 }
 
 .blue-button {
@@ -127,10 +167,35 @@ ul.section-list {
 	background: $blue;
 	color: white;
 
-	outline-offset: 0.2rem;
-	-moz-outline-radius: 7px;
+	&:focus { outline-color: $blue; }
+}
 
-	&:focus { outline: 1px dashed $blue; }
+.green-button {
+	@extend %button;
+
+	background: #96e97f;
+	color: black;
+	border-radius: 5rem;
+	padding: 1.5rem 2.5rem;
+	box-shadow: 0 3px 4px 1px rgba(black, 0.06);
+	text-transform: uppercase;
+
+	&:focus { outline-color: black; }
+	&:active:focus:hover { box-shadow: inset 0 0.3rem 0.1rem rgba(black, 0.3); }
+}
+
+.cyan-button {
+	@extend %button;
+
+	background: #a9e8fa;
+	color: black;
+	border-radius: 5rem;
+	padding: 1.5rem 2.5rem;
+	box-shadow: 0 3px 4px 1px rgba(black, 0.06);
+	text-transform: uppercase;
+
+	&:focus { outline-color: black; }
+	&:active:focus:hover { box-shadow: inset 0 0.3rem 0.1rem rgba(black, 0.3); }
 }
 
 .link-button {
@@ -325,10 +390,14 @@ textarea.budget-input {
 }
 
 #nav {
-	padding: 2rem 0;
 	line-height: 3rem;
-	color: white;
-	background: $blue;
+	background: $yellow;
+	color: black;
+
+	.centered {
+		padding-top: 4rem;
+		padding-bottom: 2rem;
+	}
 
 	.home {
 		font-weight: bold;
@@ -382,51 +451,21 @@ textarea.budget-input {
 	}
 }
 
-#footer {
-	background: $blue;
-	color: white;
-	padding: 3rem 0;
-	line-height: 1.5;
-
-	.logos {
-		float: right;
-		margin-left: 4rem;
-
-		a { display: block; }
-		img { display: block; }
-		a + a { margin-top: 1rem; }
-	}
-
-	p {
-		text-align: left;
-	}
-
-	a {
-		text-decoration: underline;
-		outline-offset: 0.2rem;
-		-moz-outline-radius: 2px;
-
-		&:focus { outline: 1px dashed currentcolor; }
-	}
-}
-
 #header {
-	padding: 3rem 0;
-	background: $blue;
-	color: white;
+	background: $yellow;
+	color: black;
 	line-height: 1.5;
+
+	.centered {
+		padding-top: 2rem;
+		padding-bottom: 4rem;
+	}
 
 	h1 {
 		font-size: 4.8rem;
 		font-family: $headline-font;
-		line-height: 1.4;
-	}
-
-	a {
-		outline-offset: 0.2rem;
-		-moz-outline-radius: 2px;
-
-		&:focus { outline: 1px dashed currentcolor; }
+		font-weight: 900;
+		line-height: 1.2;
 	}
 
 	menu {
@@ -434,13 +473,14 @@ textarea.budget-input {
 
 		a {
 			border-radius: 0.3rem;
-			border: 1px solid rgba(white, 0.7);
-			border: 1px solid transparent;
 			font-size: 1.4rem;
 			display: inline-block;
 			padding: 0.5rem 1rem;
 			outline-offset: 0.2rem;
 			border: 1px solid rgba(white, 0.8);
+			-moz-outline-radius: 2px;
+
+			&:focus { outline: 1px dashed currentcolor; }
 
 			&.selected {
 				color: $blue;
@@ -467,25 +507,123 @@ textarea.budget-input {
 		margin-top: 1rem;
 		font-size: 2.4rem;
 	}
+
+	&.hero {
+		overflow: hidden;
+
+		.centered {
+			position: relative;
+			background-image: linear-gradient(to right, $yellow 50%, $cover-green 0);
+			background-repeat: no-repeat;
+		}
+
+		.cover {
+			position: absolute;
+			top: 0;
+			left: 50%;
+			width: 50%;
+		}
+
+		.centered > .cover ~ * {
+			width: 50%;
+			padding-right: 3rem;
+		}
+
+		p {
+			font-family: $museo-sans;
+			font-size: 2rem;
+
+			.link-button { color: black; }
+		}
+	}
 }
 
 #header + section {
 	margin-top: 4rem;
 }
 
-#home-page main {
-	#cover-image {
-		display: block;
-		margin-bottom: 2rem;
+#footer {
+	background: $yellow;
+	color: black;
+	padding: 3rem 0;
+	line-height: 1.5;
 
+	.logos {
+		float: right;
+		margin-left: 4rem;
+
+		#kogu-logo { width: 10rem; }
+
+		a { display: block; }
+		img { display: block; }
+		a + a { margin-top: 1rem; }
+	}
+
+	p {
+		text-align: left;
+	}
+
+	a {
+		text-decoration: underline;
 		outline-offset: 0.2rem;
 		-moz-outline-radius: 2px;
 
-		img { width: 100%; }
-		&:focus { outline: 1px dashed $blue; }
+		&:focus { outline: 1px dashed currentcolor; }
+	}
+}
+
+#home-page,
+#help-page {
+	#nav .centered,
+	#header .centered {
+		max-width: 90rem + 2 * $page-padding;
 	}
 
-	#schools {
+	#nav .centered {
+		background-image: linear-gradient(to right, $yellow 50%, $cover-blue 0);
+		background-repeat: no-repeat;
+	}
+
+	@media only screen and (max-width: $hero-header-vertical-breakpoint) {
+		#nav .centered {
+			background-image: none;
+		}
+
+		#header {
+			.centered { background-image: none; }
+			.cover { display: none; }
+			.cover ~ * { width: 100%; padding-right: 0; }
+		}
+	}
+}
+
+#home-page {
+	#header {
+		h1 {
+			margin-bottom: 1.5rem;
+		}
+
+		.call-to-actions {
+			margin-top: 2rem;
+			a { margin-right: 1rem; margin-bottom: 1rem; }
+		}
+	}
+
+	main #intro-section .benefits-list {
+		.list-image {
+			float: left;
+			margin-top: 1rem;
+			margin-left: 2rem;
+			margin-right: 2rem;
+			width: 10rem;
+
+			& ~ * {
+				margin-left: 12rem;
+			}
+		}
+	}
+
+	main #schools {
 		margin-top: 2rem;
 		line-height: 1.5;
 
@@ -493,6 +631,90 @@ textarea.budget-input {
 			@extend .link-button;
 			font-size: 2rem;
 		}
+	}
+
+	@media only screen and (max-width: $hero-header-vertical-breakpoint) {
+		.call-to-actions {
+			text-align: center;
+		}
+	}
+}
+
+#help-page main {
+	.timestamps {
+		margin: 1rem auto 0;
+
+		td {
+			padding: 0.2rem 0.5rem;
+		}
+
+		a { @extend .link-button; }
+
+		td:first-child {
+			text-align: right;
+		}
+	}
+
+	.video + .video,
+	.section-paragraph + .video {
+		margin-top: 1.5rem;
+	}
+
+	.video {
+		position: relative;
+		background: #2e2f30;
+		overflow: hidden;
+		border-radius: 1rem;
+		display: flex;
+		align-items: center;
+		text-align: center;
+		justify-content: center;
+
+		&:before {
+			content: "";
+			float: left;
+			width: 1px;
+			margin-left: -1px;
+			height: 0;
+			padding-top: (9 / 16) * 100%;
+		}
+
+		iframe {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	#workshop {
+		ol {
+			counter-reset: lesson;
+
+			li {
+				margin-top: 2rem;
+				counter-increment: lesson;
+				margin-left: 3rem;
+
+				&:before {
+					clear: left;
+					float: left;
+					margin-left: -3rem;
+					margin-right: 1rem;
+					content: counter(lesson) ". ";
+					font-size: 2rem;
+					font-family: $headline-font;
+					font-weight: 900;
+				}
+			}
+		}
+
+		.duration { color: #666; }
+	}
+
+	#book {
+		.download-links { margin-top: 2rem; }
 	}
 }
 

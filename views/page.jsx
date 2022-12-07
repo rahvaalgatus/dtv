@@ -1,5 +1,7 @@
 /** @jsx Jsx */
 var _ = require("root/lib/underscore")
+var Fs = require("fs")
+var Path = require("path")
 var Jsx = require("j6pack")
 var {Fragment} = Jsx
 var LIVERELOAD_PORT = process.env.LIVERELOAD_PORT || 35729
@@ -7,10 +9,14 @@ var ENV = process.env.ENV
 exports = module.exports = Page
 exports.Header = Header
 exports.Section = Section
+exports.Centered = Centered
 exports.Heading = Heading
 exports.Form = Form
 exports.DateElement = DateElement
 exports.serializeStyle = serializeStyle
+var ASSETS_PATH = Path.dirname(require.resolve("../public/assets/logo.svg"))
+var LOGO_SVG = Fs.readFileSync(ASSETS_PATH + "/logo.svg")
+var KOGU_LOGO_SVG = Fs.readFileSync(ASSETS_PATH + "/kogu.svg")
 
 function Page(attrs, children) {
 	var req = attrs.req
@@ -24,7 +30,7 @@ function Page(attrs, children) {
 		color: attrs.headerForegroundColor
 	})
 
-	return <html lang="en" class={attrs.class}>
+	return <html lang="et" class={attrs.class}>
 		<head>
 			<meta charset="utf-8" />
 			<meta name="viewport" content="width=device-width" />
@@ -36,7 +42,9 @@ function Page(attrs, children) {
 		<body id={page + "-page"}>
 			<nav id="nav" style={headerStyle}>
 				<Centered>
-					<a href="/" class="home">Kaasav Kool</a>
+					<a href="/" class="home" title="Demokraatia töövihik">
+						{Jsx.html(LOGO_SVG)}
+					</a>
 
 					<menu class="account">{account ? <Fragment>
 						<a class="account-name" href="/account">{account.name}</a>
@@ -60,7 +68,7 @@ function Page(attrs, children) {
 				<Centered>
 					<div class="logos">
 						<a href="https://kogu.ee" title="Eesti Koostöö Kogu">
-							<img width="100" src="/assets/kogu.png" alt="Eesti Koostöö Kogu" />
+							{Jsx.html(KOGU_LOGO_SVG)}
 						</a>
 
 						<a href="https://transparency.ee" title="Korruptsioonivaba Eesti">

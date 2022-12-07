@@ -1,61 +1,68 @@
 /** @jsx Jsx */
 var Jsx = require("j6pack")
 var Page = require("./page")
-var {Header} = Page
 var {Section} = Page
+var {Centered} = Page
 var {Heading} = Page
+exports = module.exports = IndexPage
+exports.HeroHeader = HeroHeader
 
-module.exports = function(attrs) {
+function IndexPage(attrs) {
 	var {req} = attrs
 	var {schools} = attrs
 	var schoolsPath = req.baseUrl + "/schools"
 
 	return <Page
 		page="home"
-		req={attrs.req}
+		req={req}
 		title="Kaasav Kool"
 	>
-		<Header>
-			<h1>Kaasav Kool</h1>
-		</Header>
-
-		<Section id="intro-section">
-			<a href="/assets/cover.jpg" id="cover-image">
-				<img src="/assets/cover.jpg" />
-			</a>
-
-			<p class="section-paragraph">
-				Ühingu <a href="https://www.transparency.ee">MTÜ Korruptsioonivaba Eesti</a> ning <a href="https://kogu.ee">SA Eesti Koostöö Kogu</a> algatatud kaasava eelarvestamise projekt koolides on esimene laiaulatuslikum ettevõtmine Eestis, kus kohalike omavalitsuste kaasava eelarvestamise eeskujul saavad õpilased välja töötada, arendada ja esitleda ideesid, mille vahel kooli kogukond valib kõige sobilikuma viisi eelarve kasutamiseks.
+		<HeroHeader title="Koolide kaasav eelarve">
+			<p>
+				Ühingu <a class="link-button" href="https://www.transparency.ee">MTÜ Korruptsioonivaba Eesti</a> ning <a class="link-button" href="https://kogu.ee">SA Eesti Koostöö Kogu</a> algatatud kaasava eelarvestamise projekt koolides on esimene laiaulatuslikum ettevõtmine Eestis, kus kohalike omavalitsuste kaasava eelarvestamise eeskujul saavad õpilased välja töötada, arendada ja esitleda ideesid, mille vahel kooli kogukond valib kõige sobilikuma viisi eelarve kasutamiseks.
 			</p>
 
-			<p class="section-paragraph">
-				Käesoleva lehe puhul on tegemist koolidele loodud keskkonnaga, kus õpilased saavad digitaalselt ettepanekuid esitada ja nende üle kaasaegseid e-vahendeid kasutades demokraatlikult hääletada. 
+			<div class="call-to-actions">
+				<a href="mailto:info@rahvaalgatus.ee" class="green-button">
+					Ühine programmiga
+				</a>
 
+				<a href="/help" class="cyan-button">
+					Tutvu õppevahenditega
+				</a>
+			</div>
+		</HeroHeader>
+
+		<Section id="intro-section">
+			<p class="section-paragraph">
+				Käesoleva lehe puhul on tegemist koolidele loodud keskkonnaga, kus õpilased saavad digitaalselt ettepanekuid esitada ja nende üle kaasaegseid e-vahendeid kasutades demokraatlikult hääletada.
 			</p>
 
 			<p class="section-paragraph">
 				Ettevõtmise eesmärk on suurendada õpilaste teadlikkust demokraatlikest otsustusprotsessidest ning aktiveerida neid koolielus kaasa rääkima.
 			</p>
 
-			<p class="section-paragraph">
-				Projekti kaudu saavad õpilased osa:
-			</p>
+			<div class="section-block benefits-list">
+				<img src="/assets/list-icon.png" class="list-image" alt="" />
 
-			<ul class="section-list">
-				<li>avatud (kooli)valitsemisest;</li>
-				<li>kogukonnana otsustamisest ja enda elu puudutavates otsustes osalemisest;</li>
-				<li>vajalike digipädevuste arendamisest.</li>
-			</ul>
+				<p class="section-paragraph">
+					<strong>Projekti kaudu saavad õpilased osa:</strong>
+				</p>
+
+				<ul class="section-list">
+					<li>avatud (kooli)valitsemisest;</li>
+					<li>kogukonnana otsustamisest ja enda elu puudutavates otsustes osalemisest;</li>
+					<li>vajalike digipädevuste arendamisest.</li>
+				</ul>
+			</div>
 
 			<p class="section-paragraph">
 				Eesmärk on, et õpilased lihtsalt ei õpiks koolis teoreetiliselt, mis on demokraatia, vaid saaksid ka päriselulise kaasa rääkimise ja koos otsustamise kogemuse. See loob eeldused tugevama kogukonna ja kodanikuühiskonna arenguks.
 			</p>
-
-			
 		</Section>
 
 		<Section id="schools-section">
-			<Heading>Koolid</Heading>
+			<Heading>Osalevad koolid</Heading>
 
 			<ul id="schools">{schools.map(function(school) {
 				return <li>
@@ -64,4 +71,18 @@ module.exports = function(attrs) {
 			})}</ul>
 		</Section>
 	</Page>
+}
+
+function HeroHeader(attrs, children) {
+	var {title} = attrs
+
+	return <header id="header" class="hero">
+		<Centered>
+			<img src="/assets/book-cover.jpg" class="cover" alt="" />
+
+			<h1>{title}</h1>
+
+			{children}
+		</Centered>
+	</header>
 }

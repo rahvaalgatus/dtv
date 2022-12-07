@@ -1,3 +1,4 @@
+var _ = require("root/lib/underscore")
 var Router = require("express").Router
 var schoolsDb = require("root/db/schools_db")
 var sql = require("sqlate")
@@ -12,3 +13,7 @@ exports.router.get("/", next(function*(_req, res) {
 
 	res.render("index_page.jsx", {schools})
 }))
+
+_.each({
+	"/help": "help_page.jsx"
+}, (page, path) => exports.router.get(path, (_req, res) => res.render(page)))
