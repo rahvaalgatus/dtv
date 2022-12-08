@@ -7,9 +7,9 @@ describe("HomeController", function() {
 	require("root/test/web")()
 	require("root/test/db")()
 
-	describe("/", function() {
+	describe("/eelarve", function() {
 		it("must render given no schools", function*() {
-			var res = yield this.request("/")
+			var res = yield this.request("/eelarve")
 			res.statusCode.must.equal(200)
 
 			var dom = parseDom(res.body)
@@ -23,7 +23,7 @@ describe("HomeController", function() {
 				new ValidSchool({name: "Springfield High"})
 			])
 
-			var res = yield this.request("/")
+			var res = yield this.request("/eelarve")
 			res.statusCode.must.equal(200)
 
 			var dom = parseDom(res.body)

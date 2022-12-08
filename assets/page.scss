@@ -9,7 +9,6 @@ $phablet-breakpoint: 599px;
 
 // https://brand.estonia.ee/et/disain/varvid/
 $aino: Aino, sans-serif;
-$aino-headline: Aino Headline, Aino, sans-serif;
 $museo-sans: "Museo Sans Cyrl", "Museo Sans", sans-serif;
 $headline-font: $museo-sans;
 $body-font: $aino;
@@ -73,12 +72,15 @@ body {
 
 main {
 	flex: 1;
-	padding-bottom: 4rem;
 }
 
 main section {
 	& + section {
 		margin-top: 4rem;
+	}
+
+	&:last-child {
+		padding-bottom: 4rem;
 	}
 }
 
@@ -143,7 +145,7 @@ ul.section-list {
 	padding: 1.2rem 2.5rem;
 	border: none;
 	border-radius: 0.5rem;
-	line-height: 1;
+	line-height: 1.3;
 	font-family: $museo-sans;
 	font-weight: bold;
 	font-size: 1.6rem;
@@ -170,13 +172,13 @@ ul.section-list {
 	&:focus { outline-color: $blue; }
 }
 
-.green-button {
+.cyan-button {
 	@extend %button;
 
-	background: #96e97f;
+	background: #a9e8fa;
 	color: black;
 	border-radius: 5rem;
-	padding: 1.5rem 2.5rem;
+	padding: 1.5rem 2.5rem 1rem;
 	box-shadow: 0 3px 4px 1px rgba(black, 0.06);
 	text-transform: uppercase;
 
@@ -184,13 +186,27 @@ ul.section-list {
 	&:active:focus:hover { box-shadow: inset 0 0.3rem 0.1rem rgba(black, 0.3); }
 }
 
-.cyan-button {
+.green-button {
 	@extend %button;
 
-	background: #a9e8fa;
+	background: #96e97f;
 	color: black;
 	border-radius: 5rem;
-	padding: 1.5rem 2.5rem;
+	padding: 1.5rem 2.5rem 1rem;
+	box-shadow: 0 3px 4px 1px rgba(black, 0.06);
+	text-transform: uppercase;
+
+	&:focus { outline-color: black; }
+	&:active:focus:hover { box-shadow: inset 0 0.3rem 0.1rem rgba(black, 0.3); }
+}
+
+.yellow-button {
+	@extend %button;
+
+	background: #ffec6e;
+	color: black;
+	border-radius: 5rem;
+	padding: 1.5rem 2.5rem 1.0rem;
 	box-shadow: 0 3px 4px 1px rgba(black, 0.06);
 	text-transform: uppercase;
 
@@ -452,7 +468,7 @@ textarea.budget-input {
 }
 
 #header {
-	background: $yellow;
+	background-color: $yellow;
 	color: black;
 	line-height: 1.5;
 
@@ -572,8 +588,122 @@ textarea.budget-input {
 	}
 }
 
-#home-page,
-#help-page {
+#home-page {
+	#nav {
+		background-color: #BAD2FF;
+	}
+
+	#footer {
+		background-color: #C9DBFF;
+	}
+
+	#header {
+		background-color: #dde9ff;
+		background-image: linear-gradient(to bottom, #BAD2FF 0, #DDE9FF 100%);
+
+		h1 {
+			margin-bottom: 0.5rem;
+			font-size: 4rem;
+			text-transform: uppercase;
+
+			img { width: 30rem; }
+
+			.subtitle {
+				display: block;
+				text-transform: none;
+				font-weight: 700;
+				font-size: 2.2rem;
+				max-width: 40rem;
+			}
+		}
+
+		.call-to-actions {
+			overflow: hidden;
+
+			h2 {
+				margin-left: auto;
+				margin-bottom: 2rem;
+				width: 50%;
+				padding-left: 3rem;
+				text-transform: uppercase;
+			}
+
+			.illustration {
+				float: left;
+				width: 50%;
+			}
+
+			ul {
+				float: right;
+				width: 50%;
+				padding-left: 5rem;
+
+				li + li { margin-top: 2rem; }
+			}
+
+			.yellow-button {
+				font-weight: 900;
+				width: 100%;
+			}
+		}
+	}
+
+	#exercises-section {
+		padding-top: 6rem;
+		padding-bottom: 6rem;
+		background-color: #ecf2ff;
+
+		h2 {
+			margin-bottom: 4rem;
+			text-transform: uppercase;
+		}
+
+		ul {
+			.exercise {
+				display: flex;
+				align-items: start;
+
+				.yellow-button {
+					flex-grow: 1;
+					flex-shrink: 0;
+					font-weight: 900;
+					flex-basis: 30rem;
+
+					text-align: left;
+					padding: 3.5rem 4rem 3rem 3rem;
+					background-image: url("/assets/yellow-button-arrow.svg");
+					background-repeat: no-repeat;
+					background-position: 24rem center;
+					background-size: 3.5rem;
+				}
+
+				@each $type in budgeting, election, signing {
+					.#{$type}-button {
+						background-image:
+							url("/assets/yellow-button-arrow.svg"),
+							url("/assets/#{$type}-white-icon.svg");
+
+						background-position: 24rem center, 15rem center;
+						background-size: 3.5rem, 6.5rem;
+					}
+				}
+
+				p {
+					margin-left: 2rem;
+					flex-grow: 1;
+					flex-shrink: 1;
+				}
+			}
+
+			.exercise + .exercise {
+				margin-top: 4rem;
+			}
+		}
+	}
+}
+
+#budgeting-home-page,
+#budgeting-help-page {
 	#nav .centered,
 	#header .centered {
 		max-width: 90rem + 2 * $page-padding;
@@ -597,7 +727,7 @@ textarea.budget-input {
 	}
 }
 
-#home-page {
+#budgeting-home-page {
 	#header {
 		h1 {
 			margin-bottom: 1.5rem;
@@ -640,7 +770,7 @@ textarea.budget-input {
 	}
 }
 
-#help-page main {
+#budgeting-help-page main {
 	.timestamps {
 		margin: 1rem auto 0;
 

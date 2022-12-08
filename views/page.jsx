@@ -24,6 +24,7 @@ function Page(attrs, children) {
 	var session = req.session
 	var {title} = attrs
 	var {page} = attrs
+	var {homeless} = attrs
 
 	var headerStyle = serializeStyle({
 		"background-color": attrs.headerBackgroundColor,
@@ -42,9 +43,9 @@ function Page(attrs, children) {
 		<body id={page + "-page"}>
 			<nav id="nav" style={headerStyle}>
 				<Centered>
-					<a href="/" class="home" title="Demokraatia töövihik">
+					{!homeless ? <a href="/" class="home" title="Demokraatia töövihik">
 						{Jsx.html(LOGO_SVG)}
-					</a>
+					</a> : null}
 
 					<menu class="account">{account ? <Fragment>
 						<a class="account-name" href="/account">{account.name}</a>
@@ -83,7 +84,7 @@ function Page(attrs, children) {
 					<p>
 						Küsimuste või ettepanekute korral võta meiega ühendust aadressil <a
 						href="mailto:info@rahvaalgatus.ee">info@rahvaalgatus.ee</a>.
-						Kaasav Kool lähtekoodi leiad <a href="https://github.com/rahvaalgatus/kaasavkool">GitHubist</a>, kus saad ka <a href="https://github.com/rahvaalgatus/kaasavkool/issues">ettepanekuid teha</a>.
+						Demokraatia töövihiku lähtekoodi leiad <a href="https://github.com/rahvaalgatus/kaasavkool">GitHubist</a>, kus saad ka <a href="https://github.com/rahvaalgatus/kaasavkool/issues">ettepanekuid teha</a>.
 					</p>
 				</Centered>
 			</footer>
@@ -107,11 +108,13 @@ function Header(attrs, children) {
 }
 
 function Section(attrs, children) {
+	var {wide} = attrs || Object
+
 	return <section
 		id={attrs && attrs.id}
-		class={"centered " + (attrs && attrs.class || "")}
+		class={(wide ? "" : "centered ") + (attrs && attrs.class || "")}
 	>
-		{children}
+		{wide ? <Centered>{children}</Centered> : children}
 	</section>
 }
 

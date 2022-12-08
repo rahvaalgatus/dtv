@@ -5,7 +5,7 @@ NPM_REBUILD = npm --ignore-scripts false rebuild --build-from-source
 MOCHA = ./node_modules/.bin/_mocha
 TEST = $$(find test -name "*_test.js")
 SHANGE = vendor/shange -f "config/$(ENV).sqlite3"
-APP_HOST = $(error "Please set APP_HOST")
+APP_HOST = rahvaalgatus.ee
 APP_PATH = $(error "Please set APP_PATH")
 LIVERELOAD_PORT = 35733
 
@@ -99,12 +99,14 @@ config/tsl/ee_test.xml:
 deploy:
 	@rsync $(RSYNC_OPTS) . "$(APP_HOST):$(or $(APP_PATH), $(error "APP_PATH"))/"
 
-production: APP_HOST = rahvaalgatus.ee
-production: APP_PATH = /var/www/eelarveldaja
+production: APP_PATH = /var/www/dtv
 production: deploy
+
+production/diff: RSYNC_OPTS += --dry-run
+production/diff: production
 
 .PHONY: love
 .PHONY: web livereload
 .PHONY: test spec autotest autospec
 .PHONY: shrinkwrap rebuild
-.PHONY: deploy production
+.PHONY: deploy production production/diff

@@ -2,87 +2,102 @@
 var Jsx = require("j6pack")
 var Page = require("./page")
 var {Section} = Page
-var {Centered} = Page
 var {Heading} = Page
-exports = module.exports = IndexPage
-exports.HeroHeader = HeroHeader
+var {Centered} = Page
+module.exports = IndexPage
 
 function IndexPage(attrs) {
 	var {req} = attrs
-	var {schools} = attrs
-	var schoolsPath = req.baseUrl + "/schools"
 
 	return <Page
 		page="home"
 		req={req}
-		title="Kaasav Kool"
+		title="Demokraatia töövihik"
+		homeless
 	>
-		<HeroHeader title="Koolide kaasav eelarve">
-			<p>
-				Ühingu <a class="link-button" href="https://www.transparency.ee">MTÜ Korruptsioonivaba Eesti</a> ning <a class="link-button" href="https://kogu.ee">SA Eesti Koostöö Kogu</a> algatatud kaasava eelarvestamise projekt koolides on esimene laiaulatuslikum ettevõtmine Eestis, kus kohalike omavalitsuste kaasava eelarvestamise eeskujul saavad õpilased välja töötada, arendada ja esitleda ideesid, mille vahel kooli kogukond valib kõige sobilikuma viisi eelarve kasutamiseks.
+		<header id="header">
+			<Centered>
+				<h1>
+					<img src="/assets/logo.svg" alt="Demokraatia töövihik" class="logo" />
+
+					<span class="subtitle">
+						Kolme harjutusega koolinoorest aktiivseks kodanikuks!
+					</span>
+				</h1>
+
+
+				<div class="call-to-actions">
+					<Heading>Harjutused</Heading>
+
+					<img src="/assets/home-illustration.png" alt="" class="illustration" />
+
+					<ul>
+						<li>
+							<a class="yellow-button" href="/eelarve">
+								Koolide kaasav<br />eelarve
+							</a>
+						</li>
+
+						<li>
+							<a class="yellow-button" href="https://vali.rahvaalgatus.ee">
+								Õpilasesinduse<br />valimine
+							</a>
+						</li>
+
+						<li>
+							<a class="yellow-button" href="https://rahvaalgatus.ee/digiallkiri">
+								Harjuta<br />digiallkirjastamist
+							</a>
+						</li>
+					</ul>
+				</div>
+			</Centered>
+		</header>
+
+		<Section>
+			<p class="section-paragraph">
+				Kool on koht, kus noored saavad esimesed kogemused demokraatias osalemisest. Hea kool on kaasav, osalemist soodustav, märkamist ja loovust toetav. Siinne Demokraatia töövihik on Eesti Koostöö Kogu poolt loodud õpikeskkond, kus noored saavad harjutada aktiivsele kodanikule olulisi digioskusi ja proovida ka ise koolielus kaasa rääkida ning muutusi luua.
 			</p>
 
-			<div class="call-to-actions">
-				<a href="mailto:info@rahvaalgatus.ee" class="green-button">
-					Ühine programmiga
-				</a>
-
-				<a href="/help" class="cyan-button">
-					Tutvu õppevahenditega
-				</a>
-			</div>
-		</HeroHeader>
-
-		<Section id="intro-section">
 			<p class="section-paragraph">
-				Käesoleva lehe puhul on tegemist koolidele loodud keskkonnaga, kus õpilased saavad digitaalselt ettepanekuid esitada ja nende üle kaasaegseid e-vahendeid kasutades demokraatlikult hääletada.
-			</p>
-
-			<p class="section-paragraph">
-				Ettevõtmise eesmärk on suurendada õpilaste teadlikkust demokraatlikest otsustusprotsessidest ning aktiveerida neid koolielus kaasa rääkima.
-			</p>
-
-			<div class="section-block benefits-list">
-				<img src="/assets/list-icon.png" class="list-image" alt="" />
-
-				<p class="section-paragraph">
-					<strong>Projekti kaudu saavad õpilased osa:</strong>
-				</p>
-
-				<ul class="section-list">
-					<li>avatud (kooli)valitsemisest;</li>
-					<li>kogukonnana otsustamisest ja enda elu puudutavates otsustes osalemisest;</li>
-					<li>vajalike digipädevuste arendamisest.</li>
-				</ul>
-			</div>
-
-			<p class="section-paragraph">
-				Eesmärk on, et õpilased lihtsalt ei õpiks koolis teoreetiliselt, mis on demokraatia, vaid saaksid ka päriselulise kaasa rääkimise ja koos otsustamise kogemuse. See loob eeldused tugevama kogukonna ja kodanikuühiskonna arenguks.
+				SA Eesti Koostöö Kogu on mõttekoda, mis muuhulgas edendab osalusdemokraatiat ja avatud valitsemist ja on osalusportaali Rahvaalgatus.ee kureerija.
 			</p>
 		</Section>
 
-		<Section id="schools-section">
-			<Heading>Osalevad koolid</Heading>
+		<Section id="exercises-section" wide>
+			<Heading>Harjutused</Heading>
 
-			<ul id="schools">{schools.map(function(school) {
-				return <li>
-					<a href={schoolsPath + "/" + school.id}>{school.name}</a>
+			<ul>
+				<li class="exercise">
+					<a class="yellow-button budgeting-button" href="/eelarve">
+						Koolide kaasav<br />eelarve
+					</a>
+
+					<p class="section-paragraph">Siin saab kooli esindaja üles laadida kaasava eelarvestamise ideid ning õpilased saavad nende poolt digihääletada.</p>
 				</li>
-			})}</ul>
+
+				<li class="exercise">
+					<a
+						class="yellow-button election-button"
+						href="https://vali.rahvaalgatus.ee"
+					>
+						Õpilasesinduse<br />valimine
+					</a>
+
+					<p class="section-paragraph">Siin saab korraldada turvalises veebikeskkonnas õpilasesinduste hääletusi.</p>
+				</li>
+
+				<li class="exercise">
+					<a
+						class="yellow-button signing-button"
+						href="https://rahvaalgatus.ee/digiallkiri"
+					>
+						Harjuta<br />digiallkirjastamist
+					</a>
+
+					<p class="section-paragraph">Nii nagu autokoolis alustatakse turvalist harjutamist kinnisel platsil, saad ka sellel leheküljel turvaliselt proovida digiallkirja andmist. Siin saad sa proovida digiallkirja andmist nii ID-kaardi, Mobiil-ID kui ka Smart-ID kaudu.</p>
+				</li>
+			</ul>
 		</Section>
 	</Page>
-}
-
-function HeroHeader(attrs, children) {
-	var {title} = attrs
-
-	return <header id="header" class="hero">
-		<Centered>
-			<img src="/assets/book-cover.jpg" class="cover" alt="" />
-
-			<h1>{title}</h1>
-
-			{children}
-		</Centered>
-	</header>
 }

@@ -1,8 +1,8 @@
 {
 	"cookieSecret": null,
-	"cookieDomain": "kaasavkool.rahvaalgatus.ee",
-	"sessionCookieName": "kaasavkool_2021_session_token",
-	"csrfCookieName": "kaasavkool_2021_csrf_token",
+	"cookieDomain": "demokraatia.rahvaalgatus.ee",
+	"sessionCookieName": "demokraatia_session_token",
+	"csrfCookieName": "demokraatia_csrf_token",
 
 	"idCardAuthenticationUrl": null,
 	"mobileIdUser": null,

@@ -1,13 +1,13 @@
 /** @jsx Jsx */
 var Jsx = require("j6pack")
-var Page = require("./page")
+var Page = require("../page")
 var {HeroHeader} = require("./index_page")
 var {Section} = Page
 var {Heading} = Page
 
 module.exports = function(attrs) {
 	return <Page
-		page="help"
+		page="budgeting-help"
 		req={attrs.req}
 		title="Õppevahendid"
 	>
