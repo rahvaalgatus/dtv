@@ -14,7 +14,6 @@ function CreatePage(attrs) {
 	var {req} = attrs
 	var {school} = attrs
 	var {account} = req
-	var schoolPath = Paths.schoolPath(school)
 
 	return <SchoolPage
 		page="create-idea"
@@ -23,7 +22,7 @@ function CreatePage(attrs) {
 		school={school}
 	>
 		<SchoolHeader school={school}>
-			<a href={schoolPath} class="context">{school.name}</a>
+			<a href={Paths.schoolPath(school)} class="context">{school.name}</a>
 			<h1>Esita uus idee</h1>
 		</SchoolHeader>
 

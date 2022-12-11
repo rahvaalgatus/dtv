@@ -41,7 +41,7 @@ _.each({
 	"/": require("../controllers/home_controller").router,
 	"/account": require("../controllers/account_controller").router,
 	"/sessions": require("../controllers/sessions_controller").router,
-	"/schools": require("../controllers/schools_controller").router
+	"/koolid": require("../controllers/schools_controller").router
 }, (router, path) => app.use(path, router))
 
 app.use((_req, _res, next) => next(new HttpError(404, "Not Found", {

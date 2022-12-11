@@ -1,3 +1,4 @@
+var Paths = require("root/lib/paths")
 var ValidSchool = require("root/test/valid_school")
 var ValidIdea = require("root/test/valid_idea")
 var schoolsDb = require("root/db/schools_db")
@@ -20,7 +21,7 @@ describe("PaperVotesController", function() {
 			var school = yield schoolsDb.create(new ValidSchool)
 			yield createTeacher(school, this.account)
 
-			var res = yield this.request(`/schools/${school.id}/paper-votes`)
+			var res = yield this.request(Paths.paperVotesPath(school))
 			res.statusCode.must.equal(200)
 
 			var dom = parseDom(res.body)
@@ -45,7 +46,7 @@ describe("PaperVotesController", function() {
 				new ValidIdea({school_id: school.id, account_id: this.account.id})
 			])
 
-			var res = yield this.request(`/schools/${school.id}/paper-votes`, {
+			var res = yield this.request(Paths.paperVotesPath(school), {
 				method: "PUT",
 
 				form: {"paper-votes": outdent`
@@ -56,7 +57,7 @@ describe("PaperVotesController", function() {
 			})
 
 			res.statusCode.must.equal(303)
-			res.headers.location.must.equal(`/schools/${school.id}/paper-votes`)
+			res.headers.location.must.equal(Paths.paperVotesPath(school))
 
 			yield paperVotesDb.search(sql`
 				SELECT * FROM paper_votes ORDER BY voter_personal_id
@@ -94,7 +95,7 @@ describe("PaperVotesController", function() {
 			])
 
 
-			var res = yield this.request(`/schools/${school.id}/paper-votes`, {
+			var res = yield this.request(Paths.paperVotesPath(school), {
 				method: "PUT",
 
 				form: {"paper-votes": outdent`
@@ -120,7 +121,7 @@ describe("PaperVotesController", function() {
 				account_id: this.account.id
 			}))
 
-			var res = yield this.request(`/schools/${school.id}/paper-votes`, {
+			var res = yield this.request(Paths.paperVotesPath(school), {
 				method: "PUT",
 				form: {"paper-votes": `38706180001, ${idea.id}`}
 			})

@@ -187,10 +187,12 @@ exports.router.put(SCHOOL_PATH,
 }))
 
 _.each({
-	"/ideas": require("./schools/ideas_controller").router,
-	"/votes": require("./schools/votes_controller").router,
-	"/paper-votes": require("./schools/paper_votes_controller").router
-}, (router, path) => exports.router.use(SCHOOL_PATH + path, router))
+	"/ideed": require("./schools/ideas_controller").router,
+	"/hääled": require("./schools/votes_controller").router,
+	"/paberhääled": require("./schools/paper_votes_controller").router
+}, (router, path) => (
+	exports.router.use(SCHOOL_PATH + encodeURI(path), router)
+))
 
 function parse(obj, files) {
 	var attrs = {

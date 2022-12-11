@@ -24,7 +24,7 @@ function ReadPage(attrs) {
 	var {ideas} = attrs
 	var {votesByIdea} = attrs
 	var {thank} = attrs
-	var schoolPath = req.baseUrl + req.path
+	var schoolPath = Paths.schoolPath(school)
 
 	var headerButtonStyle = serializeStyle({
 		"border-color": school.foreground_color,
@@ -47,10 +47,10 @@ function ReadPage(attrs) {
 			<h1>{school.name}</h1>
 
 			{role == "teacher" ? <menu>
-				<a href={`${schoolPath}/edit`} style={headerButtonStyle}>
+				<a href={Paths.editSchoolPath(school)} style={headerButtonStyle}>
 					Muuda kooli
 				</a>
-				<a href={`${schoolPath}/paper-votes`} style={headerButtonStyle}>
+				<a href={Paths.paperVotesPath(school)} style={headerButtonStyle}>
 					Muuda paberhääli
 					</a>
 			</menu> : null}
@@ -156,11 +156,9 @@ function SchoolButton(attrs, children) {
 }
 
 function IdeasSection(attrs) {
-	var {req} = attrs
 	var {school} = attrs
 	var {role} = attrs
 	var {ideas} = attrs
-	var schoolPath = req.baseUrl + req.path
 
 	return <Section id="viewable-ideas-section">
 		<Heading>Ideed</Heading>
@@ -176,7 +174,7 @@ function IdeasSection(attrs) {
 		) ? <menu>
 			<SchoolButton
 				school={school}
-				href={`${schoolPath}/ideas/new`}
+				href={Paths.ideasPath(school) + "/new"}
 			>
 				Esita uus idee
 			</SchoolButton>
@@ -185,7 +183,7 @@ function IdeasSection(attrs) {
 		<ul id="ideas">{ideas.map(function(idea) {
 			return <li class="idea">
 				<h3 class="idea-title">
-					<a href={`${schoolPath}/ideas/${idea.id}`}>{idea.title}</a>
+					<a href={Paths.ideaPath(school, idea)}>{idea.title}</a>
 				</h3>
 
 				<span class="idea-author-names">{idea.author_names}</span>
@@ -203,7 +201,6 @@ function VotingSection(attrs) {
 	var {votesByIdea} = attrs
 	var {thank} = attrs
 	var maxVoteCount = _.max(_.values(votesByIdea))
-	var schoolPath = req.baseUrl + req.path
 
 	return <Section id="votable-ideas-section">
 		<Heading>Ideed</Heading>
@@ -234,7 +231,7 @@ function VotingSection(attrs) {
 		<Form
 			id="voting-form"
 			req={req}
-			action={schoolPath + "/votes"}
+			action={Paths.votesPath(school)}
 			method="post"
 		>
 			<ul id="ideas">{ideas.map(function(idea) {
@@ -251,7 +248,7 @@ function VotingSection(attrs) {
 
 					<label for={`idea-${idea.id}-checkbox`}>
 						<h3 class="idea-title">
-							<a href={`${schoolPath}/ideas/${idea.id}`}>{idea.title}</a>
+							<a href={Paths.ideaPath(school, idea)}>{idea.title}</a>
 						</h3>
 
 						{role == "teacher" ?
@@ -282,11 +279,9 @@ function VotingSection(attrs) {
 }
 
 function ResultsSection(attrs) {
-	var {req} = attrs
 	var {school} = attrs
 	var {ideas} = attrs
 	var {votesByIdea} = attrs
-	var schoolPath = req.baseUrl + req.path
 	var maxVoteCount = _.max(_.values(votesByIdea))
 	var voteCount = _.sum(_.values(votesByIdea))
 	ideas = _.sortBy(ideas, (idea) => votesByIdea[idea.id] || 0).reverse()
@@ -305,7 +300,7 @@ function ResultsSection(attrs) {
 
 			return <li class="idea">
 				<h3 class="idea-title">
-					<a href={`${schoolPath}/ideas/${idea.id}`}>{idea.title}</a>
+					<a href={Paths.ideaPath(school, idea)}>{idea.title}</a>
 				</h3>
 
 				<VoteCountView count={voteCount} max={maxVoteCount} />

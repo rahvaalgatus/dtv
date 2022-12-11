@@ -11,7 +11,6 @@ module.exports = function(attrs) {
 	var {req} = attrs
 	var {school} = attrs
 	var {idea} = attrs
-	var schoolPath = Paths.schoolPath(school)
 
 	return <SchoolPage
 		page="update-idea"
@@ -20,7 +19,7 @@ module.exports = function(attrs) {
 		school={school}
 	>
 		<SchoolHeader school={school}>
-			<a href={schoolPath} class="context">{school.name}</a>
+			<a href={Paths.schoolPath(school)} class="context">{school.name}</a>
 			<h1>{idea.title}</h1>
 		</SchoolHeader>
 

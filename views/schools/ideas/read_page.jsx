@@ -41,7 +41,6 @@ function IdeaPage(attrs, children) {
 	var {school} = attrs
 	var {idea} = attrs
 	var {editable} = attrs
-	var schoolPath = Paths.schoolPath(school)
 	var ideaPath = Paths.ideaPath(school, idea)
 
 	var headerButtonStyle = serializeStyle({
@@ -56,7 +55,7 @@ function IdeaPage(attrs, children) {
 		school={school}
 	>
 		<SchoolHeader school={school}>
-			<a href={schoolPath} class="context">{school.name}</a>
+			<a href={Paths.schoolPath(school)} class="context">{school.name}</a>
 			<h1>{idea.title}</h1>
 			<span class="subtitle author-names">{idea.author_names}</span>
 

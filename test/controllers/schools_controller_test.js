@@ -1,3 +1,4 @@
+var Paths = require("root/lib/paths")
 var ValidSchool = require("root/test/valid_school")
 var FormData = require("form-data")
 var schoolsDb = require("root/db/schools_db")
@@ -14,7 +15,7 @@ describe("SchoolsController", function() {
 
 	describe("GET /", function() {
 		it("must redirect to home page", function*() {
-			var res = yield this.request("/schools")
+			var res = yield this.request(Paths.schoolsPath)
 			res.statusCode.must.equal(302)
 			res.headers.location.must.equal("/")
 		})
@@ -28,7 +29,7 @@ describe("SchoolsController", function() {
 			var school = yield schoolsDb.create(new ValidSchool)
 			yield createTeacher(school, this.account)
 
-			var res = yield this.request(`/schools/${school.id}`, {
+			var res = yield this.request(Paths.schoolPath(school), {
 				method: "PUT",
 
 				form: {
@@ -48,7 +49,7 @@ describe("SchoolsController", function() {
 			})
 
 			res.statusCode.must.equal(303)
-			res.headers.location.must.equal(`/schools/${school.id}/edit`)
+			res.headers.location.must.equal(Paths.editSchoolPath(school))
 
 			yield schoolsDb.read(school.id).must.then.eql({
 				__proto__: school,

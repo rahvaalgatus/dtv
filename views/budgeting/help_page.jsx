@@ -167,7 +167,7 @@ module.exports = function(attrs) {
 				</a>
 
 				<a
-					href="/eelarve/abi/handbook.en.pdf"
+					href="/eelarve/abi/handbook.ru.pdf"
 					class="green-button"
 					download="Народный бюджет -- Справочник для школ (2021).pdf"
 				>
