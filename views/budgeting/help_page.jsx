@@ -150,8 +150,28 @@ module.exports = function(attrs) {
 			</p>
 
 			<div class="download-links">
-				<a href="https://transparency.ee/files/kaasav_eelarvestamine._kasiraamat_koolidele_kve2021.pdf" class="green-button">
+				<a
+					href="/eelarve/abi/handbook.et.pdf"
+					class="green-button"
+					download="Kaasav eelarvestamine -- Käsiraamat koolidele (2021).pdf"
+				>
 					Lae alla juhendraamat eesti keeles
+				</a>
+
+				<a
+					href="/eelarve/abi/handbook.en.pdf"
+					class="green-button"
+					download="Participatory budgeting -- A handbook for schools (2021).pdf"
+				>
+					Lae alla juhendraamat inglise keeles
+				</a>
+
+				<a
+					href="/eelarve/abi/handbook.en.pdf"
+					class="green-button"
+					download="Народный бюджет -- Справочник для школ (2021).pdf"
+				>
+					Lae alla juhendraamat vene keeles
 				</a>
 			</div>
 		</Section>

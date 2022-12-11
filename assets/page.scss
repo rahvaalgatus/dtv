@@ -844,7 +844,11 @@ textarea.budget-input {
 	}
 
 	#book {
-		.download-links { margin-top: 2rem; }
+		.download-links {
+			margin-top: 2rem;
+
+			a { margin-bottom: 1rem; }
+		}
 	}
 }
 
