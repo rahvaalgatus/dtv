@@ -1,6 +1,7 @@
 /** @jsx Jsx */
 var Jsx = require("j6pack")
 var Page = require("../../page")
+var Paths = require("root/lib/paths")
 var {SchoolPage} = require("../read_page")
 var {SchoolHeader} = require("../read_page")
 var {SchoolButton} = require("../read_page")
@@ -13,16 +14,16 @@ function CreatePage(attrs) {
 	var {req} = attrs
 	var {school} = attrs
 	var {account} = req
-	var schoolUrl = "/schools/" + school.id
+	var schoolPath = Paths.schoolPath(school)
 
 	return <SchoolPage
 		page="create-idea"
 		req={attrs.req}
-		title={"Uus idee"}
+		title="Uus idee"
 		school={school}
 	>
 		<SchoolHeader school={school}>
-			<a href={schoolUrl} class="context">{school.name}</a>
+			<a href={schoolPath} class="context">{school.name}</a>
 			<h1>Esita uus idee</h1>
 		</SchoolHeader>
 

@@ -3,6 +3,7 @@ var _ = require("root/lib/underscore")
 var Jsx = require("j6pack")
 var Page = require("../page")
 var DateFns = require("date-fns")
+var Paths = require("root/lib/paths")
 var {Header} = Page
 var {Section} = Page
 var {Heading} = Page
@@ -110,7 +111,7 @@ function SchoolPage(attrs, children) {
 
 function SchoolHeader(attrs, children) {
 	var {school} = attrs
-	var schoolPath = "/schools/" + school.id
+	var schoolPath = Paths.schoolPath(school)
 
 	return <Header
 		backgroundColor={school.background_color}

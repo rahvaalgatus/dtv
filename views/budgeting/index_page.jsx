@@ -1,6 +1,7 @@
 /** @jsx Jsx */
 var Jsx = require("j6pack")
 var Page = require("../page")
+var Paths = require("root/lib/paths")
 var {Section} = Page
 var {Centered} = Page
 var {Heading} = Page
@@ -10,7 +11,6 @@ exports.HeroHeader = HeroHeader
 function IndexPage(attrs) {
 	var {req} = attrs
 	var {schools} = attrs
-	var schoolsPath = req.baseUrl + "/schools"
 
 	return <Page
 		page="budgeting-home"
@@ -64,7 +64,7 @@ function IndexPage(attrs) {
 
 			<ul id="schools">{schools.map(function(school) {
 				return <li>
-					<a href={schoolsPath + "/" + school.id}>{school.name}</a>
+					<a href={Paths.schoolPath(school)}>{school.name}</a>
 				</li>
 			})}</ul>
 		</Section>

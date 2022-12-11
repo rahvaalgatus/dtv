@@ -7,7 +7,7 @@ exports.router = Router({mergeParams: true})
 
 exports.router.get("/eelarve", next(function*(_req, res) {
 	var schools = yield schoolsDb.search(sql`
-		SELECT id, name FROM schools
+		SELECT id, slug, name FROM schools
 		ORDER BY name ASC
 	`)
 

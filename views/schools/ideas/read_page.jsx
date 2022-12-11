@@ -1,6 +1,7 @@
 /** @jsx Jsx */
 var Jsx = require("j6pack")
 var Page = require("../../page")
+var Paths = require("root/lib/paths")
 var {SchoolPage} = require("../read_page")
 var {SchoolHeader} = require("../read_page")
 var {Section} = Page
@@ -40,8 +41,8 @@ function IdeaPage(attrs, children) {
 	var {school} = attrs
 	var {idea} = attrs
 	var {editable} = attrs
-	var schoolPath = "/schools/" + school.id
-	var ideaPath = schoolPath + "/ideas/" + idea.id
+	var schoolPath = Paths.schoolPath(school)
+	var ideaPath = Paths.ideaPath(school, idea)
 
 	var headerButtonStyle = serializeStyle({
 		"border-color": school.foreground_color,

@@ -1,6 +1,7 @@
 /** @jsx Jsx */
 var Jsx = require("j6pack")
 var Page = require("../../page")
+var Paths = require("root/lib/paths")
 var {SchoolPage} = require("../read_page")
 var {SchoolHeader} = require("../read_page")
 var {Section} = Page
@@ -10,7 +11,7 @@ module.exports = function(attrs) {
 	var {req} = attrs
 	var {school} = attrs
 	var {idea} = attrs
-	var schoolUrl = "/schools/" + school.id
+	var schoolPath = Paths.schoolPath(school)
 
 	return <SchoolPage
 		page="update-idea"
@@ -19,7 +20,7 @@ module.exports = function(attrs) {
 		school={school}
 	>
 		<SchoolHeader school={school}>
-			<a href={schoolUrl} class="context">{school.name}</a>
+			<a href={schoolPath} class="context">{school.name}</a>
 			<h1>{idea.title}</h1>
 		</SchoolHeader>
 
@@ -31,7 +32,7 @@ module.exports = function(attrs) {
 				id="account-form"
 				school={school}
 				idea={idea}
-				submit={"Muuda ideed"}
+				submit="Muuda ideed"
 			/>
 		</Section>
 	</SchoolPage>

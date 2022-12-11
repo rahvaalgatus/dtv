@@ -2,6 +2,7 @@
 var _ = require("root/lib/underscore")
 var Jsx = require("j6pack")
 var Page = require("../page")
+var Paths = require("root/lib/paths")
 var {SchoolPage} = require("./read_page")
 var {SchoolHeader} = require("./read_page")
 var {SchoolButton} = require("./read_page")
@@ -15,7 +16,7 @@ module.exports = function(attrs) {
 	var {school} = attrs
 	var {teachers} = attrs
 	var {voters} = attrs
-	var schoolPath = req.baseUrl + "/" + school.id
+	var schoolPath = Paths.schoolPath(school)
 	var votedCounts = _.countBy(voters, "has_voted")
 
 	return <SchoolPage

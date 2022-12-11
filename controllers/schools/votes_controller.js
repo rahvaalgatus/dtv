@@ -8,6 +8,7 @@ var MobileIdError = require("undersign/lib/mobile_id").MobileIdError
 var SmartId = require("undersign/lib/smart_id")
 var SmartIdError = require("undersign/lib/smart_id").SmartIdError
 var ExpiringMap = require("root/lib/expiring_map")
+var Paths = require("root/lib/paths")
 var next = require("co-next")
 var {getRequestEidMethod} = require("root/lib/eid")
 var {ensureAreaCode} = require("root/lib/eid")
@@ -218,9 +219,9 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 				xades.setOcspResponse(yield hades.timemark(xades))
 
 				yield replaceVote(vote)
-				var schoolUrl = "/schools/" + vote.school_id + "?voted=true#thanks"
+				var schoolPath = Paths.schoolPath(school) + "?voted=true#thanks"
 				res.setHeader("Content-Type", "application/json")
-				res.status(201).end(JSON.stringify({code: "OK", location: schoolUrl}))
+				res.status(201).end(JSON.stringify({code: "OK", location: schoolPath}))
 			}
 			break
 
@@ -261,7 +262,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			verificationCode = MobileId.confirmation(xades.signableHash)
 			respondWithVerificationCode(verificationCode, res)
 
-			co(waitForMobileIdSignature({
+			co(waitForMobileIdSignature(school, {
 				school_id: idea.school_id,
 				idea_id: idea.id,
 				voter_country: country,
@@ -301,7 +302,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			verificationCode = SmartId.verification(xades.signableHash)
 			respondWithVerificationCode(verificationCode, res)
 
-			co(waitForSmartIdSignature({
+			co(waitForSmartIdSignature(school, {
 				school_id: idea.school_id,
 				idea_id: idea.id,
 				voter_country: country,
@@ -417,7 +418,7 @@ function* replaceVote(vote) {
 	return yield votesDb.create(vote)
 }
 
-function* waitForMobileIdSignature(vote, sessionId, res) {
+function* waitForMobileIdSignature(school, vote, sessionId, res) {
 	try {
 		var signatureHash = yield waitForMobileIdSession(120, sessionId)
 		if (signatureHash == null) throw new MobileIdError("TIMEOUT")
@@ -432,8 +433,8 @@ function* waitForMobileIdSignature(vote, sessionId, res) {
 		xades.setOcspResponse(yield hades.timemark(xades))
 
 		yield replaceVote(vote)
-		var schoolUrl = "/schools/" + vote.school_id + "?voted=true#thanks"
-		res.end(JSON.stringify({code: "OK", location: schoolUrl}))
+		var schoolPath = Paths.schoolPath(school) + "?voted=true#thanks"
+		res.end(JSON.stringify({code: "OK", location: schoolPath}))
 	}
 	catch (ex) {
 		if (!(
@@ -446,7 +447,7 @@ function* waitForMobileIdSignature(vote, sessionId, res) {
 	}
 }
 
-function* waitForSmartIdSignature(vote, session, res) {
+function* waitForSmartIdSignature(school, vote, session, res) {
 	try {
 		var certAndSignatureHash = yield waitForSmartIdSession(120, session)
 		if (certAndSignatureHash == null) throw new SmartIdError("TIMEOUT")
@@ -462,8 +463,8 @@ function* waitForSmartIdSignature(vote, session, res) {
 		xades.setOcspResponse(yield hades.timemark(xades))
 
 		yield replaceVote(vote)
-		var schoolUrl = "/schools/" + vote.school_id + "?voted=true#thanks"
-		res.end(JSON.stringify({code: "OK", location: schoolUrl}))
+		var schoolPath = Paths.schoolPath(school) + "?voted=true#thanks"
+		res.end(JSON.stringify({code: "OK", location: schoolPath}))
 	}
 	catch (ex) {
 		if (!(ex instanceof SmartIdError && ex.code in SMART_ID_ERRORS))

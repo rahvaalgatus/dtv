@@ -8,6 +8,7 @@ var votersDb = require("root/db/voters_db")
 var votesDb = require("root/db/votes_db")
 var ideasDb = require("root/db/ideas_db")
 var {isValidImageType} = require("root/lib/image")
+var SCHOOL_PATH = "/:id:slug(-[^/]+)?"
 var next = require("co-next")
 var sql = require("sqlate")
 exports.router = Router({mergeParams: true})
@@ -16,10 +17,10 @@ exports.assertTeacher = assertTeacher
 
 exports.router.get("/", (_req, res) => res.redirect(302, "/"))
 
-exports.router.use("/:id", next(function*(req, _res, next) {
+exports.router.use(SCHOOL_PATH, next(function*(req, _res, next) {
 	var school = yield schoolsDb.read(sql`
 		SELECT
-			id, name, description, voting_starts_at, voting_ends_at,
+			id, slug, name, description, voting_starts_at, voting_ends_at,
 			background_color, foreground_color, logo_type
 
 		FROM schools
@@ -55,7 +56,7 @@ exports.router.use("/:id", next(function*(req, _res, next) {
 	next()
 }))
 
-exports.router.get("/:id", next(function*(req, res) {
+exports.router.get(SCHOOL_PATH, next(function*(req, res) {
 	var {school} = req
 	var {teachers} = req
 	var {account} = req
@@ -111,7 +112,7 @@ exports.router.get("/:id", next(function*(req, res) {
 	})
 }))
 
-exports.router.get("/:id/logo", next(function*(req, res) {
+exports.router.get(SCHOOL_PATH + "/logo", next(function*(req, res) {
 	var {school} = req
 
 	var logo = yield schoolsDb.read(sql`
@@ -125,7 +126,7 @@ exports.router.get("/:id/logo", next(function*(req, res) {
 	res.end(logo.data)
 }))
 
-exports.router.get("/:id/edit",
+exports.router.get(SCHOOL_PATH + "/edit",
 	assertAccount,
 	assertTeacher,
 	next(function*(req, res) {
@@ -169,7 +170,7 @@ exports.router.get("/:id/edit",
 	res.render("schools/update_page.jsx", {school, voters, teachers})
 }))
 
-exports.router.put("/:id",
+exports.router.put(SCHOOL_PATH,
 	assertAccount,
 	assertTeacher,
 	next(function*(req, res) {
@@ -186,10 +187,10 @@ exports.router.put("/:id",
 }))
 
 _.each({
-	"/:id/ideas": require("./schools/ideas_controller").router,
-	"/:id/votes": require("./schools/votes_controller").router,
-	"/:id/paper-votes": require("./schools/paper_votes_controller").router,
-}, (router, path) => exports.router.use(path, router))
+	"/ideas": require("./schools/ideas_controller").router,
+	"/votes": require("./schools/votes_controller").router,
+	"/paper-votes": require("./schools/paper_votes_controller").router
+}, (router, path) => exports.router.use(SCHOOL_PATH + path, router))
 
 function parse(obj, files) {
 	var attrs = {
