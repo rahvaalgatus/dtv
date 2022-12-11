@@ -385,7 +385,7 @@ function* validateVoter(school, country, personalId) {
 	`)
 
 	if (voter == null) return new HttpError(422, "Not a Permitted Voter", {
-		description: "Sa ei ole lubatud hääletajate seast. Uuri lisainfot oma õpetajalt."
+		description: "Sa ei ole lubatud hääletajate seas. Uuri lisainfot oma õpetajalt."
 	})
 
 	return null
