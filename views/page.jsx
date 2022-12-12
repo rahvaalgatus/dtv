@@ -84,7 +84,7 @@ function Page(attrs, children) {
 					<p>
 						Küsimuste või ettepanekute korral võta meiega ühendust aadressil <a
 						href="mailto:info@rahvaalgatus.ee">info@rahvaalgatus.ee</a>.
-						Demokraatia töövihiku lähtekoodi leiad <a href="https://github.com/rahvaalgatus/kaasavkool">GitHubist</a>, kus saad ka <a href="https://github.com/rahvaalgatus/kaasavkool/issues">ettepanekuid teha</a>.
+						Demokraatia töövihiku lähtekoodi leiad <a href="https://github.com/rahvaalgatus/dtv">GitHubist</a>, kus saad ka <a href="https://github.com/rahvaalgatus/dtv/issues">ettepanekuid teha</a>.
 					</p>
 				</Centered>
 			</footer>
