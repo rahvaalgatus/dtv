@@ -43,29 +43,22 @@ CREATE TABLE schools (
 	id INTEGER PRIMARY KEY NOT NULL,
 	name TEXT NOT NULL,
 	description TEXT,
-	voting_starts_at TEXT,
-	voting_ends_at TEXT, background_color TEXT, foreground_color TEXT, logo BLOB, logo_type TEXT, slug TEXT NOT NULL,
+	background_color TEXT, foreground_color TEXT, logo BLOB, logo_type TEXT, slug TEXT NOT NULL,
 
 	CONSTRAINT name_length CHECK (length(name) > 0),
 	CONSTRAINT description_length CHECK (length(description) > 0),
 
 	CONSTRAINT logo_length CHECK (length(logo) > 0),
 	CONSTRAINT logo_type_length CHECK (length(logo_type) > 0),
-	CONSTRAINT logo_with_type CHECK ((logo IS NULL) = (logo_type IS NULL)),
-
-	CONSTRAINT voting_starts_at_format
-	CHECK (voting_starts_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z'),
-
-	CONSTRAINT voting_ends_at_format
-	CHECK (voting_ends_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z')
+	CONSTRAINT logo_with_type CHECK ((logo IS NULL) = (logo_type IS NULL))
 );
 CREATE TABLE voters (
-	school_id INTEGER NOT NULL,
+	budget_id INTEGER NOT NULL,
 	country TEXT NOT NULL,
 	personal_id TEXT NOT NULL,
 
-	PRIMARY KEY (school_id, country, personal_id),
-	FOREIGN KEY (school_id) REFERENCES schools (id),
+	PRIMARY KEY (budget_id, country, personal_id),
+	FOREIGN KEY (budget_id) REFERENCES budgets (id),
 
 	CONSTRAINT country_format CHECK (country GLOB '[A-Z][A-Z]'),
 	CONSTRAINT personal_id_length CHECK (length(personal_id) > 0),
@@ -73,13 +66,13 @@ CREATE TABLE voters (
 );
 CREATE TABLE ideas (
 	id INTEGER PRIMARY KEY NOT NULL,
-	school_id INTEGER NOT NULL,
+	budget_id INTEGER NOT NULL,
 	account_id INTEGER NOT NULL,
 	title TEXT NOT NULL,
 	description TEXT NOT NULL,
 	author_names TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')), image BLOB, image_type TEXT,
 
-	FOREIGN KEY (school_id) REFERENCES schools (id),
+	FOREIGN KEY (budget_id) REFERENCES budgets (id),
 	FOREIGN KEY (account_id) REFERENCES accounts (id),
 
 	CONSTRAINT title_length CHECK (length(title) > 0),
@@ -112,7 +105,7 @@ CREATE TABLE teachers (
 	CONSTRAINT personal_id_format CHECK (personal_id NOT GLOB '*[^0-9]*')
 );
 CREATE TABLE votes (
-	school_id INTEGER NOT NULL,
+	budget_id INTEGER NOT NULL,
 	idea_id INTEGER NOT NULL,
 	voter_country TEXT NOT NULL,
 	voter_personal_id TEXT NOT NULL,
@@ -123,8 +116,8 @@ CREATE TABLE votes (
 	signable TEXT NOT NULL,
 	xades TEXT,
 
-	FOREIGN KEY (school_id) REFERENCES schools (id),
-	FOREIGN KEY (school_id, idea_id) REFERENCES ideas (school_id, id),
+	FOREIGN KEY (budget_id) REFERENCES budgets (id),
+	FOREIGN KEY (budget_id, idea_id) REFERENCES ideas (budget_id, id),
 
 	CONSTRAINT voter_country_format CHECK (voter_country GLOB '[A-Z][A-Z]'),
 	CONSTRAINT voter_personal_id_length CHECK (length(voter_personal_id) > 0),
@@ -137,28 +130,53 @@ CREATE TABLE votes (
 	CONSTRAINT xades_length CHECK (length(xades) > 0)
 	CONSTRAINT signable_length CHECK (length(signable) > 0)
 );
-CREATE UNIQUE INDEX index_votes_on_school_and_voter
-ON votes (school_id, voter_country, voter_personal_id);
 CREATE INDEX index_votes_on_voter
 ON votes (voter_country, voter_personal_id);
-CREATE UNIQUE INDEX index_ideas_on_school_id_and_id
-ON ideas (school_id, id);
 CREATE TABLE paper_votes (
-	school_id INTEGER NOT NULL,
+	budget_id INTEGER NOT NULL,
 	idea_id INTEGER NOT NULL,
 	voter_country TEXT NOT NULL,
 	voter_personal_id TEXT NOT NULL,
 
-	FOREIGN KEY (school_id) REFERENCES schools (id),
-	FOREIGN KEY (school_id, idea_id) REFERENCES ideas (school_id, id),
+	FOREIGN KEY (budget_id) REFERENCES budgets (id),
+	FOREIGN KEY (budget_id, idea_id) REFERENCES ideas (budget_id, id),
 
 	CONSTRAINT voter_country_format CHECK (voter_country GLOB '[A-Z][A-Z]'),
 	CONSTRAINT voter_personal_id_length CHECK (length(voter_personal_id) > 0),
 	CONSTRAINT voter_personal_id_format
 	CHECK (voter_personal_id NOT GLOB '*[^0-9]*')
 );
-CREATE UNIQUE INDEX index_paper_votes_on_school_and_voter
-ON paper_votes (school_id, voter_country, voter_personal_id);
+CREATE TABLE budgets (
+	id INTEGER PRIMARY KEY NOT NULL,
+	school_id INTEGER NOT NULL,
+	title TEXT NOT NULL,
+	description TEXT,
+	created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+	voting_starts_at TEXT,
+	voting_ends_at TEXT,
+
+	FOREIGN KEY (school_id) REFERENCES schools (id),
+
+	CONSTRAINT title_length CHECK (length(title) > 0),
+	CONSTRAINT description_length CHECK (length(description) > 0),
+
+	CONSTRAINT created_at_format
+	CHECK (created_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z'),
+
+	CONSTRAINT voting_starts_at_format
+	CHECK (voting_starts_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z'),
+
+	CONSTRAINT voting_ends_at_format
+	CHECK (voting_ends_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z')
+);
+CREATE UNIQUE INDEX index_votes_on_budget_and_voter
+ON votes (budget_id, voter_country, voter_personal_id);
+CREATE INDEX index_budgets_on_school
+ON budgets (school_id, id);
+CREATE UNIQUE INDEX index_ideas_on_budget_and_id
+ON ideas (budget_id, id);
+CREATE UNIQUE INDEX index_paper_votes_on_budget_and_voter
+ON paper_votes (budget_id, voter_country, voter_personal_id);
 
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
@@ -178,4 +196,5 @@ INSERT INTO migrations VALUES('20210112185326');
 INSERT INTO migrations VALUES('20210118145358');
 INSERT INTO migrations VALUES('20210118155512');
 INSERT INTO migrations VALUES('20221205000000');
+INSERT INTO migrations VALUES('20221205000010');
 COMMIT;

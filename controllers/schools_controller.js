@@ -1,11 +1,9 @@
-var _ = require("root/lib/underscore")
+var Path = require("path")
 var Router = require("express").Router
 var HttpError = require("standard-http-error")
-var DateFns = require("date-fns")
 var schoolsDb = require("root/db/schools_db")
+var budgetsDb = require("root/db/budgets_db")
 var teachersDb = require("root/db/teachers_db")
-var votersDb = require("root/db/voters_db")
-var votesDb = require("root/db/votes_db")
 var ideasDb = require("root/db/ideas_db")
 var {isValidImageType} = require("root/lib/image")
 var SCHOOL_PATH = "/:id:slug(-[^/]+)?"
@@ -17,10 +15,13 @@ exports.assertTeacher = assertTeacher
 
 exports.router.get("/", (_req, res) => res.redirect(302, "/"))
 
-exports.router.use(SCHOOL_PATH, next(function*(req, _res, next) {
+exports.router.use(SCHOOL_PATH, next(function*(req, res, next) {
+	var {account} = req
+	var slug = (req.params.slug || "").replace(/^-/, "")
+
 	var school = yield schoolsDb.read(sql`
 		SELECT
-			id, slug, name, description, voting_starts_at, voting_ends_at,
+			id, slug, name, description,
 			background_color, foreground_color, logo_type
 
 		FROM schools
@@ -31,9 +32,13 @@ exports.router.use(SCHOOL_PATH, next(function*(req, _res, next) {
 		description: "Kooli ei leitud."
 	})
 
-	req.school = school
+	if (school.slug != slug) {
+		var path = Path.dirname(req.baseUrl) + "/" + school.id + "-" + school.slug
+		path += req.url == "/" ? "" : req.url
+		return void res.redirect(308, path)
+	}
 
-	var {account} = req
+	req.school = res.locals.school = school
 
 	req.role = (
 		account && (yield teachersDb.read(sql`
@@ -43,13 +48,6 @@ exports.router.use(SCHOOL_PATH, next(function*(req, _res, next) {
 			AND personal_id = ${account.personal_id}
 		`)) ? "teacher" :
 
-		account && (yield votersDb.read(sql`
-			SELECT 1 FROM voters
-			WHERE school_id = ${school.id}
-			AND country = ${account.country}
-			AND personal_id = ${account.personal_id}
-		`)) ? "voter" :
-
 		null
 	)
 
@@ -58,58 +56,14 @@ exports.router.use(SCHOOL_PATH, next(function*(req, _res, next) {
 
 exports.router.get(SCHOOL_PATH, next(function*(req, res) {
 	var {school} = req
-	var {teachers} = req
-	var {account} = req
-	var thank = req.query.voted
 
-	var voter = account ? yield votersDb.read(sql`
-		SELECT * FROM voters
+	var budgets = yield budgetsDb.search(sql`
+		SELECT * FROM budgets
 		WHERE school_id = ${school.id}
-		AND country = ${account.country}
-		AND personal_id = ${account.personal_id}
-	`) : null
-
-	var votesByIdea = _.mapValues(_.indexBy(yield votesDb.search(sql`
-		WITH merged_votes AS (
-			SELECT vote.idea_id
-			FROM votes AS vote
-
-			LEFT JOIN paper_votes AS paper_vote
-			ON paper_vote.school_id = vote.school_id
-			AND paper_vote.voter_country = vote.voter_country
-			AND paper_vote.voter_personal_id = vote.voter_personal_id
-
-			WHERE vote.school_id = ${school.id}
-			AND paper_vote.voter_personal_id IS NULL
-
-			UNION ALL
-
-			SELECT idea_id FROM paper_votes
-			WHERE school_id = ${school.id}
-		)
-
-		SELECT idea_id, COUNT(*) AS count
-		FROM merged_votes
-		GROUP BY idea_id
-	`), "idea_id"), (votes) => votes.count)
-
-	var ideas = yield ideasDb.search(sql`
-		SELECT
-			id, school_id, account_id, title, description, author_names,
-			created_at, updated_at, image_type
-
-		FROM ideas
-		WHERE school_id = ${school.id}
+		ORDER BY created_at DESC
 	`)
 
-	res.render("schools/read_page.jsx", {
-		school,
-		teachers,
-		voter,
-		votesByIdea,
-		ideas,
-		thank
-	})
+	res.render("schools/read_page.jsx", {budgets})
 }))
 
 exports.router.get(SCHOOL_PATH + "/logo", next(function*(req, res) {
@@ -143,31 +97,7 @@ exports.router.get(SCHOOL_PATH + "/edit",
 		WHERE school_id = ${school.id}
 	`)
 
-	var voters = yield votersDb.search(sql`
-		SELECT
-			voter.*,
-			COALESCE(account.name, vote.voter_name) AS name,
-			vote.voter_personal_id IS NOT NULL AS has_voted
-
-		FROM voters AS voter
-
-		LEFT JOIN accounts AS account
-		ON account.country = voter.country
-		AND account.personal_id = voter.personal_id
-
-		LEFT JOIN votes AS vote
-		ON vote.school_id = ${school.id}
-		AND vote.voter_country = voter.country
-		AND vote.voter_personal_id = voter.personal_id
-
-		WHERE voter.school_id = ${school.id}
-	`)
-
-	voters.forEach(function(voter) {
-		voter.has_voted = Boolean(voter.has_voted)
-	})
-
-	res.render("schools/update_page.jsx", {school, voters, teachers})
+	res.render("schools/update_page.jsx", {teachers})
 }))
 
 exports.router.put(SCHOOL_PATH,
@@ -175,24 +105,32 @@ exports.router.put(SCHOOL_PATH,
 	assertTeacher,
 	next(function*(req, res) {
 	var {school} = req
-	var attrs = parse(req.body, req.files)
-	var voters = parseVoterPersonalIds(req.body.voters)
-	voters.forEach((voter) => voter.school_id = school.id)
-
-	yield schoolsDb.update(school, attrs)
-	yield votersDb.execute(sql`DELETE FROM voters WHERE school_id = ${school.id}`)
-	yield votersDb.create(voters)
-
+	yield schoolsDb.update(school, parse(req.body, req.files))
+	res.statusMessage = "School Updated"
 	res.redirect(303, req.baseUrl + req.path + "/edit")
 }))
 
-_.each({
-	"/ideed": require("./schools/ideas_controller").router,
-	"/hääled": require("./schools/votes_controller").router,
-	"/paberhääled": require("./schools/paper_votes_controller").router
-}, (router, path) => (
-	exports.router.use(SCHOOL_PATH + encodeURI(path), router)
-))
+exports.router.get(SCHOOL_PATH + "/ideed/:ideaId", next(function*(req, res) {
+	var {school} = req
+
+	var idea = yield ideasDb.read(sql`
+		SELECT idea.id, idea.budget_id
+		FROM ideas AS idea
+		JOIN budgets AS budget ON budget.id = idea.budget_id
+		WHERE idea.id = ${req.params.id}
+		AND budget.school_id = ${school.id}
+	`)
+
+	if (idea == null) throw new HttpError(404, "Idea Not Found")
+	var schoolPath = req.baseUrl + "/" + req.params.id + req.params.slug
+	var path = schoolPath + "/eelarved/" + idea.budget_id + "/ideed/" + idea.id
+	res.redirect(307, path)
+}))
+
+exports.router.use(
+	SCHOOL_PATH + "/eelarved",
+	require("./schools/budgets_controller").router
+)
 
 function parse(obj, files) {
 	var attrs = {
@@ -204,34 +142,6 @@ function parse(obj, files) {
 
 		foreground_color:
 			obj.foreground_color ? parseColor(obj.foreground_color) : null
-	}
-
-	try {
-		attrs.voting_starts_at = obj.voting_starts_on
-			? _.parseIsoDate(obj.voting_starts_on)
-			: null
-	}
-	catch (ex) {
-		if (ex.message.startsWith("Invalid Date:"))
-			throw new HttpError(422, "Invalid Attributes", {
-				description: "Hääletamise algus ei tundu õiges formaadis."
-			})
-
-		else throw ex
-	}
-
-	try {
-		attrs.voting_ends_at = obj.voting_ends_on
-			? DateFns.addDays(_.parseIsoDate(obj.voting_ends_on), 1)
-			: null
-	}
-	catch (ex) {
-		if (ex.message.startsWith("Invalid Date:"))
-			throw new HttpError(422, "Invalid Attributes", {
-				description: "Hääletamise lõpp ei tundu õiges formaadis."
-			})
-
-		else throw ex
 	}
 
 	if (files.logo && isValidImageType(files.logo.mimetype)) {
@@ -250,12 +160,6 @@ function parseColor(color) {
 	return null
 }
 
-function parseVoterPersonalIds(personalIds) {
-	personalIds = _.uniq(personalIds.trim().split(/\s+/g).map(cleanPersonalId))
-	personalIds = personalIds.filter(Boolean)
-	return personalIds.map((id) => ({country: "EE", personal_id: id}))
-}
-
 function assertAccount(req, _res, next) {
 	if (req.account == null) throw new HttpError(401, {
 		description: "Palun logi lehe nägemiseks sisse."
@@ -267,8 +171,4 @@ function assertAccount(req, _res, next) {
 function assertTeacher(req, _res, next) {
 	if (req.role != "teacher") throw new HttpError(403, "Not a Teacher")
 	else next()
-}
-
-function cleanPersonalId(personalId) {
-	return personalId.replace(/[^0-9]/g, "")
 }

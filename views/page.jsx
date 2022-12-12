@@ -31,7 +31,7 @@ function Page(attrs, children) {
 		color: attrs.headerForegroundColor
 	})
 
-	return <html lang="et" class={attrs.class}>
+	return <html lang="et">
 		<head>
 			<meta charset="utf-8" />
 			<meta name="viewport" content="width=device-width" />
@@ -40,7 +40,7 @@ function Page(attrs, children) {
 			<LiveReload req={req} />
 		</head>
 
-		<body id={page + "-page"}>
+		<body id={page + "-page"} class={attrs.class}>
 			<nav id="nav" style={headerStyle}>
 				<Centered>
 					{!homeless ? <a href="/" class="home" title="Demokraatia töövihik">

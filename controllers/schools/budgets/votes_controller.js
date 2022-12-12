@@ -144,6 +144,7 @@ exports.router.use(require("root/lib/eid").parseSignatureBody)
 
 exports.router.post("/", assertVoting, next(function*(req, res) {
 	var {school} = req
+	var {budget} = req
 	var method = getRequestEidMethod(req)
 	var cert, country, verificationCode, err, personalId, xades
 
@@ -157,7 +158,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 
 	var idea = yield ideasDb.read(sql`
 		SELECT * FROM ideas
-		WHERE school_id = ${school.id}
+		WHERE budget_id = ${budget.id}
 		AND id = ${ideaId}
 	`)
 
@@ -176,7 +177,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 				if (err = validateCertificate(cert)) throw err
 
 				;[country, personalId] = getCertificatePersonalId(cert)
-				if (err = yield validateVoter(school, country, personalId)) throw err
+				if (err = yield validateVoter(budget, country, personalId)) throw err
 
 				var token = Crypto.randomBytes(16)
 				xades = newXades(cert, signable)
@@ -188,7 +189,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 				res.status(202).end(xades.signableHash)
 
 				votings.set(token, {
-					school_id: idea.school_id,
+					budget_id: idea.budget_id,
 					idea_id: idea.id,
 					voter_country: country,
 					voter_personal_id: personalId,
@@ -219,9 +220,9 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 				xades.setOcspResponse(yield hades.timemark(xades))
 
 				yield replaceVote(vote)
-				var schoolPath = Paths.schoolPath(school) + "?voted=true#thanks"
+				var budgetPath = Paths.budgetPath(school, budget) + "?voted=true#thanks"
 				res.setHeader("Content-Type", "application/json")
-				res.status(201).end(JSON.stringify({code: "OK", location: schoolPath}))
+				res.status(201).end(JSON.stringify({code: "OK", location: budgetPath}))
 			}
 			break
 
@@ -230,7 +231,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			personalId = req.body.personalId
 
 			// Early double validation to prevent possible misuse.
-			if (err = yield validateVoter(school, "EE", personalId)) throw err
+			if (err = yield validateVoter(budget, "EE", personalId)) throw err
 
 			// Log Mobile-Id requests to confirm SK's billing.
 			logger.info(
@@ -243,7 +244,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			if (err = validateCertificate(cert)) throw err
 
 			;[country, personalId] = getCertificatePersonalId(cert)
-			if (err = yield validateVoter(school, country, personalId)) throw err
+			if (err = yield validateVoter(budget, country, personalId)) throw err
 
 			xades = newXades(cert, signable)
 
@@ -262,8 +263,8 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			verificationCode = MobileId.confirmation(xades.signableHash)
 			respondWithVerificationCode(verificationCode, res)
 
-			co(waitForMobileIdSignature(school, {
-				school_id: idea.school_id,
+			co(waitForMobileIdSignature(school, budget, {
+				budget_id: idea.budget_id,
 				idea_id: idea.id,
 				voter_country: country,
 				voter_personal_id: personalId,
@@ -279,7 +280,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			personalId = req.body.personalId
 
 			// Early double validation to prevent possible misuse.
-			if (err = yield validateVoter(school, "EE", personalId)) throw err
+			if (err = yield validateVoter(budget, "EE", personalId)) throw err
 
 			// Log Smart-Id requests to confirm SK's billing.
 			logger.info("Requesting Smart-Id certificate for %s.", personalId)
@@ -290,7 +291,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			if (err = validateCertificate(cert)) throw err
 
 			;[country, personalId] = getCertificatePersonalId(cert)
-			if (err = yield validateVoter(school, country, personalId)) throw err
+			if (err = yield validateVoter(budget, country, personalId)) throw err
 
 			xades = newXades(cert, signable)
 
@@ -302,8 +303,8 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			verificationCode = SmartId.verification(xades.signableHash)
 			respondWithVerificationCode(verificationCode, res)
 
-			co(waitForSmartIdSignature(school, {
-				school_id: idea.school_id,
+			co(waitForSmartIdSignature(school, budget, {
+				budget_id: idea.budget_id,
 				idea_id: idea.id,
 				voter_country: country,
 				voter_personal_id: personalId,
@@ -376,10 +377,10 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 	else next(err)
 })
 
-function* validateVoter(school, country, personalId) {
+function* validateVoter(budget, country, personalId) {
 	var voter = yield votersDb.read(sql`
 		SELECT * FROM voters
-		WHERE school_id = ${school.id}
+		WHERE budget_id = ${budget.id}
 		AND country = ${country}
 		AND personal_id = ${personalId}
 	`)
@@ -392,14 +393,14 @@ function* validateVoter(school, country, personalId) {
 }
 
 function assertVoting(req, _res, next) {
-	var {school} = req
+	var {budget} = req
 
-	if (!(school.voting_starts_at && new Date >= school.voting_starts_at))
+	if (!(budget.voting_starts_at && new Date >= budget.voting_starts_at))
 		throw new HttpError(403, "Voting Not Yet Started", {
 			description: "Hääletamine pole veel alanud."
 		})
 
-	if (!(school.voting_ends_at == null || new Date < school.voting_ends_at))
+	if (!(budget.voting_ends_at == null || new Date < budget.voting_ends_at))
 		throw new HttpError(403, "Voting Ended", {
 			description: "Hääletamine läbi."
 		})
@@ -410,7 +411,7 @@ function assertVoting(req, _res, next) {
 function* replaceVote(vote) {
 	yield votesDb.execute(sql`
 		DELETE FROM votes
-		WHERE school_id = ${vote.school_id}
+		WHERE budget_id = ${vote.budget_id}
 		AND voter_country = ${vote.voter_country}
 		AND voter_personal_id = ${vote.voter_personal_id}
 	`)
@@ -418,7 +419,7 @@ function* replaceVote(vote) {
 	return yield votesDb.create(vote)
 }
 
-function* waitForMobileIdSignature(school, vote, sessionId, res) {
+function* waitForMobileIdSignature(school, budget, vote, sessionId, res) {
 	try {
 		var signatureHash = yield waitForMobileIdSession(120, sessionId)
 		if (signatureHash == null) throw new MobileIdError("TIMEOUT")
@@ -433,8 +434,9 @@ function* waitForMobileIdSignature(school, vote, sessionId, res) {
 		xades.setOcspResponse(yield hades.timemark(xades))
 
 		yield replaceVote(vote)
-		var schoolPath = Paths.schoolPath(school) + "?voted=true#thanks"
-		res.end(JSON.stringify({code: "OK", location: schoolPath}))
+
+		var budgetPath = Paths.budgetPath(school, budget) + "?voted=true#thanks"
+		res.end(JSON.stringify({code: "OK", location: budgetPath}))
 	}
 	catch (ex) {
 		if (!(
@@ -447,7 +449,7 @@ function* waitForMobileIdSignature(school, vote, sessionId, res) {
 	}
 }
 
-function* waitForSmartIdSignature(school, vote, session, res) {
+function* waitForSmartIdSignature(school, budget, vote, session, res) {
 	try {
 		var certAndSignatureHash = yield waitForSmartIdSession(120, session)
 		if (certAndSignatureHash == null) throw new SmartIdError("TIMEOUT")
@@ -463,8 +465,9 @@ function* waitForSmartIdSignature(school, vote, session, res) {
 		xades.setOcspResponse(yield hades.timemark(xades))
 
 		yield replaceVote(vote)
-		var schoolPath = Paths.schoolPath(school) + "?voted=true#thanks"
-		res.end(JSON.stringify({code: "OK", location: schoolPath}))
+
+		var budgetPath = Paths.budgetPath(school, budget) + "?voted=true#thanks"
+		res.end(JSON.stringify({code: "OK", location: budgetPath}))
 	}
 	catch (ex) {
 		if (!(ex instanceof SmartIdError && ex.code in SMART_ID_ERRORS))

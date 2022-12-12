@@ -1,8 +1,8 @@
 var _ = require("root/lib/underscore")
 var Router = require("express").Router
 var HttpError = require("standard-http-error")
-var {assertAccount} = require("../schools_controller")
-var {assertTeacher} = require("../schools_controller")
+var {assertAccount} = require("../../schools_controller")
+var {assertTeacher} = require("../../schools_controller")
 var ideasDb = require("root/db/ideas_db")
 var votersDb = require("root/db/voters_db")
 var paperVotesDb = require("root/db/paper_votes_db")
@@ -13,44 +13,45 @@ exports.router = Router({mergeParams: true})
 exports.router.use(assertAccount, assertTeacher)
 
 exports.router.get("/", next(function*(req, res) {
-	var {school} = req
+	var {budget} = req
 
 	var ideas = _.indexBy(yield ideasDb.search(sql`
-		SELECT id, title FROM ideas WHERE school_id = ${school.id}
+		SELECT id, title FROM ideas WHERE budget_id = ${budget.id}
 	`), "id")
 
 	var paperVotes = yield paperVotesDb.search(sql`
-		SELECT * FROM paper_votes WHERE school_id = ${school.id}
+		SELECT * FROM paper_votes WHERE budget_id = ${budget.id}
 	`)
 
-	res.render("schools/paper_votes/index_page.jsx", {school, ideas, paperVotes})
+	res.render("schools/budgets/paper_votes/index_page.jsx", {ideas, paperVotes})
 }))
 
 exports.router.put("/", next(function*(req, res) {
 	var err
-	var school = req.school
+	var {budget} = req
 
 	var ideaIds = new Set(_.map(yield ideasDb.search(sql`
-		SELECT id FROM ideas WHERE school_id = ${school.id}
+		SELECT id FROM ideas WHERE budget_id = ${budget.id}
 	`), "id"))
 
 	var voterPersonalId = new Set(_.map(yield votersDb.search(sql`
 		SELECT country || personal_id AS id FROM voters
-		WHERE school_id = ${school.id}
+		WHERE budget_id = ${budget.id}
 	`), "id"))
 
 	var votes = parse(req.body)
 	if (err = validateVotes(ideaIds, voterPersonalId, votes)) throw err
 
 	yield paperVotesDb.execute(sql`
-		DELETE FROM paper_votes WHERE school_id = ${school.id}
+		DELETE FROM paper_votes WHERE budget_id = ${budget.id}
 	`)
 
 	yield paperVotesDb.create(votes.map((vote) => ({
 		__proto__: vote,
-		school_id: school.id
+		budget_id: budget.id
 	})))
 
+	res.statusMessage = "Paper Votes Updated"
 	res.redirect(303, req.baseUrl)
 }))
 

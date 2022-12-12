@@ -1,11 +1,11 @@
 /** @jsx Jsx */
 var _ = require("root/lib/underscore")
 var Jsx = require("j6pack")
-var Page = require("../../page")
+var Page = require("root/views/page")
 var Paths = require("root/lib/paths")
-var {SchoolPage} = require("../read_page")
-var {SchoolHeader} = require("../read_page")
-var {SchoolButton} = require("../read_page")
+var {SchoolPage} = require("../../read_page")
+var {SchoolHeader} = require("../../read_page")
+var {SchoolButton} = require("../../read_page")
 var {Section} = Page
 var {Heading} = Page
 var {Form} = Page
@@ -13,6 +13,7 @@ var {Form} = Page
 module.exports = function(attrs) {
 	var {req} = attrs
 	var {school} = attrs
+	var {budget} = attrs
 	var {ideas} = attrs
 	var {paperVotes} = attrs
 
@@ -42,9 +43,7 @@ module.exports = function(attrs) {
 
 					return <tr>
 						<td>{idea.id}</td>
-						<td>
-							<a href={ideaPath} class="link-button">{idea.title}</a>
-						</td>
+						<td><a href={ideaPath} class="link-button">{idea.title}</a></td>
 					</tr>
 				})}</tbody>
 			</table> : null}
@@ -88,13 +87,13 @@ module.exports = function(attrs) {
 						<Form
 							req={req}
 							method="put"
-							action={Paths.paperVotesPath(school)}
+							action={Paths.paperVotesPath(school, budget)}
 						>
 							<p>
 								Paberhääli saad lisada CSV (komaga eraldatud) formaadis, kus
 								esimeses tulbas on hääletaja isikukood ja teises idee
 								identifikaator. Hääletajad peavad olema
-								eelnevalt lisatud <a href={Paths.editSchoolPath(school) + "#voters"}
+								eelnevalt lisatud <a href={Paths.updateSchoolPath(school) + "#voters"}
 								class="link-button">lubatud hääletajate nimekirja</a>.
 							</p>
 

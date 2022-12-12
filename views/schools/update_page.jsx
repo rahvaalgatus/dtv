@@ -1,12 +1,10 @@
 /** @jsx Jsx */
-var _ = require("root/lib/underscore")
 var Jsx = require("j6pack")
 var Page = require("../page")
 var Paths = require("root/lib/paths")
 var {SchoolPage} = require("./read_page")
 var {SchoolHeader} = require("./read_page")
 var {SchoolButton} = require("./read_page")
-var DateFns = require("date-fns")
 var {Section} = Page
 var {Heading} = Page
 var {Form} = Page
@@ -15,9 +13,7 @@ module.exports = function(attrs) {
 	var {req} = attrs
 	var {school} = attrs
 	var {teachers} = attrs
-	var {voters} = attrs
 	var schoolPath = Paths.schoolPath(school)
-	var votedCounts = _.countBy(voters, "has_voted")
 
 	return <SchoolPage
 		page="update-school"
@@ -25,9 +21,7 @@ module.exports = function(attrs) {
 		school={school}
 	>
 		<SchoolHeader school={school}>
-			<h1>
-				<a href={schoolPath}>{school.name}</a>
-			</h1>
+			<h1><a href={schoolPath}>{school.name}</a></h1>
 		</SchoolHeader>
 
 		<Section>
@@ -52,12 +46,7 @@ module.exports = function(attrs) {
 				</label>
 
 				<label for="description" class="budget-field">
-					<span class="label">Sissejuhatav tekst</span>
-
-					<p>
-						Sissejuhatavat teksti kuvatakse sõltumata, kas hääletus on alanud
-						või lõppenud.
-					</p>
+					<span class="label">Kooli kirjeldus</span>
 
 					<textarea name="description" class="budget-input">
 						{school.description}
@@ -114,99 +103,6 @@ module.exports = function(attrs) {
 						name="logo"
 						accept="image/jpeg, image/png, image/gif"
 					/>
-				</label>
-
-				<label for="voting_starts_on" class="budget-field">
-					<span class="label">Hääletamise algus</span>
-
-					<p>
-						Ideid saab lisada ja muuta kuni hääletamise alguseni.<br />
-						Vali kuupäev kalendrist või selle puudumisel sisesta see formaadis <code>2021-01-31</code>.
-					</p>
-
-					<input
-						name="voting_starts_on"
-						type="date"
-						class="budget-input"
-
-						value={
-							school.voting_starts_at &&
-							_.formatDate("iso", school.voting_starts_at)
-						}
-					/>
-				</label>
-
-				<label for="voting_ends_on" class="budget-field">
-					<span class="label">Hääletamise lõpp</span>
-
-					<p>
-						Hääletada saab südaööni ehk kl 23:59ni.<br />
-						Vali kuupäev kalendrist või selle puudumisel sisesta see formaadis <code>2021-01-31</code>.
-					</p>
-
-					<input
-						name="voting_ends_on"
-						type="date"
-						class="budget-input"
-
-						value={
-							school.voting_ends_at &&
-							_.formatDate("iso", DateFns.addSeconds(school.voting_ends_at, -1))
-						}
-					/>
-				</label>
-
-				{/* The id is for linking from the paper-votes page. */}
-				<label id="voters" for="voters" class="budget-field">
-					<span class="label">Ideede esitajad ja hääletajad</span>
-
-					<p>
-						Kõik hääletajad saavad pakkuda välja ka uusi ideid. Kõik ülejäänud
-						küll näevad ideid ja hääletust, kuid osaleda ei saa.
-						Õpetajad saavad alati ideid lisada ja hääletada.
-						<br />
-						Eralda isikukoodid reavahedega.
-					</p>
-
-					<textarea
-						name="voters"
-						class="budget-input"
-						pla60001019906ceholder="Ideede esitajate ja hääletajate isikukoodid"
-					>
-						{voters.map((voter) => voter.personal_id).join("\n")}
-					</textarea>
-
-					{voters.length > 0 ? <table
-						id="voters"
-						class="budget-table with-footer"
-					>
-						<thead>
-							<tr>
-								<th>Isikukood</th>
-								<th>Nimi</th>
-								<th class="voted-column">Hääletanud</th>
-							</tr>
-						</thead>
-
-						<tbody>{voters.map(function(voter) {
-							return <tr>
-								<td>{voter.personal_id}</td>
-								<td>{voter.name}</td>
-								<td class="voted-column">{voter.has_voted ? "✅" : ""}</td>
-							</tr>
-						})}</tbody>
-
-						<tfoot>
-							<tr>
-								<td colspan="2" />
-
-								<td class="voted-column">
-									Hääletanud on {votedCounts.true}.<br />
-									Hääletamata veel {votedCounts.false}.
-								</td>
-							</tr>
-						</tfoot>
-					</table> : null}
 				</label>
 
 				<SchoolButton school={school} type="submit">Muuda</SchoolButton>

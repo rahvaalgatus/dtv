@@ -1,7 +1,9 @@
 var Paths = require("root/lib/paths")
 var ValidSchool = require("root/test/valid_school")
 var ValidIdea = require("root/test/valid_idea")
+var ValidBudget = require("root/test/valid_budget")
 var schoolsDb = require("root/db/schools_db")
+var budgetsDb = require("root/db/budgets_db")
 var teachersDb = require("root/db/teachers_db")
 var votersDb = require("root/db/voters_db")
 var paperVotesDb = require("root/db/paper_votes_db")
@@ -19,9 +21,14 @@ describe("PaperVotesController", function() {
 	describe("GET /", function() {
 		it("must render given no paper votes", function*() {
 			var school = yield schoolsDb.create(new ValidSchool)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id
+			}))
+
 			yield createTeacher(school, this.account)
 
-			var res = yield this.request(Paths.paperVotesPath(school))
+			var res = yield this.request(Paths.paperVotesPath(school, budget))
 			res.statusCode.must.equal(200)
 
 			var dom = parseDom(res.body)
@@ -35,18 +42,22 @@ describe("PaperVotesController", function() {
 			var school = yield schoolsDb.create(new ValidSchool)
 			yield createTeacher(school, this.account)
 
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id
+			}))
+
 			yield votersDb.create([
-				{school_id: school.id, country: "EE", personal_id: "38706180001"},
-				{school_id: school.id, country: "EE", personal_id: "38706180002"},
-				{school_id: school.id, country: "EE", personal_id: "38706180003"}
+				{budget_id: budget.id, country: "EE", personal_id: "38706180001"},
+				{budget_id: budget.id, country: "EE", personal_id: "38706180002"},
+				{budget_id: budget.id, country: "EE", personal_id: "38706180003"}
 			])
 
 			var ideas = yield ideasDb.create([
-				new ValidIdea({school_id: school.id, account_id: this.account.id}),
-				new ValidIdea({school_id: school.id, account_id: this.account.id})
+				new ValidIdea({budget_id: budget.id, account_id: this.account.id}),
+				new ValidIdea({budget_id: budget.id, account_id: this.account.id})
 			])
 
-			var res = yield this.request(Paths.paperVotesPath(school), {
+			var res = yield this.request(Paths.paperVotesPath(school, budget), {
 				method: "PUT",
 
 				form: {"paper-votes": outdent`
@@ -57,22 +68,23 @@ describe("PaperVotesController", function() {
 			})
 
 			res.statusCode.must.equal(303)
-			res.headers.location.must.equal(Paths.paperVotesPath(school))
+			res.statusMessage.must.equal("Paper Votes Updated")
+			res.headers.location.must.equal(Paths.paperVotesPath(school, budget))
 
 			yield paperVotesDb.search(sql`
 				SELECT * FROM paper_votes ORDER BY voter_personal_id
 			`).must.then.eql([{
-				school_id: school.id,
+				budget_id: budget.id,
 				idea_id: ideas[0].id,
 				voter_country: "EE",
 				voter_personal_id: "38706180001"
 			}, {
-				school_id: school.id,
+				budget_id: budget.id,
 				idea_id: ideas[1].id,
 				voter_country: "EE",
 				voter_personal_id: "38706180002"
 			}, {
-				school_id: school.id,
+				budget_id: budget.id,
 				idea_id: ideas[0].id,
 				voter_country: "EE",
 				voter_personal_id: "38706180003"
@@ -83,19 +95,22 @@ describe("PaperVotesController", function() {
 			var school = yield schoolsDb.create(new ValidSchool)
 			yield createTeacher(school, this.account)
 
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id
+			}))
+
 			yield votersDb.create({
-				school_id: school.id,
+				budget_id: budget.id,
 				country: "EE",
 				personal_id: "38706180001"
 			})
 
 			var ideas = yield ideasDb.create([
-				new ValidIdea({school_id: school.id, account_id: this.account.id}),
-				new ValidIdea({school_id: school.id, account_id: this.account.id})
+				new ValidIdea({budget_id: budget.id, account_id: this.account.id}),
+				new ValidIdea({budget_id: budget.id, account_id: this.account.id})
 			])
 
-
-			var res = yield this.request(Paths.paperVotesPath(school), {
+			var res = yield this.request(Paths.paperVotesPath(school, budget), {
 				method: "PUT",
 
 				form: {"paper-votes": outdent`
@@ -116,12 +131,16 @@ describe("PaperVotesController", function() {
 			var school = yield schoolsDb.create(new ValidSchool)
 			yield createTeacher(school, this.account)
 
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id
+			}))
+
 			var idea = yield ideasDb.create(new ValidIdea({
-				school_id: school.id,
+				budget_id: budget.id,
 				account_id: this.account.id
 			}))
 
-			var res = yield this.request(Paths.paperVotesPath(school), {
+			var res = yield this.request(Paths.paperVotesPath(school, budget), {
 				method: "PUT",
 				form: {"paper-votes": `38706180001, ${idea.id}`}
 			})

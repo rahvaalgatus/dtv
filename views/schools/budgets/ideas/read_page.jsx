@@ -1,9 +1,9 @@
 /** @jsx Jsx */
 var Jsx = require("j6pack")
-var Page = require("../../page")
+var Page = require("root/views/page")
 var Paths = require("root/lib/paths")
-var {SchoolPage} = require("../read_page")
-var {SchoolHeader} = require("../read_page")
+var {SchoolPage} = require("../../read_page")
+var {SchoolHeader} = require("../../read_page")
 var {Section} = Page
 var {serializeStyle} = Page
 var linkify = require("root/lib/linkify")
@@ -12,6 +12,7 @@ module.exports = function(attrs) {
 	var {req} = attrs
 	var {account} = req
 	var {school} = attrs
+	var {budget} = attrs
 	var {idea} = attrs
 	var ideaPath = req.baseUrl + "/" + idea.id
 
@@ -22,7 +23,7 @@ module.exports = function(attrs) {
 		editable={
 			account &&
 			idea.account_id == account.id &&
-			(school.voting_starts_at == null || new Date < school.voting_starts_at)
+			(budget.voting_starts_at == null || new Date < budget.voting_starts_at)
 		}
 	>
 		<Section>

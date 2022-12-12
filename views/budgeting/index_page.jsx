@@ -57,6 +57,10 @@ function IndexPage(attrs) {
 			<p class="section-paragraph">
 				Eesmärk on, et õpilased lihtsalt ei õpiks koolis teoreetiliselt, mis on demokraatia, vaid saaksid ka päriselulise kaasa rääkimise ja koos otsustamise kogemuse. See loob eeldused tugevama kogukonna ja kodanikuühiskonna arenguks.
 			</p>
+
+			<p class="section-paragraph">
+				Koolide kaasava eelarvestamisele on oma õla projektirahastajatena alla pannud Põhjamaade Ministrite Nõukogu (2020/21), Integratsiooni SA (2021 sügis) ja Aktiivsete Kodanike Fond (2021 sügis-2023 märts).
+			</p>
 		</Section>
 
 		<Section id="schools-section">

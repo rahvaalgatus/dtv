@@ -1,9 +1,9 @@
 /** @jsx Jsx */
 var Jsx = require("j6pack")
-var Page = require("../../page")
+var Page = require("root/views/page")
 var Paths = require("root/lib/paths")
-var {SchoolPage} = require("../read_page")
-var {SchoolHeader} = require("../read_page")
+var {SchoolPage} = require("../../read_page")
+var {SchoolHeader} = require("../../read_page")
 var {Section} = Page
 var {IdeaForm} = require("./create_page")
 

@@ -726,7 +726,7 @@ textarea.budget-input {
 	}
 }
 
-#budgeting-home-page {
+#budgeting-home-page main {
 	#header {
 		h1 {
 			margin-bottom: 1.5rem;
@@ -738,7 +738,7 @@ textarea.budget-input {
 		}
 	}
 
-	main #intro-section .benefits-list {
+	#intro-section .benefits-list {
 		.list-image {
 			float: left;
 			margin-top: 1rem;
@@ -752,7 +752,7 @@ textarea.budget-input {
 		}
 	}
 
-	main #schools {
+	#schools {
 		margin-top: 2rem;
 		line-height: 1.5;
 
@@ -853,6 +853,100 @@ textarea.budget-input {
 
 #school-page main {
 	#school-description {
+		white-space: pre-line;
+	}
+
+	#budgets {
+		margin-top: 2rem;
+		line-height: 1.5;
+
+		a {
+			@extend .link-button;
+			font-size: 2rem;
+		}
+	}
+}
+
+.school-page {
+	#header {
+		overflow: hidden;
+
+		.logo {
+			float: right;
+			width: 10rem;
+			margin-top: -2rem;
+			margin-left: 2rem;
+
+			@media only screen and (max-width: 650px) {
+				display: block;
+				float: none;
+				margin-top: 0;
+				margin-left: 0;
+				margin-bottom: 2rem;
+				width: 7rem;
+			}
+		}
+	}
+}
+
+#update-school-page main {
+	#school-form {
+		label[for=name] {
+			input {
+				width: 100%;
+				font-size: 2rem;
+				padding: 1rem 2rem;
+			}
+		}
+
+		label[for=description] {
+			textarea {
+				width: 100%;
+				resize: vertical;
+				min-height: 15rem;
+			}
+		}
+
+		label[for=colors] {
+			table {
+				width: auto;
+				td:first-child { width: 5rem; }
+			}
+		}
+
+		label[for=logo] {
+			img {
+				display: block;
+				max-width: 15rem;
+				margin-bottom: 1rem;
+			}
+		}
+
+		label[for=voters] {
+			textarea {
+				width: 100%;
+				resize: vertical;
+				min-height: 15rem;
+			}
+
+			.budget-table {
+				margin-top: 1rem;
+			}
+		}
+
+		button[type=submit] {
+			margin-top: 2rem;
+		}
+	}
+
+	#voters {
+		.voted-column { text-align: center; }
+		tfoot .voted-column { text-align: left; }
+	}
+}
+
+#budget-page main {
+	#budget-description {
 		white-space: pre-line;
 	}
 
@@ -961,31 +1055,9 @@ textarea.budget-input {
 	}
 }
 
-.school-page {
-	#header {
-		overflow: hidden;
-
-		.logo {
-			float: right;
-			width: 10rem;
-			margin-top: -2rem;
-			margin-left: 2rem;
-
-			@media only screen and (max-width: 650px) {
-				display: block;
-				float: none;
-				margin-top: 0;
-				margin-left: 0;
-				margin-bottom: 2rem;
-				width: 7rem;
-			}
-		}
-	}
-}
-
-#update-school-page main {
-	#school-form {
-		label[for=name] {
+.update-budget-page main {
+	#budget-form {
+		label[for=title] {
 			input {
 				width: 100%;
 				font-size: 2rem;
@@ -998,21 +1070,6 @@ textarea.budget-input {
 				width: 100%;
 				resize: vertical;
 				min-height: 15rem;
-			}
-		}
-
-		label[for=colors] {
-			table {
-				width: auto;
-				td:first-child { width: 5rem; }
-			}
-		}
-
-		label[for=logo] {
-			img {
-				display: block;
-				max-width: 15rem;
-				margin-bottom: 1rem;
 			}
 		}
 
