@@ -583,6 +583,7 @@ textarea.budget-input {
 		text-decoration: underline;
 		outline-offset: 0.2rem;
 		-moz-outline-radius: 2px;
+		border-radius: 2px;
 
 		&:focus { outline: 1px dashed currentcolor; }
 	}
@@ -738,17 +739,37 @@ textarea.budget-input {
 		}
 	}
 
-	#intro-section .benefits-list {
-		.list-image {
-			float: left;
-			margin-top: 1rem;
-			margin-left: 2rem;
-			margin-right: 2rem;
-			width: 10rem;
+	#intro-section {
+		.benefits-list {
+			.list-image {
+				float: left;
+				margin-top: 1rem;
+				margin-left: 2rem;
+				margin-right: 2rem;
+				width: 10rem;
 
-			& ~ * {
-				margin-left: 12rem;
+				& ~ * {
+					margin-left: 12rem;
+				}
 			}
+		}
+
+		.supporter-logos {
+			text-align: center;
+			margin-top: 2rem;
+
+			a {
+				display: inline-block;
+				margin-right: 2rem;
+				margin-bottom: 2rem;
+				outline-offset: 0.2rem;
+				-moz-outline-radius: 2px;
+				border-radius: 2px;
+
+				&:focus { outline: 1px dashed $blue; }
+			}
+
+			img { vertical-align: middle; width: 20rem; }
 		}
 	}
 
@@ -845,8 +866,26 @@ textarea.budget-input {
 	#book {
 		.download-links {
 			margin-top: 2rem;
+			margin-bottom: 2rem;
 
 			a { margin-bottom: 1rem; }
+		}
+
+		.supporter-logos {
+			margin-top: 2rem;
+
+			a {
+				display: inline-block;
+				margin-right: 2rem;
+				margin-bottom: 2rem;
+				outline-offset: 0.2rem;
+				-moz-outline-radius: 2px;
+				border-radius: 2px;
+
+				&:focus { outline: 1px dashed $blue; }
+			}
+
+			img { vertical-align: middle; width: 20rem; }
 		}
 	}
 }

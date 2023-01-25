@@ -59,8 +59,34 @@ function IndexPage(attrs) {
 			</p>
 
 			<p class="section-paragraph">
-				Koolide kaasava eelarvestamisele on oma õla projektirahastajatena alla pannud Põhjamaade Ministrite Nõukogu (2020/21), Integratsiooni SA (2021 sügis) ja Aktiivsete Kodanike Fond (2021 sügis-2023 märts).
+				Koolide kaasavat eelarvestamist veavad eest <a href="https://kogu.ee">Eesti Koostöö Kogu</a> ja <a href="https://transparency.ee">Korruptsioonivaba Eesti</a> ning oma õla projektirahastajatena on alla pannud <a href="https://www.norden.ee">Põhjamaade Ministrite Nõukogu</a> (2020/21), <a href="https://integratsioon.ee">Integratsiooni SA</a> (2021 sügis) ja <a href="https://acf.ee">Aktiivsete Kodanike Fond</a> (2021 sügis-2023 juuni).
 			</p>
+
+			<div class="supporter-logos">
+				<a href="https://www.norden.ee">
+					<img
+						src="/assets/norden.svg"
+						title="Põhjamaade Ministrite Nõukogu esindus Eestis"
+						alt="Põhjamaade Ministrite Nõukogu esindus Eestis"
+					/>
+				</a>
+				{" "}
+				<a href="https://integratsioon.ee">
+					<img
+						src="/assets/integratsiooni-sihtasutus.svg"
+						title="Integratsiooni sihtasutus"
+						alt="Integratsiooni sihtasutus"
+					/>
+				</a>
+				{" "}
+				<a href="https://acf.ee">
+					<img
+						src="/assets/acf.svg"
+						title="Aktiivsete Kodanike Fond"
+						alt="Aktiivsete Kodanike Fond"
+					/>
+				</a>
+			</div>
 		</Section>
 
 		<Section id="schools-section">

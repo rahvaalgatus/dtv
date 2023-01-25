@@ -174,6 +174,20 @@ module.exports = function(attrs) {
 					Lae alla juhendraamat vene keeles
 				</a>
 			</div>
+
+			<p class="section-paragraph">
+				Koolide kaasava eelarvestamise õppematerjalide loomisele pani oma õla projektirahastajana alla <a href="https://acf.ee">Aktiivsete Kodanike Fond</a>.
+			</p>
+
+			<div class="supporter-logos">
+				<a href="https://acf.ee">
+					<img
+						src="/assets/acf.svg"
+						title="Aktiivsete Kodanike Fond"
+						alt="Aktiivsete Kodanike Fond"
+					/>
+				</a>
+			</div>
 		</Section>
 	</Page>
 }
