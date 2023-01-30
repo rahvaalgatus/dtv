@@ -178,7 +178,7 @@ ul.section-list {
 	background: #a9e8fa;
 	color: black;
 	border-radius: 5rem;
-	padding: 1.5rem 2.5rem 1rem;
+	padding: 1.4rem 2.5rem 1.2rem;
 	box-shadow: 0 3px 4px 1px rgba(black, 0.06);
 	text-transform: uppercase;
 
@@ -192,7 +192,7 @@ ul.section-list {
 	background: #96e97f;
 	color: black;
 	border-radius: 5rem;
-	padding: 1.5rem 2.5rem 1rem;
+	padding: 1.4rem 2.5rem 1.2rem;
 	box-shadow: 0 3px 4px 1px rgba(black, 0.06);
 	text-transform: uppercase;
 
@@ -379,7 +379,8 @@ textarea.budget-input {
 
 		button {
 			vertical-align: bottom;
-			height: $input-height;
+			padding-top: 0.8rem;
+			padding-bottom: 0.8rem;
 		}
 
 		output { display: block; margin-top: 1rem; }
