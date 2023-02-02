@@ -646,6 +646,34 @@ textarea.budget-input {
 				font-weight: 900;
 				width: 100%;
 			}
+
+			@media only screen and (max-width: 759px) {
+				overflow: visible;
+
+				h2 {
+					margin-left: 0;
+					text-align: center;
+					width: auto;
+				}
+
+				.illustration {
+					float: none;
+					display: block;
+					width: 100%;
+					margin: 0 auto;
+					max-width: 35rem;
+				}
+
+				ul {
+					padding-left: 0;
+					margin-top: 2rem;
+					float: none;
+					width: 100%;
+					text-align: center;
+
+					.yellow-button { max-width: 38rem; }
+				}
+			}
 		}
 	}
 
@@ -669,6 +697,7 @@ textarea.budget-input {
 					flex-shrink: 0;
 					font-weight: 900;
 					flex-basis: 30rem;
+					min-width: 28rem;
 
 					text-align: left;
 					padding: 3.5rem 4rem 3rem 3rem;
@@ -685,6 +714,7 @@ textarea.budget-input {
 							url("/assets/#{$type}-white-icon.svg");
 
 						background-position: 24rem center, 15rem center;
+						background-position: right 2.5rem center, right 8rem center;
 						background-size: 3.5rem, 6.5rem;
 					}
 				}
@@ -698,6 +728,23 @@ textarea.budget-input {
 
 			.exercise + .exercise {
 				margin-top: 4rem;
+			}
+
+			@media only screen and (max-width: 759px) {
+				.exercise {
+					display: block;
+					text-align: center;
+
+					.yellow-button {
+						width: 100%;
+						max-width: 38rem;
+					}
+
+					p {
+						margin-top: 3rem;
+						text-align: left;
+					}
+				}
 			}
 		}
 	}
