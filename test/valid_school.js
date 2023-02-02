@@ -5,7 +5,9 @@ module.exports = function(attrs) {
 
 	return _.assign({
 		name: name,
-		slug: slugify(name)
+		slug: slugify(name),
+		logo: null,
+		logo_type: null
 	}, attrs)
 }
 

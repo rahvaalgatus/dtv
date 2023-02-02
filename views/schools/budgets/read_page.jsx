@@ -18,7 +18,7 @@ exports = module.exports = ReadPage
 
 function ReadPage(attrs) {
 	var {req} = attrs
-	var {role} = req
+	var {roles} = req
 	var {school} = attrs
 	var {budget} = attrs
 	var {ideas} = attrs
@@ -39,7 +39,7 @@ function ReadPage(attrs) {
 			<a href={Paths.schoolPath(school)} class="context">{school.name}</a>
 			<h1><a href={budgetPath}>{budget.title}</a></h1>
 
-			{role == "teacher" ? <menu>
+			{roles.includes("teacher") ? <menu>
 				<a
 					href={Paths.updateBudgetPath(school, budget)}
 					style={headerButtonStyle}
@@ -70,7 +70,7 @@ function ReadPage(attrs) {
 				req={req}
 				school={school}
 				budget={budget}
-				role={role}
+				roles={roles}
 				ideas={ideas}
 				votesByIdea={votesByIdea}
 				thank={thank}
@@ -91,7 +91,7 @@ function ReadPage(attrs) {
 				school={school}
 				budget={budget}
 				ideas={ideas}
-				role={role}
+				roles={roles}
 			/>
 		}()}
 	</SchoolPage>
@@ -100,7 +100,7 @@ function ReadPage(attrs) {
 function IdeasSection(attrs) {
 	var {school} = attrs
 	var {budget} = attrs
-	var {role} = attrs
+	var {roles} = attrs
 	var {ideas} = attrs
 
 	return <Section id="viewable-ideas-section">
@@ -112,7 +112,7 @@ function IdeasSection(attrs) {
 		</p> : null}
 
 		{(
-			(role == "teacher" || role == "voter") &&
+			(roles.includes("teacher") || roles.includes("voter")) &&
 			(budget.voting_starts_at == null || new Date < budget.voting_starts_at)
 		) ? <menu>
 			<SchoolButton
@@ -141,7 +141,7 @@ function VotingSection(attrs) {
 	var {school} = attrs
 	var {budget} = attrs
 	var {ideas} = attrs
-	var {role} = attrs
+	var {roles} = attrs
 	var {votesByIdea} = attrs
 	var {thank} = attrs
 	var maxVoteCount = _.max(_.values(votesByIdea))
@@ -167,7 +167,7 @@ function VotingSection(attrs) {
 				23:59.
 			</span> : null}
 
-			{role == "teacher" ? <span>
+			{roles.includes("teacher") ? <span>
 				{" "}Häälte arv on hääletamise ajal nähtav vaid sulle kui õpetajale.
 			</span> : null}
 		</p>
@@ -195,7 +195,7 @@ function VotingSection(attrs) {
 							<a href={Paths.ideaPath(school, idea)}>{idea.title}</a>
 						</h3>
 
-						{role == "teacher" ?
+						{roles.includes("teacher") ?
 							<VoteCountView count={voteCount} max={maxVoteCount} />
 						: null}
 

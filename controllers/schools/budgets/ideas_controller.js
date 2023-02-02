@@ -11,7 +11,7 @@ exports.router = Router({mergeParams: true})
 exports.router.get("/new",
 	assertAccount,
 	assertNotVoting,
-	assertVoter,
+	assertTeacherOrVoter,
 	function(_req, res) {
 	res.render("schools/budgets/ideas/create_page.jsx")
 })
@@ -19,7 +19,7 @@ exports.router.get("/new",
 exports.router.post("/",
 	assertAccount,
 	assertNotVoting,
-	assertVoter,
+	assertTeacherOrVoter,
 	next(function*(req, res) {
 	var {account} = req
 	var {budget} = req
@@ -125,7 +125,7 @@ function assertNotVoting(req, _res, next) {
 	next()
 }
 
-function assertVoter(req, _res, next) {
-	if (req.role == "teacher" || req.role == "voter") next()
+function assertTeacherOrVoter(req, _res, next) {
+	if (req.roles.includes("teacher") || req.roles.includes("voter")) next()
 	else throw new HttpError(403, "Not Permitted to Create Ideas")
 }

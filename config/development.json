@@ -3,6 +3,7 @@
 	"cookieDomain": "demokraatia.rahvaalgatus.test",
 	"idCardAuthenticationUrl": "/sessions",
 	"timemarkUrl": "http://demo.sk.ee/ocsp",
+	"adminPersonalIds": ["EE30303039914"],
 
 	"issuers": [[
 		"C=EE",

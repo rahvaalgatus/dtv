@@ -4,10 +4,9 @@ var Page = require("../page")
 var Paths = require("root/lib/paths")
 var {SchoolPage} = require("./read_page")
 var {SchoolHeader} = require("./read_page")
-var {SchoolButton} = require("./read_page")
+var {SchoolForm} = require("./create_page")
 var {Section} = Page
 var {Heading} = Page
-var {Form} = Page
 
 module.exports = function(attrs) {
 	var {req} = attrs
@@ -17,6 +16,7 @@ module.exports = function(attrs) {
 
 	return <SchoolPage
 		page="update-school"
+		class="update-school-page"
 		req={attrs.req}
 		school={school}
 	>
@@ -25,91 +25,10 @@ module.exports = function(attrs) {
 		</SchoolHeader>
 
 		<Section>
-			<Form
-				action={schoolPath}
-				req={req}
-				method="put"
-				enctype="multipart/form-data"
-				id="school-form"
-				class="budget-form"
-			>
-				<label for="name" class="budget-field">
-					<span class="label">Kooli nimi</span>
-
-					<input
-						type="text"
-						name="name"
-						class="budget-input"
-						required
-						value={school.name}
-					/>
-				</label>
-
-				<label for="description" class="budget-field">
-					<span class="label">Kooli kirjeldus</span>
-
-					<textarea name="description" class="budget-input">
-						{school.description}
-					</textarea>
-				</label>
-
-				<label for="colors" class="budget-field">
-					<span class="label">Värvid</span>
-
-					<p>
-						Värve kasutatakse lehe päise, jaluse ja nuppude jaoks. Vali värv
-						värvikaardilt või selle puudumisel sisesta värvid RGB formaadis
-						(#aabbcc). Sisutekst on aga alati mustas kirjas valgel taustal.
-					</p>
-
-					<table class="budget-table"><tbody>
-						<tr>
-							<td>Taustavärv</td>
-							<td>
-								<input
-									name="background_color"
-									type="color"
-									class="budget-input"
-									value={school.background_color || "#000001"}
-								/>
-							</td>
-						</tr>
-
-						<tr>
-							<td>Tekstivärv</td>
-							<td>
-								<input
-									name="foreground_color"
-									type="color"
-									class="budget-input"
-									value={school.foreground_color || "#000001"}
-								/>
-							</td>
-						</tr>
-					</tbody></table>
-				</label>
-
-				<label for="logo" class="budget-field">
-					<span class="label">Logo</span>
-
-					<p>
-						{school.logo_type ? <img src={schoolPath + "/logo"} /> : null}
-
-						JPEG, PNG või GIF formaadis pilt suurusega kuni 5 MiB.
-					</p>
-
-					<input
-						type="file"
-						name="logo"
-						accept="image/jpeg, image/png, image/gif"
-					/>
-				</label>
-
-				<SchoolButton school={school} type="submit">Muuda</SchoolButton>
-			</Form>
+			<SchoolForm req={req} school={school} teachers={teachers} />
 		</Section>
 
-		<Section id="teachers-section">
+		<Section>
 			<Heading>Õpetajad</Heading>
 
 			<p class="section-paragraph">

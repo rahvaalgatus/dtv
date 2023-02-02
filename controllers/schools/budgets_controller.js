@@ -5,6 +5,7 @@ var HttpError = require("standard-http-error")
 var DateFns = require("date-fns")
 var {assertAccount} = require("../schools_controller")
 var {assertTeacher} = require("../schools_controller")
+var {cleanPersonalId} = require("root/lib/account")
 var votersDb = require("root/db/voters_db")
 var votesDb = require("root/db/votes_db")
 var ideasDb = require("root/db/ideas_db")
@@ -62,16 +63,12 @@ exports.router.use("/:id", next(function*(req, res, next) {
 		description: "Eelarvet ei leitud."
 	})
 
-	req.role = req.role || (
-		account && (yield votersDb.read(sql`
-			SELECT 1 FROM voters
-			WHERE budget_id = ${budget.id}
-			AND country = ${account.country}
-			AND personal_id = ${account.personal_id}
-		`)) ? "voter" :
-
-		null
-	)
+	if (account && (yield votersDb.read(sql`
+		SELECT 1 FROM voters
+		WHERE budget_id = ${budget.id}
+		AND country = ${account.country}
+		AND personal_id = ${account.personal_id}
+	`))) req.roles.push("voter")
 
 	req.budget = res.locals.budget = budget
 	next()
@@ -228,8 +225,4 @@ function parseVoterPersonalIds(personalIds) {
 	personalIds = _.uniq(personalIds.trim().split(/\s+/g).map(cleanPersonalId))
 	personalIds = personalIds.filter(Boolean)
 	return personalIds.map((id) => ({country: "EE", personal_id: id}))
-}
-
-function cleanPersonalId(personalId) {
-	return personalId.replace(/[^0-9]/g, "")
 }

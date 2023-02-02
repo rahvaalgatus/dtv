@@ -123,7 +123,7 @@ function BudgetForm(attrs) {
 			/>
 		</label>
 
-		{/* The id is for linking from the paper-votes page. */}
+		{/* The id on <label> is for linking from the paper-votes page. */}
 		<label id="voters" for="voters" class="budget-field">
 			<span class="label">Ideede esitajad ja hääletajad</span>
 

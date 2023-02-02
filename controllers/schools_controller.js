@@ -1,4 +1,6 @@
+var _ = require("root/lib/underscore")
 var Path = require("path")
+var Paths = require("root/lib/paths")
 var Router = require("express").Router
 var HttpError = require("standard-http-error")
 var schoolsDb = require("root/db/schools_db")
@@ -6,6 +8,8 @@ var budgetsDb = require("root/db/budgets_db")
 var teachersDb = require("root/db/teachers_db")
 var ideasDb = require("root/db/ideas_db")
 var {isValidImageType} = require("root/lib/image")
+var {cleanPersonalId} = require("root/lib/account")
+var {isAdmin} = require("root/lib/account")
 var SCHOOL_PATH = "/:id:slug(-[^/]+)?"
 var next = require("co-next")
 var sql = require("sqlate")
@@ -14,6 +18,21 @@ exports.assertAccount = assertAccount
 exports.assertTeacher = assertTeacher
 
 exports.router.get("/", (_req, res) => res.redirect(302, "/"))
+
+exports.router.get("/new", assertAccount, assertAdmin, function(_req, res) {
+	res.render("schools/create_page.jsx")
+})
+
+exports.router.post("/", assertAccount, assertAdmin, next(function*(req, res) {
+	var school = yield schoolsDb.create(parseAsAdmin(req.body, req.files))
+
+	var teachers = parseTeacherPersonalIds(req.body.teachers)
+	teachers.forEach((teacher) => teacher.school_id = school.id)
+	yield teachersDb.create(teachers)
+
+	res.statusMessage = "School Created"
+	res.redirect(303, Paths.schoolPath(school))
+}))
 
 exports.router.use(SCHOOL_PATH, next(function*(req, res, next) {
 	var {account} = req
@@ -40,16 +59,12 @@ exports.router.use(SCHOOL_PATH, next(function*(req, res, next) {
 
 	req.school = res.locals.school = school
 
-	req.role = (
-		account && (yield teachersDb.read(sql`
-			SELECT 1 FROM teachers
-			WHERE school_id = ${school.id}
-			AND country = ${account.country}
-			AND personal_id = ${account.personal_id}
-		`)) ? "teacher" :
-
-		null
-	)
+	if (account && (yield teachersDb.read(sql`
+		SELECT 1 FROM teachers
+		WHERE school_id = ${school.id}
+		AND country = ${account.country}
+		AND personal_id = ${account.personal_id}
+	`))) req.roles.push("teacher")
 
 	next()
 }))
@@ -104,8 +119,22 @@ exports.router.put(SCHOOL_PATH,
 	assertAccount,
 	assertTeacher,
 	next(function*(req, res) {
+	var {account} = req
 	var {school} = req
-	yield schoolsDb.update(school, parse(req.body, req.files))
+	var attrs = (isAdmin(account) ? parseAsAdmin : parse)(req.body, req.files)
+	yield schoolsDb.update(school, attrs)
+
+
+	if ("teachers" in req.body && isAdmin(account)) {
+		yield teachersDb.execute(sql`
+			DELETE FROM teachers WHERE school_id = ${school.id}
+		`)
+
+		var teachers = parseTeacherPersonalIds(req.body.teachers)
+		teachers.forEach((teacher) => teacher.school_id = school.id)
+		yield teachersDb.create(teachers)
+	}
+
 	res.statusMessage = "School Updated"
 	res.redirect(303, req.baseUrl + req.path + "/edit")
 }))
@@ -133,22 +162,28 @@ exports.router.use(
 )
 
 function parse(obj, files) {
-	var attrs = {
-		name: obj.name,
-		description: obj.description || null,
+	var attrs = {}
 
-		background_color:
-			obj.background_color ? parseColor(obj.background_color) : null,
+	if ("name" in obj) attrs.name = String(obj.name)
+	if ("description" in obj) attrs.description = String(obj.description) || null
 
-		foreground_color:
-			obj.foreground_color ? parseColor(obj.foreground_color) : null
-	}
+	if ("background_color" in obj) attrs.background_color =
+		obj.background_color ? parseColor(obj.background_color) : null
+
+	if ("foreground_color" in obj) attrs.foreground_color =
+		obj.foreground_color ? parseColor(obj.foreground_color) : null
 
 	if (files.logo && isValidImageType(files.logo.mimetype)) {
 		attrs.logo = files.logo.buffer
 		attrs.logo_type = files.logo.mimetype
 	}
 
+	return attrs
+}
+
+function parseAsAdmin(obj, files) {
+	var attrs = parse(obj, files)
+	if ("slug" in obj) attrs.slug = obj.slug.toLowerCase().replace(/[^-_\w]/g, "")
 	return attrs
 }
 
@@ -168,7 +203,20 @@ function assertAccount(req, _res, next) {
 	else next()
 }
 
+function assertAdmin(req, _res, next) {
+	if (isAdmin(req.account)) next()
+	else throw new HttpError(403, "Not an Admin", {
+		description: "Selle lehe vaatamiseks pead olema lehe administraator."
+	})
+}
+
 function assertTeacher(req, _res, next) {
-	if (req.role != "teacher") throw new HttpError(403, "Not a Teacher")
-	else next()
+	if (req.roles.includes("admin") || req.roles.includes("teacher")) next()
+	else throw new HttpError(403, "Not a Teacher")
+}
+
+function parseTeacherPersonalIds(personalIds) {
+	personalIds = _.uniq(personalIds.trim().split(/\s+/g).map(cleanPersonalId))
+	personalIds = personalIds.filter(Boolean)
+	return personalIds.map((id) => ({country: "EE", personal_id: id}))
 }

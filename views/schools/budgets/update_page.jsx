@@ -6,10 +6,8 @@ var {SchoolPage} = require("../read_page")
 var {SchoolHeader} = require("../read_page")
 var {Section} = Page
 var {BudgetForm} = require("./create_page")
-exports = module.exports = UpdatePage
-exports.BudgetForm = BudgetForm
 
-function UpdatePage(attrs) {
+module.exports = function(attrs) {
 	var {req} = attrs
 	var {school} = attrs
 	var {budget} = attrs

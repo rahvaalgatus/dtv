@@ -14,7 +14,7 @@ exports.SchoolButton = SchoolButton
 
 function ReadPage(attrs) {
 	var {req} = attrs
-	var {role} = req
+	var {roles} = req
 	var {school} = attrs
 	var {budgets} = attrs
 
@@ -30,10 +30,13 @@ function ReadPage(attrs) {
 		<SchoolHeader school={school}>
 			<h1>{school.name}</h1>
 
-			{role == "teacher" ? <menu>
-				<a href={Paths.createBudgetPath(school)} style={headerButtonStyle}>
+			{roles.includes("admin") || roles.includes("teacher") ? <menu>
+				{roles.includes("teacher") ? <a
+					href={Paths.createBudgetPath(school)}
+					style={headerButtonStyle}
+				>
 					Uus eelarve hääletus
-				</a>
+				</a> : null}
 
 				<a href={Paths.updateSchoolPath(school)} style={headerButtonStyle}>
 					Muuda kooli

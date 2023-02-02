@@ -78,6 +78,13 @@ exports.account = function(attrs) {
 	})
 }
 
+exports.adminAccount = function(attrs) {
+	exports.account(_.assign({
+		country: Config.adminPersonalIds[0].slice(0, 2),
+		personal_id: Config.adminPersonalIds[0].slice(2)
+	}, attrs))
+}
+
 exports.newCertificate = function(opts) {
 	var issuer = opts && opts.issuer
 
