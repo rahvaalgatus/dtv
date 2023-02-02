@@ -55,7 +55,7 @@ function SchoolForm(attrs) {
 			/>
 		</label>
 
-		{school.id == null ? <label for="slug" class="budget-field">
+		{isAdmin(account) ? <label for="slug" class="budget-field">
 			<span class="label">Kooli nimi veebiaadresside jaoks</span>
 			<p>Lubatud vaid väikesed tähed ning "_" ja "-" märgid.</p>
 
