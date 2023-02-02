@@ -368,6 +368,23 @@ describe("SchoolsController", function() {
 					{school_id: school.id, country: "EE", personal_id: "38706180001"},
 				])
 			})
+
+			it("must permit slugs with Estonian characters", function*() {
+				var school = yield schoolsDb.create(new ValidSchool)
+
+				var res = yield this.request(Paths.schoolPath(school), {
+					method: "PUT",
+					form: {slug: "pähklimäe-gümnaasium"}
+				})
+
+				res.statusCode.must.equal(303)
+				res.statusMessage.must.equal("School Updated")
+
+				yield schoolsDb.read(school.id).must.then.eql({
+					__proto__: school,
+					slug: "pähklimäe-gümnaasium"
+				})
+			})
 		})
 	})
 

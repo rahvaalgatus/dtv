@@ -183,7 +183,10 @@ function parse(obj, files) {
 
 function parseAsAdmin(obj, files) {
 	var attrs = parse(obj, files)
-	if ("slug" in obj) attrs.slug = obj.slug.toLowerCase().replace(/[^-_\w]/g, "")
+
+	if ("slug" in obj)
+		attrs.slug = obj.slug.toLowerCase().replace(/[^-_\wäöüõ]/g, "")
+
 	return attrs
 }
 

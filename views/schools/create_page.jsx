@@ -63,7 +63,7 @@ function SchoolForm(attrs) {
 				type="text"
 				name="slug"
 				class="budget-input"
-				pattern="[-_\w]+"
+				pattern="[-_\wäöüõ]+"
 				value={school.slug}
 				required
 			/>
