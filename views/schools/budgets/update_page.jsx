@@ -21,7 +21,7 @@ module.exports = function(attrs) {
 	>
 		<SchoolHeader school={school}>
 			<a href={Paths.schoolPath(school)} class="context">{school.name}</a>
-			<h1>{budget.title}</h1>
+			<h1><a href={Paths.budgetPath(school, budget)}>{budget.title}</a></h1>
 		</SchoolHeader>
 
 		<Section>

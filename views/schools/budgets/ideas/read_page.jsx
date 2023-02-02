@@ -19,6 +19,7 @@ module.exports = function(attrs) {
 	return <IdeaPage
 		req={req}
 		school={school}
+		budget={budget}
 		idea={idea}
 		editable={
 			account &&
@@ -40,6 +41,7 @@ module.exports = function(attrs) {
 
 function IdeaPage(attrs, children) {
 	var {school} = attrs
+	var {budget} = attrs
 	var {idea} = attrs
 	var {editable} = attrs
 	var ideaPath = Paths.ideaPath(school, idea)
@@ -57,6 +59,11 @@ function IdeaPage(attrs, children) {
 	>
 		<SchoolHeader school={school}>
 			<a href={Paths.schoolPath(school)} class="context">{school.name}</a>
+			{" — "}
+			<a href={Paths.budgetPath(school, budget)} class="context">
+				{budget.title}
+			</a>
+
 			<h1>{idea.title}</h1>
 			<span class="subtitle author-names">{idea.author_names}</span>
 

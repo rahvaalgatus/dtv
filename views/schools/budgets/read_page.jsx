@@ -24,7 +24,6 @@ function ReadPage(attrs) {
 	var {ideas} = attrs
 	var {votesByIdea} = attrs
 	var {thank} = attrs
-	var budgetPath = Paths.budgetPath(school, budget)
 
 	var headerButtonStyle = serializeStyle({
 		"border-color": school.foreground_color,
@@ -37,7 +36,7 @@ function ReadPage(attrs) {
 
 		<SchoolHeader school={school}>
 			<a href={Paths.schoolPath(school)} class="context">{school.name}</a>
-			<h1><a href={budgetPath}>{budget.title}</a></h1>
+			<h1>{budget.title}</h1>
 
 			{roles.includes("teacher") ? <menu>
 				<a

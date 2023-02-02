@@ -13,6 +13,7 @@ exports.IdeaForm = IdeaForm
 function CreatePage(attrs) {
 	var {req} = attrs
 	var {school} = attrs
+	var {budget} = attrs
 	var {account} = req
 
 	return <SchoolPage
@@ -23,6 +24,11 @@ function CreatePage(attrs) {
 	>
 		<SchoolHeader school={school}>
 			<a href={Paths.schoolPath(school)} class="context">{school.name}</a>
+			{" — "}
+			<a href={Paths.budgetPath(school, budget)} class="context">
+				{budget.title}
+			</a>
+
 			<h1>Esita uus idee</h1>
 		</SchoolHeader>
 
