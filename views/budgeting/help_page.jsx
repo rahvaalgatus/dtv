@@ -176,7 +176,7 @@ module.exports = function(attrs) {
 			</div>
 
 			<p class="section-paragraph">
-				Koolide kaasava eelarvestamise õppematerjalide loomisele pani oma õla projektirahastajana alla <a href="https://acf.ee">Aktiivsete Kodanike Fond</a>.
+				Koolide kaasava eelarvestamise õppematerjalide loomisele pani oma õla projektirahastajana alla <a href="https://acf.ee">Aktiivsete Kodanike Fond</a> ja <a href="https://www.norden.ee">Põhjamaade Ministrite Nõukogu</a>.
 			</p>
 
 			<div class="supporter-logos">
@@ -185,6 +185,14 @@ module.exports = function(attrs) {
 						src="/assets/acf.svg"
 						title="Aktiivsete Kodanike Fond"
 						alt="Aktiivsete Kodanike Fond"
+					/>
+				</a>
+				{" "}
+				<a href="https://www.norden.ee">
+					<img
+						src="/assets/norden.svg"
+						title="Põhjamaade Ministrite Nõukogu esindus Eestis"
+						alt="Põhjamaade Ministrite Nõukogu esindus Eestis"
 					/>
 				</a>
 			</div>
