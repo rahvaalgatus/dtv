@@ -59,7 +59,7 @@ function IndexPage(attrs) {
 			</p>
 
 			<p class="section-paragraph">
-				Koolide kaasavat eelarvestamist veavad eest <a href="https://kogu.ee">Eesti Koostöö Kogu</a> ja <a href="https://transparency.ee">Korruptsioonivaba Eesti</a> ning oma õla projektirahastajatena on alla pannud <a href="https://www.norden.ee">Põhjamaade Ministrite Nõukogu</a> (2020/21), <a href="https://integratsioon.ee">Integratsiooni SA</a> (2021 sügis) ja <a href="https://acf.ee">Aktiivsete Kodanike Fond</a> (2021 sügis-2023 juuni).
+				Koolide kaasavat eelarvestamist veavad eest <a href="https://kogu.ee">Eesti Koostöö Kogu</a> ja <a href="https://transparency.ee">Korruptsioonivaba Eesti</a>. Oma õla projektirahastajatena on alla pannud <a href="https://www.norden.ee">Põhjamaade Ministrite Nõukogu</a> (2020/21), <a href="https://integratsioon.ee">Integratsiooni SA</a> (2021 sügis), <a href="https://acf.ee">Aktiivsete Kodanike Fond</a> (2021 sügis-2023 juuni) ning <a href="https://eeagentuur.ee">Erasmus+ ja Euroopa Solidaarsuskorpuse agentuur</a> Erasmus+ programmist (2023 juuni-2024 juuni).
 			</p>
 
 			<div class="supporter-logos">
@@ -84,6 +84,14 @@ function IndexPage(attrs) {
 						src="/assets/acf.svg"
 						title="Aktiivsete Kodanike Fond"
 						alt="Aktiivsete Kodanike Fond"
+					/>
+				</a>
+				{" "}
+				<a href="https://eeagentuur.ee">
+					<img
+						src="/assets/erasmus.svg"
+						title="Erasmus+ ja Euroopa Solidaarsuskorpuse agentuur"
+						alt="Erasmus+ ja Euroopa Solidaarsuskorpuse agentuur"
 					/>
 				</a>
 			</div>
