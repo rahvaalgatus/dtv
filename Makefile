@@ -1,7 +1,8 @@
 ENV = development
 NODE = node
 NODE_OPTS = --use-strict --require j6pack/register
-NPM_REBUILD = npm --ignore-scripts false rebuild --build-from-source
+NPM = npm
+NPM_REBUILD = $(NPM) --ignore-scripts false rebuild --build-from-source
 MOCHA = ./node_modules/.bin/_mocha
 TEST = $$(find test -name "*_test.js")
 SHANGE = vendor/shange -f "config/$(ENV).sqlite3"
@@ -64,7 +65,7 @@ autospec:
 	@$(NODE) $(NODE_OPTS) $(MOCHA) -R spec --watch $(TEST)
 
 shrinkwrap:
-	npm shrinkwrap --dev
+	$(NPM) shrinkwrap --dev
 
 rebuild:
 	$(NPM_REBUILD) sqlite3
