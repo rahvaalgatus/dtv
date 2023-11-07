@@ -7,16 +7,12 @@ var {SchoolHeader} = require("../read_page")
 var {Section} = Page
 var {BudgetForm} = require("./create_page")
 
-module.exports = function(attrs) {
-	var {req} = attrs
-	var {school} = attrs
-	var {budget} = attrs
-	var {voters} = attrs
-
+module.exports = function({req, t, school, budget, voters}) {
 	return <SchoolPage
+		title={t("update_budget_page.title", {title: budget.title})}
 		page="update-budget"
 		class="update-budget-page"
-		req={attrs.req}
+		req={req}
 		school={school}
 	>
 		<SchoolHeader school={school}>

@@ -9,6 +9,8 @@ SHANGE = vendor/shange -f "config/$(ENV).sqlite3"
 APP_HOST = rahvaalgatus.ee
 APP_PATH = $(error "Please set APP_PATH")
 LIVERELOAD_PORT = 35733
+TEXTS_URL = https://docs.google.com/spreadsheets/d/10al7Urlb1Gv16P8TY5Wu3cmu9n6iHiRnVHu7kRmHg2U/gviz/tq?tqx=out:json&tq&gid=0
+JQ_OPTS = --tab
 
 RSYNC_OPTS = \
 	--compress \
@@ -26,6 +28,7 @@ RSYNC_OPTS = \
 	--exclude "/config/*.sqlite3" \
 	--exclude "/assets/***" \
 	--exclude "/test/***" \
+	--exclude "/tmp/***" \
 	--exclude "/node_modules/livereload/***" \
 	--exclude "/node_modules/mocha/***" \
 	--exclude "/node_modules/co-mocha/***" \
@@ -96,6 +99,19 @@ config/tsl/ee.xml:
 config/tsl/ee_test.xml:
 	mkdir -p config/tsl
 	wget "https://open-eid.github.io/test-TL/EE_T.xml" -O "$@"
+
+tmp:
+	mkdir -p tmp
+
+tmp/texts.json: tmp
+	curl -H "X-DataSource-Auth: true" "$(TEXTS_URL)" | sed -e 1d > "$@"
+
+lib/texts.json: tmp/texts.json
+	jq --sort-keys $(JQ_OPTS) -f scripts/texts.jq "$<" > "$@"
+
+translatables:
+	@ag --nofilename -o '\bt\("([\w.]+)"|"eid_view\.[^"]+"' |\
+		grep -v '^$$' | sort -u | cut -d\" -f2
 
 deploy:
 	@rsync $(RSYNC_OPTS) . "$(APP_HOST):$(or $(APP_PATH), $(error "APP_PATH"))/"

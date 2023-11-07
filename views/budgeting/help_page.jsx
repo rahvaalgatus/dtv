@@ -1,27 +1,30 @@
 /** @jsx Jsx */
+var _ = require("root/lib/underscore")
 var Jsx = require("j6pack")
 var Page = require("../page")
 var {HeroHeader} = require("./index_page")
 var {Section} = Page
 var {Heading} = Page
 
-module.exports = function(attrs) {
+module.exports = function({req, t}) {
+	var timestamps = t("budgeting_help_page.info.video_timestamps")
+		.split("\n")
+		.map((timestamp) => _.split2(timestamp, " "))
+
 	return <Page
 		page="budgeting-help"
-		req={attrs.req}
-		title="Õppevahendid"
+		req={req}
+		title={t("budgeting_help_page.title")}
 	>
-		<HeroHeader title="Õppe&shy;vahendid">
-			<p>
-				Alt leiad koolide kaasava eelarvestamise meetodit läbiviijale tutvustava <strong><a href="#info" class="link-button">infotunni</a></strong>, töötubade <strong><a href="#workshop" class="link-button">õppevideod</a></strong> ja <strong><a href="#book" class="link-button">juhendraamatu</a></strong>. Õppevideod on saadaval eesti ja vene subtiitritega ning juhendraamat on eesti, inglise ja vene keeles.
-			</p>
+		<HeroHeader title={t("budgeting_help_page.header.title")}>
+			<p>{Jsx.html(t("budgeting_help_page.header.description"))}</p>
 		</HeroHeader>
 
 		<Section id="info">
-			<Heading>Infotund</Heading>
+			<Heading>{t("budgeting_help_page.info.title")}</Heading>
 
 			<p class="section-paragraph">
-				Oled mõtlemas oma koolis kaasavat eelarvestamist läbi viia? Meie 2022. aasta kevadel korraldatud infotund aitab sul selles põnevas teemas paremini orienteeruda:
+				{t("budgeting_help_page.info.description")}
 			</p>
 
 			<Video
@@ -32,32 +35,23 @@ module.exports = function(attrs) {
 			/>
 
 			<table class="timestamps">
-				<tbody>
-					{[
-						[1, "0:01", "Sissejuhatus, üldinfo"],
-						[341, "5:41", "Kaasava eelarvestamise mõju"],
-						[492, "8:12", "Kaasava eelarvestamise praktiline läbiviimine"],
-						[981, "16:21", "Sügis 2022 plaanid"],
-						[1282, "21:22", "Rapla Gümnaasiumi kogemuslugu"],
-						[2030, "33:50", "Küsimused ja vastused"],
-					].map(([at, range, description]) => <tr>
-						<td>
-							<a href={`https://www.youtube-nocookie.com/embed/Ie7vrxY4u3A?start=${at}&autoplay=1`} target="intro-video">
-								{range}
-							</a>
-						</td>
+				<tbody>{timestamps.map(([at, description]) => <tr>
+					<td>
+						<a href={`https://www.youtube-nocookie.com/embed/Ie7vrxY4u3A?start=${at}&autoplay=1`} target="intro-video">
+							{formatSeconds(at)}
+						</a>
+					</td>
 
-						<td>{description}</td>
-					</tr>)}
-				</tbody>
+					<td>{description}</td>
+				</tr>)}</tbody>
 			</table>
 		</Section>
 
-		<Section id="info">
-			<Heading>Animatsioon</Heading>
+		<Section id="animation">
+			<Heading>{t("budgeting_help_page.animation.title")}</Heading>
 
 			<p class="section-paragraph">
-				Kuidas koolide kaasavat eelarvestamist õpilastele reklaamida? Siin tuleb abiks lühike ja kaasahaarav video, kus selgitatakse, mis on kaasav eelarvestamine, miks seda vaja on ning miks selles osalema peaks. Videot võib kasutada lisaks tunnis näitamisele ka näiteks kooli siseveebis, sotsiaalmeedias või kooli ekraanidel.
+				{t("budgeting_help_page.animation.description")}
 			</p>
 
 			<Video
@@ -68,32 +62,40 @@ module.exports = function(attrs) {
 		</Section>
 
 		<Section id="workshop">
-			<Heading>Töötuba</Heading>
+			<Heading>{t("budgeting_help_page.workshop.title")}</Heading>
 
 			<p class="section-paragraph">
-				Kuidas koolide kaasava eelarvestamist laiemale kooliperele tutvustada?  Lähtuvalt meie praktilisest kogemusest, soovitame korraldada neljaosaline (kokku umbes 1 tund) töötuba, mis võiks konstruktiivsuse mõttes toimuda maksimaalselt 100 õpilasele korraga.
-			</p>
-
-			<p class="section-paragraph">
-				Töötuba võiks olla üles ehitatud nii:
+				{t("budgeting_help_page.workshop.description")}
 			</p>
 
 			<ol>
 				<li>
 					<p class="section-paragraph">
-						Koolipoolne esindaja annab ülevaate koolieelarve mahust, jaotumisest, struktuurist ning tsüklist. <span class="duration">Kestus: 10 minutit.</span>
+						{Jsx.html(t("budgeting_help_page.workshop.list.1"))}
+						{" "}
+						<span class="duration">
+							{t("budgeting_help_page.workshop.duration", {minutes: 10})}
+						</span>
 					</p>
 				</li>
 
 				<li>
 					<p class="section-paragraph">
-						Võimalusel jagab kohaliku omavalitsuse esindaja kaasava eelarvestamise kogemust teie kohalikus omavalitsuses. <span class="duration">Kestus: 10 minutit.</span>
+						{t("budgeting_help_page.workshop.list.2")}
+						{" "}
+						<span class="duration">
+							{t("budgeting_help_page.workshop.duration", {minutes: 10})}
+						</span>
 					</p>
 				</li>
 
 				<li>
 					<p class="section-paragraph">
-						Korruptsioonivaba Eesti videoloeng demokraatiast, korruptsioonist, kodanikuaktiivsusest ning kaasavast eelarvestamisest. Kust see pärineb, miks, mida ja kus selle abil maailmas ning Eestis ära tehtud on. <span class="duration">Kestus: 10 minutit.</span>
+						{t("budgeting_help_page.workshop.list.3")}
+						{" "}
+						<span class="duration">
+							{t("budgeting_help_page.workshop.duration", {minutes: 10})}
+						</span>
 					</p>
 
 					<Video
@@ -111,7 +113,11 @@ module.exports = function(attrs) {
 
 				<li>
 					<p class="section-paragraph">
-						Ideekorje, kus iga õpilane saab paberile kirjutada ühe idee. Need korjatakse kokku ning grupeeritakse järgmiste osade ajal. <span class="duration">Kestus: 10 minutit.</span>
+						{t("budgeting_help_page.workshop.list.4")}
+						{" "}
+						<span class="duration">
+							{t("budgeting_help_page.workshop.duration", {minutes: 10})}
+						</span>
 					</p>
 
 					<Video
@@ -124,7 +130,11 @@ module.exports = function(attrs) {
 
 				<li>
 					<p class="section-paragraph">
-						Eesti Koostöö Kogu tutvustab videoloenguga õpilastele, mis on digiallkiri ning kuidas toimib e-hääletamine ja laiemalt, kuidas saab digivahendeid kasutades demokraatlikes protsessides kaasa lüüa. <span class="duration">Kestus: 8 minutit.</span>
+						{t("budgeting_help_page.workshop.list.5")}
+						{" "}
+						<span class="duration">
+							{t("budgeting_help_page.workshop.duration", {minutes: 8})}
+						</span>
 					</p>
 
 					<Video
@@ -136,17 +146,21 @@ module.exports = function(attrs) {
 
 				<li>
 					<p class="section-paragraph">
-						Tutvustage ideekorje tulemusi, õpilased võivad ka end juba ideede juurde kirja panna. Ideed jäävad projekti eest vastutava isiku kätte. <span class="duration">Kestus: 5 minutit.</span>
+						{t("budgeting_help_page.workshop.list.6")}
+						{" "}
+						<span class="duration">
+							{t("budgeting_help_page.workshop.duration", {minutes: 5})}
+						</span>
 					</p>
 				</li>
 			</ol>
 		</Section>
 
 		<Section id="book">
-			<Heading>Juhendraamat</Heading>
+			<Heading>{t("budgeting_help_page.book.title")}</Heading>
 
 			<p class="section-paragraph">
-				Käsiraamat, mis on mõeldud kasutamiseks õpetajatele ja koolidele, et toetada kaasava eelarvestamise läbiviimist, on leitav nii eesti keeles, inglise keeles kui ka vene keeles. Juhendraamatusse on koondatud statistikat, häid näiteid, võimalikke edasiarendusi ja ka üksikasjalik läbiviimise juhend.
+				{t("budgeting_help_page.book.description")}
 			</p>
 
 			<div class="download-links">
@@ -155,7 +169,7 @@ module.exports = function(attrs) {
 					class="green-button"
 					download="Kaasav eelarvestamine -- Käsiraamat koolidele (2021).pdf"
 				>
-					Lae alla juhendraamat eesti keeles
+					{t("budgeting_help_page.book.download_et")}
 				</a>
 
 				<a
@@ -163,7 +177,7 @@ module.exports = function(attrs) {
 					class="green-button"
 					download="Participatory budgeting -- A handbook for schools (2021).pdf"
 				>
-					Lae alla juhendraamat inglise keeles
+					{t("budgeting_help_page.book.download_en")}
 				</a>
 
 				<a
@@ -171,12 +185,12 @@ module.exports = function(attrs) {
 					class="green-button"
 					download="Народный бюджет -- Справочник для школ (2021).pdf"
 				>
-					Lae alla juhendraamat vene keeles
+					{t("budgeting_help_page.book.download_ru")}
 				</a>
 			</div>
 
 			<p class="section-paragraph">
-				Koolide kaasava eelarvestamise õppematerjalide loomisele pani oma õla projektirahastajana alla <a href="https://acf.ee">Aktiivsete Kodanike Fond</a> ja <a href="https://www.norden.ee">Põhjamaade Ministrite Nõukogu</a>.
+				{Jsx.html(t("budgeting_help_page.footer"))}
 			</p>
 
 			<div class="supporter-logos">
@@ -214,4 +228,10 @@ function Video(attrs) {
 			loading="lazy"
 		/>
 	</div>
+}
+
+function formatSeconds(seconds) {
+	var mins = Math.floor(seconds / 60)
+	var secs = seconds % 60
+	return mins + ":" + _.padLeft(secs, 2, 0)
 }

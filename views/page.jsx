@@ -3,7 +3,6 @@ var _ = require("root/lib/underscore")
 var Fs = require("fs")
 var Path = require("path")
 var Jsx = require("j6pack")
-var {Fragment} = Jsx
 var LIVERELOAD_PORT = process.env.LIVERELOAD_PORT || 35729
 var ENV = process.env.ENV
 exports = module.exports = Page
@@ -20,8 +19,10 @@ var KOGU_LOGO_SVG = Fs.readFileSync(ASSETS_PATH + "/kogu.svg")
 
 function Page(attrs, children) {
 	var req = attrs.req
-	var account = req.account
-	var session = req.session
+	var {l10n} = req
+	var {t} = req
+	var {account} = req
+	var {session} = req
 	var {title} = attrs
 	var {page} = attrs
 	var {homeless} = attrs
@@ -31,35 +32,59 @@ function Page(attrs, children) {
 		color: attrs.headerForegroundColor
 	})
 
-	return <html lang="et">
+	return <html lang={l10n.language}>
 		<head>
 			<meta charset="utf-8" />
 			<meta name="viewport" content="width=device-width" />
 			<link rel="stylesheet" href="/assets/page.css?t=1" type="text/css" />
-			<title>{title == null ? "" : title + " - "} Kaasav Kool</title>
+			<title>{title == null ? "" : title + " - "} {t("title")}</title>
 			<LiveReload req={req} />
 		</head>
 
 		<body id={page + "-page"} class={attrs.class}>
 			<nav id="nav" style={headerStyle}>
 				<Centered>
-					{!homeless ? <a href="/" class="home" title="Demokraatia töövihik">
+					{!homeless ? <a href="/" class="home" title={t("nav.home")}>
 						{Jsx.html(LOGO_SVG)}
 					</a> : null}
 
-					<menu class="account">{account ? <Fragment>
-						<a class="account-name" href="/account">{account.name}</a>
+					<menu class="account-menu">
+						{account ? <>
+							<a class="account-name" href="/account">{account.name}</a>
 
-						<FormButton
+							<FormButton
+								req={req}
+								name="_method"
+								value="delete"
+								class="signout-button"
+								action={"/sessions/" + session.id}
+							>{t("nav.sign_out")}</FormButton>
+						</> : <>
+							<a href="/sessions/new" class="signin-button">
+								{t("nav.sign_in")}
+							</a>
+						</>}
+
+						<Form
+							id="language-form"
 							req={req}
-							name="_method"
-							value="delete"
-							class="signout-button"
-							action={"/sessions/" + session.id}
-						>Logi välja</FormButton>
-					</Fragment> : <Fragment>
-						<a href="/sessions/new">Logi sisse</a>
-					</Fragment>}</menu>
+							method="put"
+							action="/language"
+						>{_.map({
+							et: "Eesti keeles",
+							en: "In English"
+						}, (title, lang) => <button
+							name="language"
+							value={lang}
+							disabled={l10n.language == lang}
+						>
+							<img
+								src={`/assets/${lang}.svg`}
+								alt={title}
+								title={title}
+							/>
+						</button>)}</Form>
+					</menu>
 				</Centered>
 			</nav>
 
@@ -81,11 +106,7 @@ function Page(attrs, children) {
 						</a>
 					</div>
 
-					<p>
-						Küsimuste või ettepanekute korral võta meiega ühendust aadressil <a
-						href="mailto:info@rahvaalgatus.ee">info@rahvaalgatus.ee</a>.
-						Demokraatia töövihiku lähtekoodi leiad <a href="https://github.com/rahvaalgatus/dtv">GitHubist</a>, kus saad ka <a href="https://github.com/rahvaalgatus/dtv/issues">ettepanekuid teha</a>.
-					</p>
+					<p>{Jsx.html(t("footer.contacts"))}</p>
 				</Centered>
 			</footer>
 		</body>
@@ -164,9 +185,8 @@ function FormButton(attrs, children) {
 	</Form>
 }
 
-function DateElement(attrs) {
-	var at = attrs.at
-	return <time datetime={at.toJSON()}>{_.formatDate("et", at)}</time>
+function DateElement({l10n, at}) {
+	return <time datetime={at.toJSON()}>{l10n.formatDate(at)}</time>
 }
 
 function LiveReload(attrs) {

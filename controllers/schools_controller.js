@@ -35,6 +35,7 @@ exports.router.post("/", assertAccount, assertAdmin, next(function*(req, res) {
 }))
 
 exports.router.use(SCHOOL_PATH, next(function*(req, res, next) {
+	var {t} = req
 	var {account} = req
 	var slug = (req.params.slug || "").replace(/^-/, "")
 
@@ -48,7 +49,7 @@ exports.router.use(SCHOOL_PATH, next(function*(req, res, next) {
 	`)
 
 	if (school == null) throw new HttpError(404, "School Not Found", {
-		description: "Kooli ei leitud."
+		description: t("school_page.404_error.description")
 	})
 
 	if (school.slug != slug) {
@@ -198,18 +199,18 @@ function parseColor(color) {
 	return null
 }
 
-function assertAccount(req, _res, next) {
-	if (req.account == null) throw new HttpError(401, {
-		description: "Palun logi lehe nägemiseks sisse."
+function assertAccount({t, account}, _res, next) {
+	if (account == null) throw new HttpError(401, {
+		description: t("401_error_page.description")
 	})
 
 	else next()
 }
 
-function assertAdmin(req, _res, next) {
-	if (isAdmin(req.account)) next()
+function assertAdmin({t, account}, _res, next) {
+	if (isAdmin(account)) next()
 	else throw new HttpError(403, "Not an Admin", {
-		description: "Selle lehe vaatamiseks pead olema lehe administraator."
+		description: t("403_error_page.admin_description")
 	})
 }
 

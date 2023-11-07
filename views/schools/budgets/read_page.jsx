@@ -16,21 +16,15 @@ var EidView = require("../../eid_view")
 var linkify = require("root/lib/linkify")
 exports = module.exports = ReadPage
 
-function ReadPage(attrs) {
-	var {req} = attrs
+function ReadPage({req, t, l10n, school, budget, ideas, votesByIdea, thank}) {
 	var {roles} = req
-	var {school} = attrs
-	var {budget} = attrs
-	var {ideas} = attrs
-	var {votesByIdea} = attrs
-	var {thank} = attrs
 
 	var headerButtonStyle = serializeStyle({
 		"border-color": school.foreground_color,
 		color: school.foreground_color
 	})
 
-	return <SchoolPage page="budget" req={attrs.req} school={school}>
+	return <SchoolPage page="budget" req={req} school={school}>
 		<script src="/assets/html5.js" />
 		<script src="/assets/hwcrypto.js" />
 
@@ -43,14 +37,14 @@ function ReadPage(attrs) {
 					href={Paths.updateBudgetPath(school, budget)}
 					style={headerButtonStyle}
 				>
-					Muuda hääletust
+					{t("budget_page.menu.update_budget_button")}
 				</a>
 
 				<a
 					href={Paths.paperVotesPath(school, budget)}
 					style={headerButtonStyle}
 				>
-					Muuda paberhääli
+					{t("budget_page.menu.update_paper_votes_button")}
 				</a>
 			</menu> : null}
 		</SchoolHeader>
@@ -67,6 +61,7 @@ function ReadPage(attrs) {
 				(budget.voting_ends_at == null || new Date < budget.voting_ends_at)
 			) return <VotingSection
 				req={req}
+				l10n={l10n}
 				school={school}
 				budget={budget}
 				roles={roles}
@@ -78,6 +73,7 @@ function ReadPage(attrs) {
 			if (
 				budget.voting_ends_at && new Date >= budget.voting_ends_at
 			) return <ResultsSection
+				l10n={l10n}
 				req={req}
 				school={school}
 				budget={budget}
@@ -86,7 +82,7 @@ function ReadPage(attrs) {
 			/>
 
 			return <IdeasSection
-				req={req}
+				l10n={l10n}
 				school={school}
 				budget={budget}
 				ideas={ideas}
@@ -96,18 +92,15 @@ function ReadPage(attrs) {
 	</SchoolPage>
 }
 
-function IdeasSection(attrs) {
-	var {school} = attrs
-	var {budget} = attrs
-	var {roles} = attrs
-	var {ideas} = attrs
+function IdeasSection({l10n, school, budget, roles, ideas}) {
+	var {t} = l10n
 
 	return <Section id="viewable-ideas-section">
-		<Heading>Ideed</Heading>
+		<Heading>{t("budget_page.ideas.title")}</Heading>
 
 		{budget.voting_starts_at ? <p class="section-paragraph">
 			Ideid saad esitada kuni hääletamise alguseni ehk
-			kuni <DateElement at={budget.voting_starts_at} />.
+			kuni <DateElement l10n={l10n} at={budget.voting_starts_at} />.
 		</p> : null}
 
 		{(
@@ -118,7 +111,7 @@ function IdeasSection(attrs) {
 				school={school}
 				href={Paths.createIdeaPath(school, budget)}
 			>
-				Esita uus idee
+				{t("budget_page.ideas.create_button")}
 			</SchoolButton>
 		</menu> : null}
 
@@ -134,41 +127,57 @@ function IdeasSection(attrs) {
 	</Section>
 }
 
-function VotingSection(attrs) {
-	var {req} = attrs
-	var {account} = req
-	var {school} = attrs
-	var {budget} = attrs
-	var {ideas} = attrs
-	var {roles} = attrs
-	var {votesByIdea} = attrs
-	var {thank} = attrs
+function VotingSection({
+	req,
+	l10n,
+	account,
+	school,
+	budget,
+	ideas,
+	roles,
+	votesByIdea,
+	thank
+}) {
+	var {t} = l10n
 	var maxVoteCount = _.max(_.values(votesByIdea))
 
 	return <Section id="votable-ideas-section">
-		<Heading>Ideed</Heading>
+		<Heading>{t("budget_page.voting.title")}</Heading>
 
 		{thank ? <p id="thanks" class="section-paragraph">
-			Aitäh hääletamast!
+			{t("budget_page.voting.voted")}
 		</p> : null}
 
 		<p class="section-paragraph">
-			Hääleta meelepärasele ideele. Anda saad vaid ühe hääle, nii et kaks korda
-			hääletades jääb kehtima vaid viimane hääl.
+			{t("budget_page.voting.description")}
 
-			{budget.voting_starts_at ? <span>
-				{" "}Hääletamine algas <DateElement at={budget.voting_starts_at} />.
-			</span> : null}
+			{budget.voting_starts_at ? <>
+				{" "}
+				{Jsx.html(t("budget_page.voting.started_on", {
+					date: <DateElement
+						l10n={l10n}
+						at={budget.voting_starts_at}
+					/>,
 
-			{budget.voting_ends_at ? <span>
-				{" "}Hääletada saad
-				kuni <DateElement at={DateFns.addDays(budget.voting_ends_at, -1)} /> kl
-				23:59.
-			</span> : null}
+					time: "23:59"
+				}))}
+			</> : null}
 
-			{roles.includes("teacher") ? <span>
-				{" "}Häälte arv on hääletamise ajal nähtav vaid sulle kui õpetajale.
-			</span> : null}
+			{budget.voting_ends_at ? <>
+				{" "}
+				{Jsx.html(t("budget_page.voting.ends_at", {
+					date: <DateElement
+						l10n={l10n}
+						at={DateFns.addDays(budget.voting_ends_at, -1)}
+					/>,
+
+					time: "23:59"
+				}))}
+			</> : null}
+
+			{roles.includes("teacher") ? <>
+				{" "}{t("budget_page.voting.vote_count_only_for_teacher")}
+			</> : null}
 		</p>
 
 		<Form
@@ -195,7 +204,7 @@ function VotingSection(attrs) {
 						</h3>
 
 						{roles.includes("teacher") ?
-							<VoteCountView count={voteCount} max={maxVoteCount} />
+							<VoteCountView t={t} count={voteCount} max={maxVoteCount} />
 						: null}
 
 						<span class="idea-author-names">{idea.author_names}</span>
@@ -203,40 +212,46 @@ function VotingSection(attrs) {
 				</li>
 			})}</ul>
 
-		{thank ? <p class="section-paragraph">
-			Aitäh hääletamast! Kui soovid oma häält muuta või lubada sõbral ka sama seadmega hääletada, vali ülalt idee ning allkirjasta hääl.
-		</p> : <p class="section-paragraph">
-			Hääletamiseks pead andma digiallkirja. Vali ülalt lemmikidee ja hääleta kas Id-kaardi, Mobiil-Id või Smart-Id abiga.
-		</p>}
+		<p class="section-paragraph">{thank
+			? t("budget_page.voting.vote_description_if_voted")
+			: t("budget_page.voting.vote_description")
+		}</p>
 
 			<EidView
 				req={req}
 				formId="voting-form"
 				action="sign"
-				pending="Hääletan…"
-				submit="Hääleta"
+				pending={t("budget_page.voting.vote_pending")}
+				submit={t("budget_page.voting.vote_button")}
 				personalId={account && account.personal_id}
 			/>
 		</Form>
 	</Section>
 }
 
-function ResultsSection(attrs) {
-	var {school} = attrs
-	var {budget} = attrs
-	var {ideas} = attrs
-	var {votesByIdea} = attrs
+function ResultsSection({l10n, school, budget, ideas, votesByIdea}) {
+	var {t} = l10n
 	var maxVoteCount = _.max(_.values(votesByIdea))
 	var voteCount = _.sum(_.values(votesByIdea))
 	ideas = _.sortBy(ideas, (idea) => votesByIdea[idea.id] || 0).reverse()
 
 	return <Section id="voted-ideas-section">
-		<Heading>Ideed</Heading>
+		<Heading>{t("budget_page.results.title")}</Heading>
 
 		<p class="section-paragraph">
-			Hääletamine lõppes <DateElement
-			at={DateFns.addDays(budget.voting_ends_at, -1)} /> kl 23:59.
-			Kokku anti {voteCount} {_.plural(voteCount, "hääl", "häält")}.
+			{Jsx.html(t("budget_page.results.ended_at", {
+				date: <DateElement
+					l10n={l10n}
+					at={DateFns.addDays(budget.voting_ends_at, -1)}
+				/>,
+
+				time: "23:59"
+			}))}
+			{" "}
+			{_.plural(voteCount,
+				t("budget_page.results.total_1"),
+				t("budget_page.results.total_n", {count: voteCount})
+			)}
 		</p>
 
 		<ul id="ideas">{ideas.map(function(idea) {
@@ -247,24 +262,21 @@ function ResultsSection(attrs) {
 					<a href={Paths.ideaPath(school, idea)}>{idea.title}</a>
 				</h3>
 
-				<VoteCountView count={voteCount} max={maxVoteCount} />
+				<VoteCountView t={t} count={voteCount} max={maxVoteCount} />
 				<span class="idea-author-names">{idea.author_names}</span>
 			</li>
 		})}</ul>
 	</Section>
 }
 
-function VoteCountView(attrs) {
-	var {count} = attrs
-	var {max} = attrs
-
+function VoteCountView({t, max, count}) {
 	return <span class="idea-vote-count">
 		{count > 0 ? <progress value={count} max={max} /> : null}
 
-		<span class="count">
-			{count}
-			{" "}
-			{_.plural(count, "hääl", "häält")}
-		</span>
+		<span class="count">{_.plural(
+			count,
+			t("budget_page.voting.1_vote"),
+			t("budget_page.voting.n_vote", {count})
+		)}</span>
 	</span>
 }

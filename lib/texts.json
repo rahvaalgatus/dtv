@@ -1,0 +1,830 @@
+{
+	"401_error_page.description": {
+		"en": "Please sign in to see this page.",
+		"et": "Palun logi lehe nägemiseks sisse."
+	},
+	"403_error_page.admin_description": {
+		"en": "To see this page you have to be an administrator.",
+		"et": "Selle lehe vaatamiseks pead olema lehe administraator."
+	},
+	"404_error_page.description": {
+		"en": "Apparently there's no page here.\nIf you think it's our mistake, please let us know!",
+		"et": "Paistab, et siit aadressilt ei leia ühtegi lehte.\nKui arvad, et tegemist on veaga, palun anna sellest meile teada!"
+	},
+	"404_error_page.title": {
+		"en": "404 apologies!",
+		"et": "404 vabandust"
+	},
+	"500_error_page.description": {
+		"en": "Seems our system's having trouble.\nPlease try again and if the problem persists, let us know! Thanks!",
+		"et": "Tundub, et me süsteemil on mingi viga.\nPalun proovi korra uuesti, ja kui probleem kordub, võta meiega ühendust. Aitäh!"
+	},
+	"500_error_page.title": {
+		"en": "500 apologies!",
+		"et": "500 vabandust"
+	},
+	"account_page.form.name_label": {
+		"en": "Name",
+		"et": "Nimi"
+	},
+	"account_page.form.update_button": {
+		"en": "Update",
+		"et": "Muuda"
+	},
+	"account_page.header.personal_id": {
+		"en": "Personal id",
+		"et": "Isikukood"
+	},
+	"budget_page.404_error.description": {
+		"en": "Budget not found.",
+		"et": "Eelarvet ei leitud."
+	},
+	"budget_page.ideas.create_button": {
+		"en": "Propose a New Idea",
+		"et": "Esita uus idee"
+	},
+	"budget_page.ideas.title": {
+		"en": "Ideas",
+		"et": "Ideed"
+	},
+	"budget_page.menu.update_budget_button": {
+		"en": "Edit Voting",
+		"et": "Muuda hääletust"
+	},
+	"budget_page.menu.update_paper_votes_button": {
+		"en": "Edit Votes on Paper",
+		"et": "Muuda paberhääli"
+	},
+	"budget_page.results.ended_at": {
+		"en": "Voting ended on {date} at {time}.",
+		"et": "Hääletamine lõppes {date} kl {time}."
+	},
+	"budget_page.results.title": {
+		"en": "Ideas",
+		"et": "Ideed"
+	},
+	"budget_page.results.total_1": {
+		"en": "A single vote was cast.",
+		"et": "Kokku anti üks hääl."
+	},
+	"budget_page.results.total_n": {
+		"en": "A total of {count} votes were cast.",
+		"et": "Kokku anti {count} häält."
+	},
+	"budget_page.voting.1_vote": {
+		"en": "1 vote",
+		"et": "1 hääl"
+	},
+	"budget_page.voting.description": {
+		"en": "Vote for your favorite idea. You can only cast one vote, so if you vote twice, only the last vote will remain.",
+		"et": "Hääleta meelepärasele ideele. Anda saad vaid ühe hääle, nii et kaks korda hääletades jääb kehtima vaid viimane hääl."
+	},
+	"budget_page.voting.ends_at": {
+		"en": "You can vote until {date} at {time}.",
+		"et": "Hääletada saad kuni {date} kl {time}."
+	},
+	"budget_page.voting.errors.ended": {
+		"en": "Voting's over.",
+		"et": "Hääletamine läbi."
+	},
+	"budget_page.voting.errors.idea_missing": {
+		"en": "Don't forget to pick an idea!",
+		"et": "Ära unusta ideed valimast!"
+	},
+	"budget_page.voting.errors.invalid_idea": {
+		"en": "Didn't find the idea you picked.",
+		"et": "Ei leidnud valitud ideed."
+	},
+	"budget_page.voting.errors.not_permitted": {
+		"en": "You're not among one the permitted voters. Ask for more info from your teacher.",
+		"et": "Sa ei ole lubatud hääletajate seas. Uuri lisainfot oma õpetajalt."
+	},
+	"budget_page.voting.errors.not_started": {
+		"en": "Voting's not started yet.",
+		"et": "Hääletamine pole veel alanud."
+	},
+	"budget_page.voting.errors.voting_expired": {
+		"en": "Unfortunately voting expired. Please try again.",
+		"et": "Kahjuks hääletamine aegus. Palun proovi uuesti."
+	},
+	"budget_page.voting.n_vote": {
+		"en": "{count} votes",
+		"et": "{count} häält"
+	},
+	"budget_page.voting.signable": {
+		"en": "I vote for \"{title}\".",
+		"et": "Hääletan idee \"{title}\" poolt."
+	},
+	"budget_page.voting.started_on": {
+		"en": "Voting started on {date} at {time}.",
+		"et": "Hääletamine algas {date} kl {time}."
+	},
+	"budget_page.voting.title": {
+		"en": "Ideas",
+		"et": "Ideed"
+	},
+	"budget_page.voting.vote_button": {
+		"en": "Vote",
+		"et": "Hääleta"
+	},
+	"budget_page.voting.vote_count_only_for_teacher": {
+		"en": "The vote count is only visible to you as a teacher during voting.",
+		"et": "Häälte arv on hääletamise ajal nähtav vaid sulle kui õpetajale."
+	},
+	"budget_page.voting.vote_description": {
+		"en": "To vote you need to give a digital signature. Pick your favorite idea from above and vote with either an ID-card, Mobile-ID or Smart-ID.",
+		"et": "Hääletamiseks pead andma digiallkirja. Vali ülalt lemmikidee ja hääleta kas ID-kaardi, Mobiil-ID või Smart-ID abiga."
+	},
+	"budget_page.voting.vote_description_if_voted": {
+		"en": "Thanks for voting! If you wish to change your vote or allow a friend to vote on the same device, pick an idea from above and vote below.",
+		"et": "Aitäh hääletamast! Kui soovid oma häält muuta või lubada sõbral ka sama seadmega hääletada, vali ülalt idee ning allkirjasta hääl."
+	},
+	"budget_page.voting.vote_pending": {
+		"en": "Voting…",
+		"et": "Hääletan…"
+	},
+	"budget_page.voting.voted": {
+		"en": "Thanks for voting!",
+		"et": "Aitäh hääletamast!"
+	},
+	"budgeting_help_page.animation.description": {
+		"en": "How to promote participatory budgeting in schools to students? A short and engaging video will help here, explaining what inclusive budgeting is, why it is needed and why you should participate in it. In addition to being shown in class, the video can also be used, for example, on the school's intranet, social media or on school screens.",
+		"et": "Kuidas koolide kaasavat eelarvestamist õpilastele reklaamida? Siin tuleb abiks lühike ja kaasahaarav video, kus selgitatakse, mis on kaasav eelarvestamine, miks seda vaja on ning miks selles osalema peaks. Videot võib kasutada lisaks tunnis näitamisele ka näiteks kooli siseveebis, sotsiaalmeedias või kooli ekraanidel."
+	},
+	"budgeting_help_page.animation.title": {
+		"en": "Animation",
+		"et": "Animatsioon"
+	},
+	"budgeting_help_page.book.description": {
+		"en": "The booklet, which is intended for use by teachers and schools to support the implementation of participatory budgeting, can be found in Estonian, English and Russian. The booklet includes statistics, good examples, possible further developments and also a detailed implementation guide. ",
+		"et": "Käsiraamat, mis on mõeldud kasutamiseks õpetajatele ja koolidele, et toetada kaasava eelarvestamise läbiviimist, on leitav nii eesti keeles, inglise keeles kui ka vene keeles. Juhendraamatusse on koondatud statistikat, häid näiteid, võimalikke edasiarendusi ja ka üksikasjalik läbiviimise juhend."
+	},
+	"budgeting_help_page.book.download_en": {
+		"en": "Download the Booklet in English",
+		"et": "Lae alla juhendraamat inglise keeles"
+	},
+	"budgeting_help_page.book.download_et": {
+		"en": "Download the Booklet in Estonian",
+		"et": "Lae alla juhendraamat eesti keeles"
+	},
+	"budgeting_help_page.book.download_ru": {
+		"en": "Download the Booklet in Russian",
+		"et": "Lae alla juhendraamat vene keeles"
+	},
+	"budgeting_help_page.book.title": {
+		"en": "Instruction Booklet",
+		"et": "Juhendraamat"
+	},
+	"budgeting_help_page.footer": {
+		"en": "The <a href=\"https://acf.ee\">Active Citizens Fund</a> and the <a href=\"https://www.norden.ee\">Nordic Council of Ministers</a> supported the creation of educational materials for participatory budgeting in schools as project financiers.",
+		"et": "Koolide kaasava eelarvestamise õppematerjalide loomisele pani oma õla projektirahastajana alla <a href=\"https://acf.ee\">Aktiivsete Kodanike Fond</a> ja <a href=\"https://www.norden.ee\">Põhjamaade Ministrite Nõukogu</a>."
+	},
+	"budgeting_help_page.header.description": {
+		"en": "Below you will find an  <strong><a href=\"#info\" class=\"link-button\">information session</a></strong> introducing the method of participatory budgeting for schools, <strong><a href=\"#workshop\" class=\"link-button\">educational workshop short-lectures</a></strong> and an <strong><a href=\"#book\" class=\"link-button\">instruction booklet</a></strong>. The training videos are available with Estonian and Russian subtitles, and the instruction booklet is in Estonian, English and Russian.",
+		"et": "Alt leiad koolide kaasava eelarvestamise meetodit läbiviijale tutvustava <strong><a href=\"#info\" class=\"link-button\">infotunni</a></strong>, töötubade <strong><a href=\"#workshop\" class=\"link-button\">õppevideod</a></strong> ja <strong><a href=\"#book\" class=\"link-button\">juhendraamatu</a></strong>. Õppevideod on saadaval eesti ja vene subtiitritega ning juhendraamat on eesti, inglise ja vene keeles."
+	},
+	"budgeting_help_page.header.title": {
+		"en": "Educational Material",
+		"et": "Õppe­vahendid"
+	},
+	"budgeting_help_page.info.description": {
+		"en": "Are you thinking of implementing inclusive budgeting in your school? Our information session organised in the spring of 2022 will help you better orient yourself in this exciting topic:",
+		"et": "Oled mõtlemas oma koolis kaasavat eelarvestamist läbi viia? Meie 2022. aasta kevadel korraldatud infotund aitab sul selles põnevas teemas paremini orienteeruda:"
+	},
+	"budgeting_help_page.info.title": {
+		"en": "Information session",
+		"et": "Infotund"
+	},
+	"budgeting_help_page.info.video_timestamps": {
+		"en": "1 Introduction, general information\n341 Impact of participatory budgeting\n492 Practical implementation of participatory budgeting\n981 Fall 2022 plans\n1282 Experience story of Rapla Grammar School\n2030 Questions and answers round",
+		"et": "1 Sissejuhatus üldinfo\n341 Kaasava eelarvestamise mõju\n492 Kaasava eelarvestamise praktiline läbiviimine\n981 Sügis 2022 plaanid\n1282 Rapla Gümnaasiumi kogemuslugu\n2030 Küsimused ja vastused"
+	},
+	"budgeting_help_page.title": {
+		"en": "Educational Material",
+		"et": "Õppevahendid"
+	},
+	"budgeting_help_page.workshop.description": {
+		"en": "How to introduce participatory budgeting in schools to the wider school family? Based on our practical experience, we recommend organising a four-part workshop (about 1 hour in total), which could take place for a maximum of 100 students at a time.\n\nThe workshop could be structured as follows: ",
+		"et": "Kuidas koolide kaasava eelarvestamist laiemale kooliperele tutvustada?  Lähtuvalt meie praktilisest kogemusest, soovitame korraldada neljaosaline (kokku umbes 1 tund) töötuba, mis võiks konstruktiivsuse mõttes toimuda maksimaalselt 100 õpilasele korraga.\n\nTöötuba võiks olla üles ehitatud nii:"
+	},
+	"budgeting_help_page.workshop.duration": {
+		"en": "Duration: {minutes} minutes.",
+		"et": "Kestus: {minutes} minutit."
+	},
+	"budgeting_help_page.workshop.list.1": {
+		"en": "The school representative provides an overview of the size, distribution, structure and cycle of the school budget.",
+		"et": "Koolipoolne esindaja annab ülevaate koolieelarve mahust, jaotumisest, struktuurist ning tsüklist."
+	},
+	"budgeting_help_page.workshop.list.2": {
+		"en": "If possible, a local government representative will share the experience of participatory budgeting in your local government.",
+		"et": "Võimalusel jagab kohaliku omavalitsuse esindaja kaasava eelarvestamise kogemust teie kohalikus omavalitsuses."
+	},
+	"budgeting_help_page.workshop.list.3": {
+		"en": "Transparency International Estonia’s video lecture on democracy, corruption, civic engagement and inclusive budgeting. Where does it come from, why, what and where has it been done in the world and in Estonia.",
+		"et": "Korruptsioonivaba Eesti videoloeng demokraatiast, korruptsioonist, kodanikuaktiivsusest ning kaasavast eelarvestamisest. Kust see pärineb, miks, mida ja kus selle abil maailmas ning Eestis ära tehtud on."
+	},
+	"budgeting_help_page.workshop.list.4": {
+		"en": "Idea collection, where each student can write one idea on a piece of paper. They will be collected and grouped during the following sections.",
+		"et": "Ideekorje, kus iga õpilane saab paberile kirjutada ühe idee. Need korjatakse kokku ning grupeeritakse järgmiste osade ajal."
+	},
+	"budgeting_help_page.workshop.list.5": {
+		"en": "With a video lecture, the Estonian Cooperation Assembly introduces students to what a digital signature is and how e-voting works and, more broadly, how you can participate in democratic processes using digital tools.",
+		"et": "Eesti Koostöö Kogu tutvustab videoloenguga õpilastele, mis on digiallkiri ning kuidas toimib e-hääletamine ja laiemalt, kuidas saab digivahendeid kasutades demokraatlikes protsessides kaasa lüüa."
+	},
+	"budgeting_help_page.workshop.list.6": {
+		"en": "Present the results of the idea collection, students can also write down ideas. Ideas remain in the hands of the person responsible for the project.",
+		"et": "Tutvustage ideekorje tulemusi, õpilased võivad ka end juba ideede juurde kirja panna. Ideed jäävad projekti eest vastutava isiku kätte."
+	},
+	"budgeting_help_page.workshop.title": {
+		"en": "Workshop",
+		"et": "Töötuba"
+	},
+	"budgeting_page.body.intro": {
+		"en": "The programme’s primary objective is to enable students to democratically influence the improvement of their school life by submitting proposals and voting on them when possible using modern digital tools. This initiative not only enhances students’ understanding of democratic decision-making processes and digital tools but also stimulates their participation in school life.",
+		"et": "Käesoleva lehe puhul on tegemist koolidele loodud keskkonnaga, kus õpilased saavad digitaalselt ettepanekuid esitada ja nende üle kaasaegseid e-vahendeid kasutades demokraatlikult hääletada.\n\nEttevõtmise eesmärk on suurendada õpilaste teadlikkust demokraatlikest otsustusprotsessidest ning aktiveerida neid koolielus kaasa rääkima."
+	},
+	"budgeting_page.body.list_header": {
+		"en": "Through this project, students get experience in:",
+		"et": "Projekti kaudu saavad õpilased osa:"
+	},
+	"budgeting_page.body.list_items": {
+		"en": "open (school) governance; \nparticipating in decisions about one's community; \nthe development of the necessary digital competences.",
+		"et": "avatud (kooli)valitsemisest;\nkogukonnana otsustamisest ja enda elu puudutavates otsustes osalemisest;\nvajalike digipädevuste arendamisest."
+	},
+	"budgeting_page.body.outro": {
+		"en": "An impact study conducted in the first three schools revealed a 15% increase in the number of students actively participating in school life. Moreover, there was a 19% increase in the number of students who believe that the school consistently or frequently includes students in making important decisions.\n\nThe programme also led to a 70% increase in the number of students who understand school budgeting to a sufficient or high degree. Furthermore, students came to appreciate the opportunity to influence the school budget as a prerequisite for a more democratic school environment.\n\nThe participatory budgeting in schools is organised by the  <a href=\"https://kogu.ee\">Estonian Cooperation Assembly</a> and <a href=\"https://transparency.ee\">Transparency International Estonia</a>. The <a href=\"https://www.norden.ee\">Nordic Council of Ministers</a> (2020/21), <a href=\"https://integratsioon.ee\">Integration Foundation</a> (Fall 2021), <a href=\"https://acf.ee\">Active Citizens Fund</a> (Fall 2021-June 2023) and <a href=\"https://eeagentuur.ee\">Erasmus+ and the European Solidarity Corps Agency</a> from the Erasmus+ program (June 2023-June 2024) have contributed as project financiers.",
+		"et": "Eesmärk on, et õpilased lihtsalt ei õpiks koolis teoreetiliselt, mis on demokraatia, vaid saaksid ka päriselulise kaasa rääkimise ja koos otsustamise kogemuse. See loob eeldused tugevama kogukonna ja kodanikuühiskonna arenguks.\n\nKoolide kaasavat eelarvestamist veavad eest <a href=\"https://kogu.ee\">Eesti Koostöö Kogu</a> ja <a href=\"https://transparency.ee\">Korruptsioonivaba Eesti</a>. Oma õla projektirahastajatena on alla pannud <a href=\"https://www.norden.ee\">Põhjamaade Ministrite Nõukogu</a> (2020/21), <a href=\"https://integratsioon.ee\">Integratsiooni SA</a> (2021 sügis), <a href=\"https://acf.ee\">Aktiivsete Kodanike Fond</a> (2021 sügis-2023 juuni) ning <a href=\"https://eeagentuur.ee\">Erasmus+ ja Euroopa Solidaarsuskorpuse agentuur</a> Erasmus+ programmist (2023 juuni-2024 juuni)."
+	},
+	"budgeting_page.header.description": {
+		"en": "The <a class=\"link-button\" href=\"https://kogu.ee\">Estonian Cooperation Assembly</a> has been organising the Participatory School Budget programme since 2020 in collaboration with  <a class=\"link-button\" href=\"https://www.transparency.ee\">Transparency International Estonia</a>. This is the first large-scale initiative in Estonia, where students can develop, present and (digitally) vote for their ideas, which will be implemented by the school.",
+		"et": "Ühingu <a class=\"link-button\" href=\"https://www.transparency.ee\">MTÜ Korruptsioonivaba Eesti</a> ning <a class=\"link-button\" href=\"https://kogu.ee\">SA Eesti Koostöö Kogu</a> algatatud kaasava eelarvestamise projekt koolides on esimene laiaulatuslikum ettevõtmine Eestis, kus kohalike omavalitsuste kaasava eelarvestamise eeskujul saavad õpilased välja töötada, arendada ja esitleda ideesid, mille vahel kooli kogukond valib kõige sobilikuma viisi eelarve kasutamiseks."
+	},
+	"budgeting_page.header.join_button": {
+		"en": "Join the Program",
+		"et": "Ühine programmiga"
+	},
+	"budgeting_page.header.read_button": {
+		"en": "Check the Education Material",
+		"et": "Tutvu õppevahenditega"
+	},
+	"budgeting_page.header.title": {
+		"en": "Participatory Budgeting in Schools",
+		"et": "Koolide kaasav eelarve"
+	},
+	"budgeting_page.schools.title": {
+		"en": "Participating Schools",
+		"et": "Osalevad koolid"
+	},
+	"budgeting_page.title": {
+		"en": "Participatory Budgeting",
+		"et": "Kaasav Kool"
+	},
+	"create_budget_page.form.create_button": {
+		"en": "Create New Budget Voting",
+		"et": "Lisa uus eelarve hääletus"
+	},
+	"create_budget_page.form.description_description": {
+		"en": "The introduction is shown regardless of whether the voting has started or already finished.",
+		"et": "Sissejuhatavat teksti kuvatakse sõltumata, kas hääletus on alanud või lõppenud."
+	},
+	"create_budget_page.form.description_label": {
+		"en": "Introduction",
+		"et": "Sissejuhatav tekst"
+	},
+	"create_budget_page.form.end_description": {
+		"en": "Voting is open until midnight — until 23:59.\nSelect a date from the calendar or, in its absence, enter it in the format <code>2021-01-31</code>.",
+		"et": "Hääletada saab südaööni ehk kl 23:59ni.\nVali kuupäev kalendrist või selle puudumisel sisesta see formaadis <code>2021-01-31</code>."
+	},
+	"create_budget_page.form.end_error": {
+		"en": "The vote end date doesn't seem to be in the correct format.",
+		"et": "Hääletamise lõpp ei tundu õiges formaadis."
+	},
+	"create_budget_page.form.end_label": {
+		"en": "Voting End",
+		"et": "Hääletamise lõpp"
+	},
+	"create_budget_page.form.start_description": {
+		"en": "Ideas can be added and modified until the start of the voting.\nSelect a date from the calendar or, in its absence, enter it in the format <code>2021-01-31</code>.",
+		"et": "Ideid saab lisada ja muuta kuni hääletamise alguseni.\nVali kuupäev kalendrist või selle puudumisel sisesta see formaadis <code>2021-01-31</code>."
+	},
+	"create_budget_page.form.start_error": {
+		"en": "The vote start date doesn't seem to be in the correct format.",
+		"et": "Hääletamise algus ei tundu õiges formaadis."
+	},
+	"create_budget_page.form.start_label": {
+		"en": "Voting Start",
+		"et": "Hääletamise algus"
+	},
+	"create_budget_page.form.title_label": {
+		"en": "Budget Voting Title",
+		"et": "Eelarve hääletuse pealkiri"
+	},
+	"create_budget_page.form.update_button": {
+		"en": "Update Voting",
+		"et": "Muuda hääletust"
+	},
+	"create_budget_page.form.voters_description": {
+		"en": "All voters can also suggest new ideas. Everyone else can see the ideas and the voting, but cannot participate. Teachers can always add ideas and vote.\nSeparate personal identification codes with line breaks.",
+		"et": "Kõik hääletajad saavad pakkuda välja ka uusi ideid. Kõik ülejäänud küll näevad ideid ja hääletust, kuid osaleda ei saa. Õpetajad saavad alati ideid lisada ja hääletada.\nEralda isikukoodid reavahedega."
+	},
+	"create_budget_page.form.voters_placeholder": {
+		"en": "Idea Creator and Voter Personal Ids",
+		"et": "Ideede esitajate ja hääletajate isikukoodid"
+	},
+	"create_budget_page.form.voters_title": {
+		"en": "Idea Creators and Voters",
+		"et": "Ideede esitajad ja hääletajad"
+	},
+	"create_budget_page.title": {
+		"en": "New Budget Voting",
+		"et": "Uus eelarve hääletus"
+	},
+	"create_budget_page.voters.name_column": {
+		"en": "Name",
+		"et": "Nimi"
+	},
+	"create_budget_page.voters.personal_id_column": {
+		"en": "Personal Id",
+		"et": "Isikukood"
+	},
+	"create_budget_page.voters.total": {
+		"en": "Voted {votedCount}.\nNot voted {unvotedCount}.",
+		"et": "Hääletanud on {votedCount}.\nHääletamata veel {unvotedCount}."
+	},
+	"create_budget_page.voters.voted_column": {
+		"en": "Voted",
+		"et": "Hääletanud"
+	},
+	"create_idea_page.form.author_names_label": {
+		"en": "Author Names",
+		"et": "Autorite nimed"
+	},
+	"create_idea_page.form.create_button": {
+		"en": "Propose a New Idea",
+		"et": "Esita uus idee"
+	},
+	"create_idea_page.form.description_label": {
+		"en": "Description",
+		"et": "Kirjeldus"
+	},
+	"create_idea_page.form.image_description": {
+		"en": "JPEG, PNG, or GIF image with a size of up to 5 MiB.",
+		"et": "JPEG, PNG või GIF formaadis pilt suurusega kuni 5 MiB."
+	},
+	"create_idea_page.form.image_label": {
+		"en": "Image",
+		"et": "Pilt"
+	},
+	"create_idea_page.form.title_label": {
+		"en": "Title",
+		"et": "Pealkiri"
+	},
+	"create_idea_page.form.update_button": {
+		"en": "Update the Idea",
+		"et": "Muuda ideed"
+	},
+	"create_idea_page.title": {
+		"en": "Propose a New Idea",
+		"et": "Esita uus idee"
+	},
+	"create_school_page.form.colors_bg": {
+		"en": "Background color",
+		"et": "Taustavärv"
+	},
+	"create_school_page.form.colors_description": {
+		"en": "Colors are used for the page's header, footer and buttons. Pick a color below or if you just see a text input, enter the color in RGB (<code>#aabbcc</code>). Body text is always in black on a white background.",
+		"et": "Värve kasutatakse lehe päise, jaluse ja nuppude jaoks. Vali värv värvikaardilt või selle puudumisel sisesta värvid RGB formaadis (<code>#aabbcc</code>). Sisutekst on aga alati mustas kirjas valgel taustal."
+	},
+	"create_school_page.form.colors_fg": {
+		"en": "Text color",
+		"et": "Tekstivärv"
+	},
+	"create_school_page.form.colors_label": {
+		"en": "Colors",
+		"et": "Värvid"
+	},
+	"create_school_page.form.create_button": {
+		"en": "Create New School",
+		"et": "Lisa uus kool"
+	},
+	"create_school_page.form.description_label": {
+		"en": "School Description",
+		"et": "Kooli kirjeldus"
+	},
+	"create_school_page.form.logo_description": {
+		"en": "An image in the JPEG, PNG or GIF format with a max size of 5 MiB.",
+		"et": "JPEG, PNG või GIF formaadis pilt suurusega kuni 5 MiB."
+	},
+	"create_school_page.form.logo_label": {
+		"en": "Logo",
+		"et": "Logo"
+	},
+	"create_school_page.form.name_label": {
+		"en": "School Name",
+		"et": "Kooli nimi"
+	},
+	"create_school_page.form.slug_description": {
+		"en": "Use lowercase letters and \"_\" or \"-\" characters. Separate spaces in the school name with dashes (\"-\").",
+		"et": "Lubatud vaid väikesed tähed ning \"_\" ja \"-\" märgid. Asenda tühikud kooli nimes sidekriipsudega."
+	},
+	"create_school_page.form.slug_label": {
+		"en": "School Identifier for Web Addresses",
+		"et": "Kooli nimi veebiaadresside jaoks"
+	},
+	"create_school_page.form.teachers_description": {
+		"en": "Separate personal ids with newlines.",
+		"et": "Eralda isikukoodid reavahedega."
+	},
+	"create_school_page.form.teachers_label": {
+		"en": "Teachers' Personal Ids",
+		"et": "Õpetajate isikukoodid"
+	},
+	"create_school_page.form.teachers_placeholder": {
+		"en": "39006011234\n49006015678",
+		"et": "39006011234\n49006015678"
+	},
+	"create_school_page.form.update_button": {
+		"en": "Update School",
+		"et": "Muuda kooli"
+	},
+	"create_school_page.title": {
+		"en": "New School",
+		"et": "Uus kool"
+	},
+	"create_session_page.description": {
+		"en": "To sign in, please choose an authentication method.",
+		"et": "Sisselogimiseks vali autentimismeetod."
+	},
+	"create_session_page.eid_view.submit_button": {
+		"en": "Sign In",
+		"et": "Logi sisse"
+	},
+	"create_session_page.eid_view.submitting": {
+		"en": "Signing in…",
+		"et": "Login sisse…"
+	},
+	"create_session_page.id_card_errors.certificate_missing": {
+		"en": "It looks like your browser didn't start the authentication or you cancelled it. Have you installed the ID-card software? Does it work on other sites? Sometimes it may help to restart the browser. If you need help, please contact us!",
+		"et": "Tundub, et kas veebilehitseja ei alustanud ID-kaardiga autentimist või otsustasid autentimise katkestada. Kas ID-kaardi tarkvara on installitud ja mujal töötab? Vahel on abi veebilehitseja taasavamisest. Kui vajad abi, palun võta meiega ühendust."
+	},
+	"create_session_page.id_card_errors.invalid_certificate": {
+		"en": "Unfortunately authentication didn't succeed. It may be because of a technical issue or an expired ID-card. If you know it works on other sites and think it's a mistake, please contact us!",
+		"et": "Kahjuks autentimine ei õnnestunud.\nSee võib olla tingitud nii valest digiallkirjast kui ka tühistatud ID-kaardist.\nKui arvad, et tegu on eksitusega, palun võta meiega ühendust."
+	},
+	"create_session_page.title": {
+		"en": "Sign In",
+		"et": "Logi sisse"
+	},
+	"eid_view.errors.certificate_expired": {
+		"en": "Unfortunately your certificate has expired.",
+		"et": "Andestust, kuid sinu sertifikaat paistab olevat juba aegunud."
+	},
+	"eid_view.errors.certificate_not_yet_valid": {
+		"en": "Unfortunately your certificate does not seem to be valid yet.",
+		"et": "Andestust, kuid sinu sertifikaat ei paista olevat veel aktiivne."
+	},
+	"eid_view.errors.invalid_issuer": {
+		"en": "Unfortunately we don't yet support your certificate. Please let us know about it.",
+		"et": "Andestust, kuid me ei toeta veel sinu sertifikaati. Palun anna meile sellest teada."
+	},
+	"eid_view.id_card_errors.no_certificates": {
+		"en": "No ID-card in the card-reader or the ID-card is expired.",
+		"et": "Lugeja ei leia Id-kaarti või Id-kaart aegunud."
+	},
+	"eid_view.id_card_errors.no_implementation": {
+		"en": "The ID-card software or browser plugin seems missing.",
+		"et": "ID-kaardi tarkvara või pistikprogramm puudu."
+	},
+	"eid_view.id_card_errors.not_allowed": {
+		"en": "Use of the ID-card is not possible due to an insecure connection.",
+		"et": "ID-kaardi kasutamine pole turvalise ühenduse puudumise tõttu võimalik."
+	},
+	"eid_view.id_card_errors.sign_invalid_signature": {
+		"en": "The digital signature doesn't match the certificate.",
+		"et": "Digiallkiri ei vasta sertifikaadile."
+	},
+	"eid_view.id_card_errors.technical_error": {
+		"en": "Technical error.",
+		"et": "Tehniline viga."
+	},
+	"eid_view.id_card_errors.user_cancel": {
+		"en": "You've cancelled.",
+		"et": "Katkestasid."
+	},
+	"eid_view.mobile_id.no_javascript": {
+		"en": "Unfortunately using Mobile ID requires JavaScript.\nPlease enable it temporarily.",
+		"et": "Mobiil-ID kasutamine vajab kahjuks JavaScripti.\nPalun lülita see brauseris ajutiselt sisse."
+	},
+	"eid_view.mobile_id.personal_id": {
+		"en": "Personal Id",
+		"et": "Isikukood"
+	},
+	"eid_view.mobile_id.phone_number": {
+		"en": "Phone Number",
+		"et": "Telefoninumber"
+	},
+	"eid_view.mobile_id_errors.auth_cancelled": {
+		"en": "You have canceled the login process.",
+		"et": "Katkestasid sisselogimise."
+	},
+	"eid_view.mobile_id_errors.auth_certificate_mismatch": {
+		"en": "There has been an authentication certificate mismatch.",
+		"et": "Autentimissertifikaat ei vasta oodatule."
+	},
+	"eid_view.mobile_id_errors.auth_delivery_error": {
+		"en": "The phone is not technically suitable for the signing process or the network is temporarily down.",
+		"et": "Telefon ei ole allkirjastamiseks tehniliselt sobiv või on võrgu töö ajutiselt häiritud."
+	},
+	"eid_view.mobile_id_errors.auth_hash_mismatch": {
+		"en": "Sign-in confirmation from your Mobile-ID did not meet the security requirements. Please try again.",
+		"et": "Mobiil-ID-lt tulnud sisselogimise kinnitus ei vastanud turvanõuetele. Palun proovi uuesti."
+	},
+	"eid_view.mobile_id_errors.auth_invalid_signature": {
+		"en": "Sign-in failed because the digital signature does not match the certificate.",
+		"et": "Sisselogimine ebaõnnestus, sest digiallkirja ei vasta sertifikaadile."
+	},
+	"eid_view.mobile_id_errors.auth_phone_absent": {
+		"en": "The phone is switched off or out of range.",
+		"et": "Telefon on välja lülitatud või ei ole leviulatuses."
+	},
+	"eid_view.mobile_id_errors.auth_timeout": {
+		"en": "It took too long to log in. Please try again.",
+		"et": "Sisselogimine võttis liiga kaua. Palun proovi uuesti."
+	},
+	"eid_view.mobile_id_errors.not_active": {
+		"en": "Your certificate has not been activated. Please try again later. If the problem persists, please contact us.",
+		"et": "Sinu sertifikaat pole veel aktiveeritud. Palun proovi hiljem uuesti. Probleemi püsimisel palun võta ühendust."
+	},
+	"eid_view.mobile_id_errors.not_found": {
+		"en": "The phone number lacks Mobile-ID support. Please double check that the phone number and personal id are correct.",
+		"et": "Telefoninumbril puudub Mobiil-ID tugi. Palun vaata, kas telefoninumber ja isikukood said õigesti sisestatud."
+	},
+	"eid_view.mobile_id_errors.sign_cancelled": {
+		"en": "You have cancelled signing and your vote was not cast.",
+		"et": "Oled katkestanud allkirjastamise, sinu häält ei loetud."
+	},
+	"eid_view.mobile_id_errors.sign_delivery_error": {
+		"en": "Mobile signing was not successful. Either your phone is incapable of receiving the message or there is a problem with messaging service.",
+		"et": "Allkirjastamine ebaõnnestus. Telefon ei ole allkirjastamiseks tehniliselt sobiv või on võrgu töö ajutiselt häiritud."
+	},
+	"eid_view.mobile_id_errors.sign_hash_mismatch": {
+		"en": "The signature is invalid. Your vote was not cast.",
+		"et": "Allkiri ei ole korrektne, sinu häält ei loetud."
+	},
+	"eid_view.mobile_id_errors.sign_invalid_signature": {
+		"en": "Signing failed because the signature does not match the certificate.",
+		"et": "Allkirjastamine ebaõnnestus, sest allkiri ei vasta sertifikaadile."
+	},
+	"eid_view.mobile_id_errors.sign_phone_absent": {
+		"en": "Signing failed. Your phone is either switched off or out of coverage.",
+		"et": "Allkirjastamine ebaõnnestus, kuna telefon on välja lülitatud või ei ole leviulatuses."
+	},
+	"eid_view.mobile_id_errors.sign_timeout": {
+		"en": "Signing took too long. Please start over.",
+		"et": "Allkirjastamine võttis liiga kaua aega. Palun proovi uuesti."
+	},
+	"eid_view.mobile_id_errors.sim_error": {
+		"en": "Error in phone SIM application. Please try again. If the problem persists, contact your service provider.",
+		"et": "SIM-kaardi rakenduse viga. Proovi palun uuesti. Probleemi püsimisel võta palun ühendust oma teenusepakkujaga."
+	},
+	"eid_view.smart_id.no_javascript": {
+		"en": "Unfortunately using Smart ID requires JavaScript.\nPlease enable it temporarily.",
+		"et": "Smart-ID kasutamine vajab kahjuks JavaScripti.\nPalun lülita see brauseris ajutiselt sisse."
+	},
+	"eid_view.smart_id.personal_id": {
+		"en": "Personal Id",
+		"et": "Isikukood"
+	},
+	"eid_view.smart_id_errors.auth_cancelled": {
+		"en": "You have canceled logging in.",
+		"et": "Katkestasid sisselogimise."
+	},
+	"eid_view.smart_id_errors.auth_certificate_mismatch": {
+		"en": "There has been an authentication certificate mismatch.",
+		"et": "Autentimissertifikaat ei vasta oodatule."
+	},
+	"eid_view.smart_id_errors.auth_invalid_signature": {
+		"en": "Sign-in failed because the digital signature does not match the certificate.",
+		"et": "Sisselogimine ebaõnnestus, sest digiallkirja ei vasta sertifikaadile."
+	},
+	"eid_view.smart_id_errors.auth_no_suitable_certificate": {
+		"en": "Smart-ID account seems to exist, but not suitable for signing in.",
+		"et": "Smart-ID konto on küll olemas, aga ei paista sobilik autentimiseks."
+	},
+	"eid_view.smart_id_errors.auth_timeout": {
+		"en": "It took too long to log in. Please try again.",
+		"et": "Sisselogimine võttis liiga kaua. Palun proovi uuesti."
+	},
+	"eid_view.smart_id_errors.document_unusable": {
+		"en": "The Smart-ID certificate is not available. Please contact us.",
+		"et": "Smart-ID sertifikaat ei ole kasutatav. Palun võta meiega ühendust."
+	},
+	"eid_view.smart_id_errors.not_found": {
+		"en": "This person does not appear to use Smart-ID.",
+		"et": "Sellel isikukoodil ei tundu olevat Smart-ID kontot."
+	},
+	"eid_view.smart_id_errors.sign_cancelled": {
+		"en": "You have canceled signing.",
+		"et": "Katkestasid allkirjastamise."
+	},
+	"eid_view.smart_id_errors.sign_invalid_signature": {
+		"en": "Signing failed because the signature does not match the certificate.",
+		"et": "Allkirjastamine ebaõnnestus, sest allkiri ei vasta sertifikaadile."
+	},
+	"eid_view.smart_id_errors.sign_no_suitable_certificate": {
+		"en": "Smart-ID account seems to exist, but not suitable for signing.",
+		"et": "Smart-ID konto on küll olemas, aga ei paista sobilik allkirjastamiseks."
+	},
+	"eid_view.smart_id_errors.sign_timeout": {
+		"en": "Signing took too long. Please start over.",
+		"et": "Allkirjastamine võttis liiga kaua aega. Palun proovi uuesti."
+	},
+	"eid_view.smart_id_errors.wrong_vc": {
+		"en": "Unfortunately, the verification code you selected was incorrect. Please try again.",
+		"et": "Kahjuks ei olnud valitud kinnituskood õige. Palun proovi uuesti."
+	},
+	"eid_view.tabs.id_card": {
+		"en": "ID-card",
+		"et": "ID-kaart"
+	},
+	"eid_view.tabs.mobile_id": {
+		"en": "Mobile ID",
+		"et": "Mobile ID"
+	},
+	"eid_view.tabs.smart_id": {
+		"en": "Smart ID",
+		"et": "Smart ID"
+	},
+	"eid_view.verification_code": {
+		"en": "Verification Code",
+		"et": "Kinnituskood"
+	},
+	"error_page.title": {
+		"en": "{code} apologies!",
+		"et": "{code} vabandust!"
+	},
+	"footer.contacts": {
+		"en": "If you have any questions or suggestions, please contact us at <a href=\"mailto:info@rahvaalgatus.ee\">info@rahvaalgatus.ee</a>. You can find the source code of the democracy workbook on <a href=\"https://github.com/rahvaalgatus/dtv\">GitHub</a>, where you can also <a href=\"https://github.com/rahvaalgatus/dtv/issues\">make suggestions</a>.",
+		"et": "Küsimuste või ettepanekute korral võta meiega ühendust aadressil <a href=\"mailto:info@rahvaalgatus.ee\">info@rahvaalgatus.ee</a>. Demokraatia töövihiku lähtekoodi leiad <a href=\"https://github.com/rahvaalgatus/dtv\">GitHubist</a>, kus saad ka <a href=\"https://github.com/rahvaalgatus/dtv/issues\">ettepanekuid teha</a>."
+	},
+	"home_page.exercises.budgets_button": {
+		"en": "Participatory\nBudgeting",
+		"et": "Koolide kaasav\neelarve"
+	},
+	"home_page.exercises.budgets_description": {
+		"en": "Here, the school representative can upload participatory budgeting ideas and students can vote for them using the national e-ID system.",
+		"et": "Siin saab kooli esindaja üles laadida kaasava eelarvestamise ideid ning õpilased saavad nende poolt digihääletada."
+	},
+	"home_page.exercises.elections_button": {
+		"en": "Student\nElections",
+		"et": "Õpilasesinduse\nvalimine"
+	},
+	"home_page.exercises.elections_description": {
+		"en": "This secure online environment can be used for student council or class president e-voting.",
+		"et": "Siin saab korraldada turvalises veebikeskkonnas õpilasesinduste hääletusi."
+	},
+	"home_page.exercises.signing_button": {
+		"en": "Practice\nDigital Signing",
+		"et": "Harjuta\ndigiallkirjastamist"
+	},
+	"home_page.exercises.signing_description": {
+		"en": "This is a tool for practicing giving your digital signature using the Estonian e-ID system. In Estonia, where a substantial portion of interactions with the state occur online, having a safe sandbox where to practice it, is crucial.",
+		"et": "Nii nagu autokoolis alustatakse turvalist harjutamist kinnisel platsil, saad ka sellel leheküljel turvaliselt proovida digiallkirja andmist. Siin saad sa proovida digiallkirja andmist nii ID-kaardi, Mobiil-ID kui ka Smart-ID kaudu."
+	},
+	"home_page.exercises.title": {
+		"en": "Exercises",
+		"et": "Harjutused"
+	},
+	"home_page.header.budgets_button": {
+		"en": "Participatory\nBudgeting",
+		"et": "Koolide kaasav\neelarve"
+	},
+	"home_page.header.buttons_title": {
+		"en": "Exercises",
+		"et": "Harjutused"
+	},
+	"home_page.header.elections_button": {
+		"en": "Student\nElections",
+		"et": "Õpilasesinduse\nvalimine"
+	},
+	"home_page.header.signing_button": {
+		"en": "Practice\nDigital Signing",
+		"et": "Harjuta\ndigiallkirjastamist"
+	},
+	"home_page.subtitle": {
+		"en": "Three Exercises for School Students to Become Active Citizens",
+		"et": "Kolme harjutusega koolinoorest aktiivseks kodanikuks!"
+	},
+	"home_page.text": {
+		"en": "Schools play a pivotal role in providing young people with their first experience of democratic participation. A good school actively promotes student engagement, encourages participation, and nurtures creativity and critical thinking.\n\nThe Estonian Cooperation Assembly has developed a range of activities, including digital tools and programmes, to foster engagement, encourage participation in decision-making processes, and strengthen young people’s democratic mindset.\n\nThe Estonian Cooperation Assembly is a think-tank that, among other things, promotes participatory democracy and open governance and is the curator of the participation portal Rahvaalgatus.ee.",
+		"et": "Kool on koht, kus noored saavad esimesed kogemused demokraatias osalemisest. Hea kool on kaasav, osalemist soodustav, märkamist ja loovust toetav. Siinne Demokraatia töövihik on Eesti Koostöö Kogu poolt loodud õpikeskkond, kus noored saavad harjutada aktiivsele kodanikule olulisi digioskusi ja proovida ka ise koolielus kaasa rääkida ning muutusi luua.\n\nSA Eesti Koostöö Kogu on mõttekoda, mis muuhulgas edendab osalusdemokraatiat ja avatud valitsemist ja on osalusportaali Rahvaalgatus.ee kureerija."
+	},
+	"home_page.title": {
+		"en": "Democracy Workbook",
+		"et": "Demokraatia töövihik"
+	},
+	"idea_page.menu.edit_button": {
+		"en": "Edit Idea",
+		"et": "Muuda ideed"
+	},
+	"nav.home": {
+		"en": "Democracy Workbook",
+		"et": "Demokraatia töövihik"
+	},
+	"nav.sign_in": {
+		"en": "Sign In",
+		"et": "Logi sisse"
+	},
+	"nav.sign_out": {
+		"en": "Sign Out",
+		"et": "Logi välja"
+	},
+	"paper_votes_page.ideas.id_column": {
+		"en": "Id",
+		"et": "Id"
+	},
+	"paper_votes_page.ideas.title": {
+		"en": "Ideas",
+		"et": "Ideed"
+	},
+	"paper_votes_page.ideas.title_column": {
+		"en": "Title",
+		"et": "Pealkiri"
+	},
+	"paper_votes_page.title": {
+		"en": "{title}'s Votes on Paper",
+		"et": "{title} Paberhääled"
+	},
+	"paper_votes_page.votes.csv_description": {
+		"en": "You can add paper votes in CSV (comma-separated) format, where the first column contains the voter's personal id and the second one the idea identifier. Voters must have been previously added to the <a href={votersUrl} class=\"link-button\">list of voters</a>.",
+		"et": "Paberhääli saad lisada CSV (komaga eraldatud) formaadis, kus esimeses tulbas on hääletaja isikukood ja teises idee identifikaator. Hääletajad peavad olema eelnevalt lisatud <a href={votersUrl} class=\"link-button\">lubatud hääletajate nimekirja</a>."
+	},
+	"paper_votes_page.votes.csv_placeholder": {
+		"en": "Voter personal id, idea id",
+		"et": "Valija isikukood, idee id"
+	},
+	"paper_votes_page.votes.description": {
+		"en": "Votes on paper override digital votes.",
+		"et": "Paberhääled trumpavad üle digihääled."
+	},
+	"paper_votes_page.votes.edit_button": {
+		"en": "Edit Paper Votes",
+		"et": "Muuda paberhääli"
+	},
+	"paper_votes_page.votes.id_column": {
+		"en": "Idea Id",
+		"et": "Idee id"
+	},
+	"paper_votes_page.votes.personal_id_column": {
+		"en": "Personal Id",
+		"et": "Isikukood"
+	},
+	"paper_votes_page.votes.title": {
+		"en": "Votes on Paper",
+		"et": "Paberhääled"
+	},
+	"paper_votes_page.votes.title_column": {
+		"en": "Idea Title",
+		"et": "Idee pealkiri"
+	},
+	"school_page.404_error.description": {
+		"en": "School not found.",
+		"et": "Kooli ei leitud."
+	},
+	"school_page.budgets.title": {
+		"en": "Budgets",
+		"et": "Eelarved"
+	},
+	"school_page.menu.new_budget_button": {
+		"en": "New Budget Voting",
+		"et": "Uus eelarve hääletus"
+	},
+	"school_page.menu.update_school_button": {
+		"en": "Edit School",
+		"et": "Muuda kooli"
+	},
+	"title": {
+		"en": "Democracy Workbook",
+		"et": "Demokraatia töövihik"
+	},
+	"update_budget_page.title": {
+		"en": "Edit {title}",
+		"et": "Muuda \"{title}\""
+	},
+	"update_school_page.teachers.description": {
+		"en": "Teachers can change the school's name and the students who are allowed to submit ideas or vote for them. Teachers can also always add ideas. To add teachers, please contact us.",
+		"et": "Õpetajatel on õigus muuta kooli nime ja loetelu õpilastest, kes on lubatud esitama ideid või nende poolt hääletada. Õpetajad saavad ka alati lisada ideid. Õpetajate lisamiseks palun võta meiega ühendust."
+	},
+	"update_school_page.teachers.name_column": {
+		"en": "Name",
+		"et": "Nimi"
+	},
+	"update_school_page.teachers.personal_id_column": {
+		"en": "Personal Id",
+		"et": "Isikukood"
+	},
+	"update_school_page.teachers.title": {
+		"en": "Teachers",
+		"et": "Õpetajad"
+	}
+}

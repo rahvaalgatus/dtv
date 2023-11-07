@@ -10,17 +10,15 @@ var {isAdmin} = require("root/lib/account")
 exports = module.exports = CreatePage
 exports.SchoolForm = SchoolForm
 
-function CreatePage(attrs) {
-	var {req} = attrs
-
+function CreatePage({req, t}) {
 	return <Page
 		page="create-school"
 		class="update-school-page"
-		req={attrs.req}
-		title="Uus kool"
+		req={req}
+		title={t("create_school_page.title")}
 	>
 		<Header>
-			<h1>Uus kool</h1>
+			<h1>{t("create_school_page.title")}</h1>
 		</Header>
 
 		<Section>
@@ -29,11 +27,9 @@ function CreatePage(attrs) {
 	</Page>
 }
 
-function SchoolForm(attrs) {
-	var {req} = attrs
+function SchoolForm({req, school, teachers}) {
+	var {t} = req
 	var {account} = req
-	var {school} = attrs
-	var {teachers} = attrs
 
 	return <Form
 		action={school.id ? Paths.schoolPath(school) : Paths.schoolsPath}
@@ -44,7 +40,7 @@ function SchoolForm(attrs) {
 		class="budget-form"
 	>
 		<label for="name" class="budget-field">
-			<span class="label">Kooli nimi</span>
+			<span class="label">{t("create_school_page.form.name_label")}</span>
 
 			<input
 				type="text"
@@ -56,8 +52,8 @@ function SchoolForm(attrs) {
 		</label>
 
 		{isAdmin(account) ? <label for="slug" class="budget-field">
-			<span class="label">Kooli nimi veebiaadresside jaoks</span>
-			<p>Lubatud vaid väikesed tähed ning "_" ja "-" märgid.</p>
+			<span class="label">{t("create_school_page.form.slug_label")}</span>
+			<p>{t("create_school_page.form.slug_description")}</p>
 
 			<input
 				type="text"
@@ -70,7 +66,9 @@ function SchoolForm(attrs) {
 		</label> : null}
 
 		<label for="description" class="budget-field">
-			<span class="label">Kooli kirjeldus</span>
+			<span class="label">
+				{t("create_school_page.form.description_label")}
+			</span>
 
 			<textarea name="description" class="budget-input">
 				{school.description}
@@ -78,17 +76,12 @@ function SchoolForm(attrs) {
 		</label>
 
 		<label for="colors" class="budget-field">
-			<span class="label">Värvid</span>
-
-			<p>
-				Värve kasutatakse lehe päise, jaluse ja nuppude jaoks. Vali värv
-				värvikaardilt või selle puudumisel sisesta värvid RGB formaadis
-				(#aabbcc). Sisutekst on aga alati mustas kirjas valgel taustal.
-			</p>
+			<span class="label">{t("create_school_page.form.colors_label")}</span>
+			<p>{Jsx.html(t("create_school_page.form.colors_description"))}</p>
 
 			<table class="budget-table"><tbody>
 				<tr>
-					<td>Taustavärv</td>
+					<td>{t("create_school_page.form.colors_bg")}</td>
 					<td>
 						<input
 							name="background_color"
@@ -100,7 +93,7 @@ function SchoolForm(attrs) {
 				</tr>
 
 				<tr>
-					<td>Tekstivärv</td>
+					<td>{t("create_school_page.form.colors_fg")}</td>
 					<td>
 						<input
 							name="foreground_color"
@@ -114,14 +107,14 @@ function SchoolForm(attrs) {
 		</label>
 
 		<label for="logo" class="budget-field">
-			<span class="label">Logo</span>
+			<span class="label">{t("create_school_page.form.logo_label")}</span>
 
 			<p>
 				{school.logo_type ?
 					<img src={Paths.schoolPath(school) + "/logo"} />
 				: null}
 
-				JPEG, PNG või GIF formaadis pilt suurusega kuni 5 MiB.
+				{t("create_school_page.form.logo_description")}
 			</p>
 
 			<input
@@ -132,21 +125,22 @@ function SchoolForm(attrs) {
 		</label>
 
 		{isAdmin(account) ? <label for="teachers" class="budget-field">
-			<span class="label">Õpetajate isikukoodid</span>
-			<p>Eralda isikukoodid reavahedega.</p>
+			<span class="label">{t("create_school_page.form.teachers_label")}</span>
+			<p>{t("create_school_page.form.teachers_description")}</p>
 
 			<textarea
 				name="teachers"
 				class="budget-input"
-				placeholder="Õpetajate isikukoodid"
+				placeholder={t("create_school_page.form.teachers_placeholder")}
 			>
 				{teachers.map((teacher) => teacher.personal_id).join("\n")}
 			</textarea>
 		</label> : null}
 
-		{school.id
-			? <SchoolButton school={school} type="submit">Muuda</SchoolButton>
-			: <button class="blue-button" type="submit">Lisa uus kool</button>
-		}
+		{school.id ? <SchoolButton school={school} type="submit">
+			{t("create_school_page.form.update_button")}
+		</SchoolButton> : <button class="blue-button" type="submit">
+			{t("create_school_page.form.create_button")}
+		</button>}
 	</Form>
 }

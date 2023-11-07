@@ -7,24 +7,22 @@ var {Section} = Page
 var {Form} = Page
 var EidView = require("../eid_view")
 
-module.exports = function(attrs) {
-	var {req} = attrs
-
+module.exports = function({req, t}) {
 	return <Page
 		page="create-session"
-		req={attrs.req}
-		title="Logi sisse"
+		req={req}
+		title={t("create_session_page.title")}
 	>
 		<script src="/assets/html5.js" />
 		<script src="/assets/hwcrypto.js" />
 
 		<Header>
-			<h1>Logi sisse</h1>
+			<h1>{t("create_session_page.title")}</h1>
 		</Header>
 
 		<Section>
 			<p class="section-paragraph">
-				Sisselogimiseks vali autentimismeetod.
+				{t("create_session_page.description")}
 			</p>
 
 			<Form
@@ -38,8 +36,8 @@ module.exports = function(attrs) {
 					formId="authentication-form"
 					action="auth"
 					idCardAuthenticationUrl={Config.idCardAuthenticationUrl + req.baseUrl}
-					pending="Login sisse…"
-					submit="Logi sisse"
+					submit={t("create_session_page.eid_view.submit_button")}
+					pending={t("create_session_page.eid_view.submitting")}
 				/>
 			</Form>
 		</Section>

@@ -26,9 +26,10 @@ exports.router.post("/",
 	assertAccount,
 	assertTeacher,
 	next(function*(req, res) {
+	var {t} = req
 	var {school} = req
 
-	var attrs = parse(req.body)
+	var attrs = parse(t, req.body)
 	attrs.school_id = school.id
 	var voters = parseVoterPersonalIds(req.body.voters)
 	var budget = yield budgetsDb.create(attrs)
@@ -50,6 +51,7 @@ exports.router.get("/new",
 })
 
 exports.router.use("/:id", next(function*(req, res, next) {
+	var {t} = req
 	var {account} = req
 	var {school} = req
 
@@ -60,7 +62,7 @@ exports.router.use("/:id", next(function*(req, res, next) {
 	`)
 
 	if (budget == null) throw new HttpError(404, "Budget Not Found", {
-		description: "Eelarvet ei leitud."
+		description: t("budget_page.404_error.description")
 	})
 
 	if (account && (yield votersDb.read(sql`
@@ -131,9 +133,10 @@ exports.router.put("/:id",
 	assertAccount,
 	assertTeacher,
 	next(function*(req, res) {
+	var {t} = req
 	var {budget} = req
 
-	var attrs = parse(req.body)
+	var attrs = parse(t, req.body)
 	var voters = parseVoterPersonalIds(req.body.voters)
 	voters.forEach((voter) => voter.budget_id = budget.id)
 
@@ -184,7 +187,7 @@ _.each({
 	"/paberhääled": require("./budgets/paper_votes_controller").router
 }, (router, path) => exports.router.use("/:id" + encodeURI(path), router))
 
-function parse(obj) {
+function parse(t, obj) {
 	var attrs = {
 		title: obj.title,
 		description: obj.description || null
@@ -198,7 +201,7 @@ function parse(obj) {
 	catch (ex) {
 		if (ex.message.startsWith("Invalid Date:"))
 			throw new HttpError(422, "Invalid Attributes", {
-				description: "Hääletamise algus ei tundu õiges formaadis."
+				description: t("create_budget_page.form.start_error")
 			})
 
 		else throw ex
@@ -212,7 +215,7 @@ function parse(obj) {
 	catch (ex) {
 		if (ex.message.startsWith("Invalid Date:"))
 			throw new HttpError(422, "Invalid Attributes", {
-				description: "Hääletamise lõpp ei tundu õiges formaadis."
+				description: t("create_budget_page.form.end_error")
 			})
 
 		else throw ex

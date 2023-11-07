@@ -10,16 +10,13 @@ var {Form} = Page
 exports = module.exports = CreatePage
 exports.IdeaForm = IdeaForm
 
-function CreatePage(attrs) {
-	var {req} = attrs
-	var {school} = attrs
-	var {budget} = attrs
+function CreatePage({req, t, school, budget}) {
 	var {account} = req
 
 	return <SchoolPage
 		page="create-idea"
-		req={attrs.req}
-		title="Uus idee"
+		req={req}
+		title={t("create_idea_page.title")}
 		school={school}
 	>
 		<SchoolHeader school={school}>
@@ -29,28 +26,23 @@ function CreatePage(attrs) {
 				{budget.title}
 			</a>
 
-			<h1>Esita uus idee</h1>
+			<h1>{t("create_idea_page.title")}</h1>
 		</SchoolHeader>
 
 		<Section>
 			<IdeaForm
-				action={req.baseUrl}
 				req={req}
+				t={t}
+				action={req.baseUrl}
 				school={school}
 				idea={{author_names: account.name}}
-				submit="Esita uus idee"
+				submit={t("create_idea_page.form.create_button")}
 			/>
 		</Section>
 	</SchoolPage>
 }
 
-function IdeaForm(attrs) {
-	var {req} = attrs
-	var {school} = attrs
-	var {idea} = attrs
-	var {action} = attrs
-	var {method} = attrs
-	var {submit} = attrs
+function IdeaForm({req, t, school, idea, action, method, submit}) {
 	var ideaPath = req.baseUrl + "/" + idea.id
 
 	return <Form
@@ -62,7 +54,7 @@ function IdeaForm(attrs) {
 		enctype="multipart/form-data"
 	>
 		<label for="title" class="budget-field">
-			<span class="label">Pealkiri</span>
+			<span class="label">{t("create_idea_page.form.title_label")}</span>
 
 			<input
 				type="text"
@@ -74,19 +66,19 @@ function IdeaForm(attrs) {
 		</label>
 
 		<label class="budget-field">
-			<span class="label">Kirjeldus</span>
+			<span class="label">{t("create_idea_page.form.description_label")}</span>
+
 			<textarea name="description" class="budget-input" required>
 				{idea.description}
 			</textarea>
 		</label>
 
 		<label for="image" class="budget-field">
-			<span class="label">Pilt</span>
+			<span class="label">{t("create_idea_page.form.image_label")}</span>
 
 			<p>
 				{idea.image_type ? <img src={ideaPath + "/image"} /> : null}
-
-				JPEG, PNG või GIF formaadis pilt suurusega kuni 5 MiB.
+				{t("create_idea_page.form.image_description")}
 			</p>
 
 			<input
@@ -97,7 +89,7 @@ function IdeaForm(attrs) {
 		</label>
 
 		<label for="author_names" class="budget-field">
-			<span class="label">Autorite nimed</span>
+			<span class="label">{t("create_idea_page.form.author_names_label")}</span>
 			<input
 				name="author_names"
 				class="budget-input"

@@ -7,16 +7,12 @@ var {SchoolHeader} = require("../../read_page")
 var {Section} = Page
 var {IdeaForm} = require("./create_page")
 
-module.exports = function(attrs) {
-	var {req} = attrs
-	var {school} = attrs
-	var {budget} = attrs
-	var {idea} = attrs
+module.exports = function({req, t, school, budget, idea}) {
 	var ideaPath = req.baseUrl + "/" + idea.id
 
 	return <SchoolPage
 		page="update-idea"
-		req={attrs.req}
+		req={req}
 		title={idea.title}
 		school={school}
 	>
@@ -33,12 +29,13 @@ module.exports = function(attrs) {
 		<Section>
 			<IdeaForm
 				req={req}
+				t={t}
 				action={ideaPath}
 				method="put"
 				id="account-form"
 				school={school}
 				idea={idea}
-				submit="Muuda ideed"
+				submit={t("create_idea_page.form.update_button")}
 			/>
 		</Section>
 	</SchoolPage>

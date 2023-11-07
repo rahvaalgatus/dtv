@@ -24,7 +24,6 @@ var {getNormalizedMobileIdErrorCode} = require("root/lib/eid")
 var {waitForSession} = require("root/lib/eid")
 var co = require("co")
 var sql = require("sqlate")
-var outdent = require("root/lib/outdent")
 
 var waitForMobileIdSession =
 	waitForSession.bind(null, mobileId.waitForAuthentication.bind(mobileId))
@@ -35,70 +34,64 @@ var MOBILE_ID_ERRORS = {
 	// Initiation responses:
 	NOT_FOUND: [
 		422,
-		"Not a Mobile-Id User or Personal Id Mismatch",
-		"Puudub Mobiil-Id tugi. Palun kontrolli telefoninumbrit ja isikukoodi."
-	],
-
-	NOT_ACTIVE: [
-		422,
-		"Mobile-Id Certificates Not Activated",
-		"Sinu sertifikaat pole veel aktiveeritud. Palun proovi hiljem uuesti. Probleemi püsimisel võta palun ühendust oma teenusepakkujaga."
+		"Not a Mobile-ID User or Personal Id Mismatch",
+		"eid_view.mobile_id_errors.not_found"
 	],
 
 	// Session responses;
 	TIMEOUT: [
 		410,
-		"Mobile-Id Timeout",
-		"Sisselogimine võttis liiga kaua. Palun proovi uuesti."
+		"Mobile-ID Timeout",
+		"eid_view.mobile_id_errors.auth_timeout"
 	],
 
 	NOT_MID_CLIENT: [
 		410,
-		"Mobile-Id Certificates Not Activated",
-		"Sinu sertifikaat pole veel aktiveeritud. Palun proovi hiljem uuesti. Probleemi püsimisel võta palun ühendust oma teenusepakkujaga."
+		"Mobile-ID Certificates Not Activated",
+		"eid_view.mobile_id_errors.not_active"
 	],
 
 	USER_CANCELLED: [
 		410,
-		"Mobile-Id Cancelled",
-		"Katkestasid sisselogimise."
+		"Mobile-ID Cancelled",
+		"eid_view.mobile_id_errors.auth_cancelled"
 	],
 
 	SIGNATURE_HASH_MISMATCH: [
 		410,
-		"Mobile-Id Signature Hash Mismatch",
-		"Mobiil-Id-lt tulnud sisselogimise kinnitus ei vastanud turvanõuetele. Palun proovi uuesti."
+		"Mobile-ID Signature Hash Mismatch",
+		"eid_view.mobile_id_errors.auth_hash_mismatch"
 	],
 
 	PHONE_ABSENT: [
 		410,
-		"Mobile-Id Phone Absent",
-		"Telefon on välja lülitatud või ei ole leviulatuses."
+		"Mobile-ID Phone Absent",
+		"eid_view.mobile_id_errors.auth_phone_absent"
 	],
 
 	DELIVERY_ERROR: [
 		410,
-		"Mobile-Id Delivery Error",
-		"Telefon ei ole sisselogimiseks tehniliselt sobiv või on võrgu töö ajutiselt häiritud."
+		"Mobile-ID Delivery Error",
+		"eid_view.mobile_id_errors.auth_delivery_error"
 	],
 
 	SIM_ERROR: [
 		410,
-		"Mobile-Id SIM Application Error",
-		"SIM-kaardi rakenduse viga. Proovi palun uuesti. Probleemi püsimisel võta palun ühendust oma teenusepakkujaga."
+		"Mobile-ID SIM Application Error",
+		"eid_view.mobile_id_errors.sim_error"
 	],
 
 	// Custom responses:
 	CERTIFICATE_MISMATCH: [
 		409,
 		"Authentication Certificate Doesn't Match",
-		"Autentimissertifikaat ei vasta oodatule."
+		"eid_view.mobile_id_errors.auth_certificate_mismatch"
 	],
 
 	INVALID_SIGNATURE: [
 		410,
-		"Invalid Mobile-Id Signature",
-		"Sisselogimine ebaõnnestus, sest digiallkiri ei vasta sertifikaadile."
+		"Invalid Mobile-ID Signature",
+		"eid_view.mobile_id_errors.auth_invalid_signature"
 	]
 }
 
@@ -106,46 +99,52 @@ var SMART_ID_ERRORS = {
 	// Initiation responses:
 	ACCOUNT_NOT_FOUND: [
 		422,
-		"Not a Smart-Id User",
-		"Sellel isikukoodil ei tundu olevat Smart-Id-d."
+		"Not a Smart-ID User",
+		"eid_view.smart_id_errors.not_found"
 	],
 
 	// Session responses:
 	USER_REFUSED: [
 		410,
-		"Smart-Id Cancelled",
-		"Katkestasid sisselogimise."
+		"Smart-ID Cancelled",
+		"eid_view.smart_id_errors.auth_cancelled"
 	],
 
 	TIMEOUT: [
 		410,
-		"Smart-Id Timeout",
-		"Sisselogimine võttis liiga kaua. Palun proovi uuesti."
+		"Smart-ID Timeout",
+		"eid_view.smart_id_errors.auth_timeout"
+	],
+
+	NO_SUITABLE_CERTIFICATE: [
+		410,
+		"No Smart-ID Certificate",
+		"eid_view.smart_id_errors.auth_no_suitable_certificate"
 	],
 
 	DOCUMENT_UNUSABLE: [
 		410,
-		"Smart-Id Certificate Unusable",
-		"Smart-Id sertifikaat ei ole kasutatav. Palun võta meiega ühendust."
+		"Smart-ID Certificate Unusable",
+		"eid_view.smart_id_errors.document_unusable"
 	],
 
 	WRONG_VC: [
 		410,
-		"Wrong Smart-Id Verification Code Chosen",
-		"Kahjuks ei olnud valitud kinnituskood õige. Palun proovi uuesti. "
+		"Wrong Smart-ID Verification Code Chosen",
+		"eid_view.smart_id_errors.wrong_vc"
 	],
 
 	// Custom responses:
 	CERTIFICATE_MISMATCH: [
 		409,
 		"Authentication Certificate Doesn't Match",
-		"Autentimissertifikaat ei vasta oodatule."
+		"eid_view.smart_id_errors.auth_certificate_mismatch"
 	],
 
 	INVALID_SIGNATURE: [
 		410,
 		"Invalid Smart-Id Signature",
-		"Sisselogimine ebaõnnestus, sest digiallkirja ei vasta sertifikaadile."
+		"eid_view.smart_id_errors.auth_invalid_signature"
 	]
 }
 
@@ -166,6 +165,7 @@ exports.router.get("/new", function(req, res) {
 })
 
 exports.router.post("/", next(function*(req, res) {
+	var {t} = req
 	var method = getRequestEidMethod(req)
 	var cert, country, personalId
 	var sessionToken, sessionTokenHash, verificationCode
@@ -174,20 +174,17 @@ exports.router.post("/", next(function*(req, res) {
 	switch (method) {
 		case "id-card":
 			var pem = req.headers["x-client-certificate"]
+
 			if (pem == null) throw new HttpError(400, "Missing Certificate", {
-				description: "Tundub, et kas veebilehitseja ei alustanud ID-kaardiga autentimist või otsustasid autentimise katkestada. Kas ID-kaardi tarkvara on installitud ja mujal töötab? Vahel on abi veebilehitseja taasavamisest. Kui vajad abi, palun võta meiega ühendust."
+				description: t("create_session_page.id_card_errors.certificate_missing")
 			})
 
 			cert = Certificate.parse(pem.replace(/\t/g, "\n"))
-			if (err = validateCertificate(cert)) throw err
+			if (err = validateCertificate(t, cert)) throw err
 
 			if (req.headers["x-client-certificate-verification"] != "SUCCESS")
 				throw new HttpError(422, "Invalid Signature", {
-					description: outdent`
-						Kahjuks autentimine ei õnnestunud.
-						See võib olla tingitud nii valest digiallkirjast kui ka tühistatud ID-kaardist.
-						Kui arvad, et tegu on eksitusega, palun võta meiega ühendust.
-					`
+					description: t("create_session_page.id_card_errors.invalid_certificate")
 				})
 
 			;[country, personalId] = getCertificatePersonalId(cert)
@@ -215,15 +212,15 @@ exports.router.post("/", next(function*(req, res) {
 			var phoneNumber = ensureAreaCode(req.body.phoneNumber)
 			personalId = req.body.personalId
 
-			// Log Mobile-Id requests to confirm SK's billing.
+			// Log Mobile-ID requests to confirm SK's billing.
 			logger.info(
-				"Authenticating via Mobile-Id for %s and %s.",
+				"Authenticating via Mobile-ID for %s and %s.",
 				phoneNumber,
 				personalId
 			)
 
 			cert = yield mobileId.readCertificate(phoneNumber, personalId)
-			if (err = validateCertificate(cert)) throw err
+			if (err = validateCertificate(t, cert)) throw err
 
 			;[country, personalId] = getCertificatePersonalId(cert)
 			if (country != "EE") throw new HttpError(422, "Estonian Users Only")
@@ -240,7 +237,7 @@ exports.router.post("/", next(function*(req, res) {
 			verificationCode = MobileId.confirmation(sessionTokenHash)
 			respondWithVerificationCode(sessionToken, verificationCode, res)
 
-			co(waitForMobileIdAuthentication({
+			co(waitForMobileIdAuthentication(t, {
 				country: country,
 				personal_id: personalId,
 				method: "mobile-id",
@@ -267,7 +264,7 @@ exports.router.post("/", next(function*(req, res) {
 			verificationCode = SmartId.verification(sessionTokenHash)
 			respondWithVerificationCode(sessionToken, verificationCode, res)
 
-			co(waitForSmartIdAuthentication({
+			co(waitForSmartIdAuthentication(t, {
 				country: "EE",
 				personal_id: personalId,
 				method: "smart-id",
@@ -291,11 +288,13 @@ exports.router.post("/", next(function*(req, res) {
 		signIn(sessionToken, req, res)
 		res.write("\n")
 	}
-}), function(err, _req, _res, next) {
+}), function(err, req, _res, next) {
+	var {t} = req
+
 	if (
 		err instanceof MobileIdError ||
 		err instanceof SmartIdError
-	) err = serializeError(err)
+	) err = serializeError(t, err)
 
 	next(err)
 })
@@ -338,7 +337,12 @@ function referTo(req, referrer, fallback) {
 	return req.hostname == referrerHost ? referrer : fallback
 }
 
-function* waitForMobileIdAuthentication(authentication, mobileIdSession, res) {
+function* waitForMobileIdAuthentication(
+	t,
+	authentication,
+	mobileIdSession,
+	res
+) {
 	try {
 		var certAndSignatureHash =
 			yield waitForMobileIdSession(120, mobileIdSession)
@@ -347,7 +351,7 @@ function* waitForMobileIdAuthentication(authentication, mobileIdSession, res) {
 		var [cert, signatureHash] = certAndSignatureHash
 
 		var err
-		if (err = validateCertificate(cert)) throw err
+		if (err = validateCertificate(t, cert)) throw err
 
 		var [country, personalId] = getCertificatePersonalId(cert)
 		if (
@@ -370,18 +374,18 @@ function* waitForMobileIdAuthentication(authentication, mobileIdSession, res) {
 			getNormalizedMobileIdErrorCode(ex) in MOBILE_ID_ERRORS
 		)) logger.error(ex)
 
-		res.end(jsonfiyError(serializeError(ex)))
+		res.end(jsonfiyError(serializeError(t, ex)))
 	}
 }
 
-function* waitForSmartIdAuthentication(authentication, smartIdSession, res) {
+function* waitForSmartIdAuthentication(t, authentication, smartIdSession, res) {
 	try {
 		var certAndSignatureHash = yield waitForSmartIdSession(120, smartIdSession)
 		if (certAndSignatureHash == null) throw new SmartIdError("TIMEOUT")
 		var [cert, signature] = certAndSignatureHash
 
 		var err
-		if (err = validateCertificate(cert)) throw err
+		if (err = validateCertificate(t, cert)) throw err
 
 		var [country, personalId] = getCertificatePersonalId(cert)
 		if (
@@ -403,7 +407,7 @@ function* waitForSmartIdAuthentication(authentication, smartIdSession, res) {
 			ex instanceof SmartIdError && ex.code in SMART_ID_ERRORS
 		)) logger.error(ex)
 
-		res.end(jsonfiyError(serializeError(ex)))
+		res.end(jsonfiyError(serializeError(t, ex)))
 	}
 }
 
@@ -448,22 +452,22 @@ function signIn(token, req, res) {
 	})
 }
 
-function serializeError(err) {
+function serializeError(t, err) {
 	if (err instanceof MobileIdError) {
 		var code = getNormalizedMobileIdErrorCode(err)
 
 		if (code in MOBILE_ID_ERRORS) return new HttpError(
 			MOBILE_ID_ERRORS[code][0],
 			MOBILE_ID_ERRORS[code][1],
-			{description: MOBILE_ID_ERRORS[code][2]}
+			{description: t(MOBILE_ID_ERRORS[code][2])}
 		)
-		else return new HttpError(500, "Unknown Mobile-Id Error", {error: err})
+		else return new HttpError(500, "Unknown Mobile-ID Error", {error: err})
 	}
 	else if (err instanceof SmartIdError) {
 		if (err.code in SMART_ID_ERRORS) return new HttpError(
 			SMART_ID_ERRORS[err.code][0],
 			SMART_ID_ERRORS[err.code][1],
-			{description: SMART_ID_ERRORS[err.code][2]}
+			{description: t(SMART_ID_ERRORS[err.code][2])}
 		)
 		else return new HttpError(500, "Unknown Smart-Id Error", {error: err})
 	}

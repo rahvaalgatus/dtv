@@ -5,17 +5,11 @@ var {Header} = Page
 var {Section} = Page
 var {Form} = Page
 
-module.exports = function(attrs) {
-	var {req} = attrs
-	var {account} = attrs
-
-	return <Page
-		page="account"
-		req={attrs.req}
-		title={account.name}
-	>
+module.exports = function({req, t, account}) {
+	return <Page page="account" req={req} title={account.name}>
 		<Header>
 			<h1>{account.name}</h1>
+			<p>{t("account_page.header.personal_id")}: {account.personal_id}</p>
 		</Header>
 
 		<Section>
@@ -27,7 +21,7 @@ module.exports = function(attrs) {
 				class="budget-form"
 			>
 				<label for="name" class="budget-field">
-					<span class="label">Nimi</span>
+					<span class="label">{t("account_page.form.name_label")}</span>
 
 					<input
 						type="text"
@@ -38,7 +32,7 @@ module.exports = function(attrs) {
 					/>
 				</label>
 
-				<button type="submit">Muuda</button>
+				<button type="submit">{t("account_page.form.update_button")}</button>
 			</Form>
 		</Section>
 	</Page>

@@ -3,3 +3,4 @@
 /config/*.sqlite3
 /public/assets/*.css
 /public/assets/*.js
+/tmp/

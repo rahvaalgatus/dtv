@@ -10,36 +10,29 @@ var {Section} = Page
 var {Heading} = Page
 var {Form} = Page
 
-module.exports = function(attrs) {
-	var {req} = attrs
-	var {school} = attrs
-	var {budget} = attrs
-	var {ideas} = attrs
-	var {paperVotes} = attrs
-
+module.exports = function({req, t, school, budget, ideas, paperVotes}) {
 	return <SchoolPage
+		title={t("paper_votes_page.title", {title: budget.title})}
 		page="paper-votes"
-		req={attrs.req}
+		req={req}
 		school={school}
 	>
 		<SchoolHeader school={school}>
 			<a href={Paths.schoolPath(school)} class="context">{school.name}</a>
 
-			<h1>
-				<a href={Paths.budgetPath(school, budget)}>{budget.title}</a>
-				{" "}
-				paberhääled
-			</h1>
+			<h1>{Jsx.html(t("paper_votes_page.title", {
+				title: <a href={Paths.budgetPath(school, budget)}>{budget.title}</a>
+			}))}</h1>
 		</SchoolHeader>
 
 		<Section>
-			<Heading>Ideed</Heading>
+			<Heading>{t("paper_votes_page.ideas.title")}</Heading>
 
 			{!_.isEmpty(ideas) ? <table id="ideas" class="budget-table">
 				<thead>
 					<tr>
-						<th>Id</th>
-						<th>Pealkiri</th>
+						<th>{t("paper_votes_page.ideas.id_column")}</th>
+						<th>{t("paper_votes_page.ideas.title_column")}</th>
 					</tr>
 				</thead>
 
@@ -55,17 +48,15 @@ module.exports = function(attrs) {
 		</Section>
 
 		<Section>
-			<Heading>Paberhääled</Heading>
+			<Heading>{t("paper_votes_page.votes.title")}</Heading>
 
-			<p class="section-paragraph">
-				Paberhääled trumpavad üle digihääled.
-			</p>
+			<p class="section-paragraph">{t("paper_votes_page.votes.description")}</p>
 
 			<table id="paper-votes" class="budget-table">
 				{paperVotes.length > 0 ? <thead>
-					<th>Isikukood</th>
-					<th>Idee id</th>
-					<th>Idee pealkiri</th>
+					<th>{t("paper_votes_page.votes.personal_id_column")}</th>
+					<th>{t("paper_votes_page.votes.id_column")}</th>
+					<th>{t("paper_votes_page.votes.title_column")}</th>
 				</thead> : null}
 
 				{paperVotes.map(function(vote) {
@@ -86,7 +77,7 @@ module.exports = function(attrs) {
 						/>
 
 						<label for="edit-paper-votes-toggle" class="edit-button">
-							Muuda paberhääli
+							{t("paper_votes_page.votes.edit_button")}
 						</label>
 
 						<Form
@@ -94,26 +85,20 @@ module.exports = function(attrs) {
 							method="put"
 							action={Paths.paperVotesPath(school, budget)}
 						>
-							<p>
-								Paberhääli saad lisada CSV (komaga eraldatud) formaadis, kus
-								esimeses tulbas on hääletaja isikukood ja teises idee
-								identifikaator. Hääletajad peavad olema
-								eelnevalt lisatud <a href={Paths.updateSchoolPath(school) + "#voters"}
-								class="link-button">lubatud hääletajate nimekirja</a>.
-							</p>
+							<p>{Jsx.html(t("paper_votes_page.votes.csv_description", {
+								votersUrl: Paths.updateSchoolPath(school) + "#voters"
+							}))}</p>
 
 							<textarea
 								name="paper-votes"
 								class="budget-input"
-								placeholder="Valija isikukood, idee id"
-							>
-								{paperVotes.map((vote) => (
-									vote.voter_personal_id + ", " + vote.idea_id
-								)).join("\n")}
-							</textarea>
+								placeholder={t("paper_votes_page.votes.csv_placeholder")}
+							>{paperVotes.map((vote) => (
+								vote.voter_personal_id + ", " + vote.idea_id
+							)).join("\n")}</textarea>
 
 							<SchoolButton school={school} type="submit">
-								Muuda paberhääli
+								{t("paper_votes_page.votes.edit_button")}
 							</SchoolButton>
 						</Form>
 					</td>

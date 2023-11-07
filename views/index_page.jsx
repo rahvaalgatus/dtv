@@ -8,45 +8,50 @@ module.exports = IndexPage
 
 function IndexPage(attrs) {
 	var {req} = attrs
+	var {t} = req
 
 	return <Page
 		page="home"
 		req={req}
-		title="Demokraatia töövihik"
+		title={t("home_page.title")}
 		homeless
 	>
 		<header id="header">
 			<Centered>
 				<h1>
-					<img src="/assets/logo.svg" alt="Demokraatia töövihik" class="logo" />
-
-					<span class="subtitle">
-						Kolme harjutusega koolinoorest aktiivseks kodanikuks!
-					</span>
+					<img src="/assets/logo.svg" alt={t("nav.home")} class="logo" />
+					<span class="subtitle">{t("home_page.subtitle")}</span>
 				</h1>
 
 
 				<div class="call-to-actions">
-					<Heading>Harjutused</Heading>
+					<Heading>{t("home_page.header.buttons_title")}</Heading>
 
-					<img src="/assets/home-illustration.png" alt="" class="illustration" />
+					<img
+						src="/assets/home-illustration.png"
+						alt=""
+						class="illustration"
+					/>
 
 					<ul>
 						<li>
 							<a class="yellow-button" href="/eelarve">
-								Koolide kaasav<br />eelarve
+								{t("home_page.header.budgets_button")}
 							</a>
 						</li>
 
 						<li>
 							<a class="yellow-button" href="https://vali.rahvaalgatus.ee">
-								Õpilasesinduse<br />valimine
+								{t("home_page.header.elections_button")}
 							</a>
 						</li>
 
 						<li>
-							<a class="yellow-button" href="https://rahvaalgatus.ee/digiallkiri">
-								Harjuta<br />digiallkirjastamist
+							<a
+								class="yellow-button"
+								href="https://rahvaalgatus.ee/digiallkiri"
+							>
+								{t("home_page.header.signing_button")}
 							</a>
 						</li>
 					</ul>
@@ -55,25 +60,21 @@ function IndexPage(attrs) {
 		</header>
 
 		<Section>
-			<p class="section-paragraph">
-				Kool on koht, kus noored saavad esimesed kogemused demokraatias osalemisest. Hea kool on kaasav, osalemist soodustav, märkamist ja loovust toetav. Siinne Demokraatia töövihik on Eesti Koostöö Kogu poolt loodud õpikeskkond, kus noored saavad harjutada aktiivsele kodanikule olulisi digioskusi ja proovida ka ise koolielus kaasa rääkida ning muutusi luua.
-			</p>
-
-			<p class="section-paragraph">
-				SA Eesti Koostöö Kogu on mõttekoda, mis muuhulgas edendab osalusdemokraatiat ja avatud valitsemist ja on osalusportaali Rahvaalgatus.ee kureerija.
-			</p>
+			<p class="section-paragraph">{t("home_page.text")}</p>
 		</Section>
 
 		<Section id="exercises-section" wide>
-			<Heading>Harjutused</Heading>
+			<Heading>{t("home_page.exercises.title")}</Heading>
 
 			<ul>
 				<li class="exercise">
 					<a class="yellow-button budgeting-button" href="/eelarve">
-						Koolide kaasav<br />eelarve
+						{t("home_page.exercises.budgets_button")}
 					</a>
 
-					<p class="section-paragraph">Siin saab kooli esindaja üles laadida kaasava eelarvestamise ideid ning õpilased saavad nende poolt digihääletada.</p>
+					<p class="section-paragraph">
+						{t("home_page.exercises.budgets_description")}
+					</p>
 				</li>
 
 				<li class="exercise">
@@ -81,10 +82,12 @@ function IndexPage(attrs) {
 						class="yellow-button election-button"
 						href="https://vali.rahvaalgatus.ee"
 					>
-						Õpilasesinduse<br />valimine
+						{t("home_page.exercises.elections_button")}
 					</a>
 
-					<p class="section-paragraph">Siin saab korraldada turvalises veebikeskkonnas õpilasesinduste hääletusi.</p>
+					<p class="section-paragraph">
+						{t("home_page.exercises.elections_description")}
+					</p>
 				</li>
 
 				<li class="exercise">
@@ -92,10 +95,12 @@ function IndexPage(attrs) {
 						class="yellow-button signing-button"
 						href="https://rahvaalgatus.ee/digiallkiri"
 					>
-						Harjuta<br />digiallkirjastamist
+						{t("home_page.exercises.signing_button")}
 					</a>
 
-					<p class="section-paragraph">Nii nagu autokoolis alustatakse turvalist harjutamist kinnisel platsil, saad ka sellel leheküljel turvaliselt proovida digiallkirja andmist. Siin saad sa proovida digiallkirja andmist nii ID-kaardi, Mobiil-ID kui ka Smart-ID kaudu.</p>
+					<p class="section-paragraph">
+						{t("home_page.exercises.signing_description")}
+					</p>
 				</li>
 			</ul>
 		</Section>

@@ -13,7 +13,7 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 main, article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+time, mark, audio, video, progress {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -85,6 +85,17 @@ textarea {
 textarea {
 	line-height: inherit;
 	resize: none;
+}
+
+button {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+
+	// Not sure if these are necessary to reset after setting appearance:
+	border: 0;
+	background: none;
+	text-shadow: inherit;
 }
 
 a,

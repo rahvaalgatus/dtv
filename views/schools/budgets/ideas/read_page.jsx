@@ -8,12 +8,8 @@ var {Section} = Page
 var {serializeStyle} = Page
 var linkify = require("root/lib/linkify")
 
-module.exports = function(attrs) {
-	var {req} = attrs
+module.exports = function({req, school, budget, idea}) {
 	var {account} = req
-	var {school} = attrs
-	var {budget} = attrs
-	var {idea} = attrs
 	var ideaPath = req.baseUrl + "/" + idea.id
 
 	return <IdeaPage
@@ -39,11 +35,8 @@ module.exports = function(attrs) {
 	</IdeaPage>
 }
 
-function IdeaPage(attrs, children) {
-	var {school} = attrs
-	var {budget} = attrs
-	var {idea} = attrs
-	var {editable} = attrs
+function IdeaPage({req, school, budget, idea, editable}, children) {
+	var {t} = req
 	var ideaPath = Paths.ideaPath(school, idea)
 
 	var headerButtonStyle = serializeStyle({
@@ -53,7 +46,7 @@ function IdeaPage(attrs, children) {
 
 	return <SchoolPage
 		page="idea"
-		req={attrs.req}
+		req={req}
 		title={idea.title}
 		school={school}
 	>
@@ -68,7 +61,9 @@ function IdeaPage(attrs, children) {
 			<span class="subtitle author-names">{idea.author_names}</span>
 
 			{editable ? <menu>
-				<a href={`${ideaPath}/edit`} style={headerButtonStyle}>Muuda ideed</a>
+				<a href={`${ideaPath}/edit`} style={headerButtonStyle}>
+					{t("idea_page.menu.edit_button")}
+				</a>
 			</menu> : null}
 		</SchoolHeader>
 

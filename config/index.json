@@ -3,6 +3,8 @@
 	"cookieDomain": "demokraatia.rahvaalgatus.ee",
 	"sessionCookieName": "demokraatia_session_token",
 	"csrfCookieName": "demokraatia_csrf_token",
+	"languageCookieName": "language",
+	"languageCookieDomain": null,
 	"adminPersonalIds": [],
 
 	"idCardAuthenticationUrl": null,

@@ -12,18 +12,15 @@ exports.SchoolPage = SchoolPage
 exports.SchoolHeader = SchoolHeader
 exports.SchoolButton = SchoolButton
 
-function ReadPage(attrs) {
-	var {req} = attrs
+function ReadPage({req, t, school, budgets}) {
 	var {roles} = req
-	var {school} = attrs
-	var {budgets} = attrs
 
 	var headerButtonStyle = serializeStyle({
 		"border-color": school.foreground_color,
 		color: school.foreground_color
 	})
 
-	return <SchoolPage page="school" req={attrs.req} school={school}>
+	return <SchoolPage page="school" req={req} school={school}>
 		<script src="/assets/html5.js" />
 		<script src="/assets/hwcrypto.js" />
 
@@ -35,11 +32,11 @@ function ReadPage(attrs) {
 					href={Paths.createBudgetPath(school)}
 					style={headerButtonStyle}
 				>
-					Uus eelarve hääletus
+					{t("school_page.menu.new_budget_button")}
 				</a> : null}
 
 				<a href={Paths.updateSchoolPath(school)} style={headerButtonStyle}>
-					Muuda kooli
+					{t("school_page.menu.update_school_button")}
 				</a>
 			</menu> : null}
 		</SchoolHeader>
@@ -51,7 +48,7 @@ function ReadPage(attrs) {
 		</Section> : null}
 
 		<Section>
-			<Heading>Eelarved</Heading>
+			<Heading>{t("school_page.budgets.title")}</Heading>
 
 			<ul id="budgets">{budgets.map(function(budget) {
 				return <li>

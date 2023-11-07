@@ -37,64 +37,58 @@ var MOBILE_ID_ERRORS = {
 	// Initiation responses:
 	NOT_FOUND: [
 		422,
-		"Not a Mobile-Id User or Personal Id Mismatch",
-		"Puudub Mobiil-Id tugi. Palun kontrolli telefoninumbrit ja isikukoodi."
-	],
-
-	NOT_ACTIVE: [
-		422,
-		"Mobile-Id Certificates Not Activated",
-		"Sinu sertifikaat pole veel aktiveeritud. Palun proovi hiljem uuesti. Probleemi püsimisel võta palun ühendust oma teenusepakkujaga."
+		"Not a Mobile-ID User or Personal Id Mismatch",
+		"eid_view.mobile_id_errors.not_found"
 	],
 
 	// Session responses;
 	TIMEOUT: [
 		410,
-		"Mobile-Id Timeout",
-		"Hääletamine võttis liiga kaua. Palun proovi uuesti."
+		"Mobile-ID Timeout",
+		"eid_view.mobile_id_errors.sign_timeout"
 	],
 
 	NOT_MID_CLIENT: [
 		410,
-		"Mobile-Id Certificates Not Activated",
-		"Sinu sertifikaat pole veel aktiveeritud. Palun proovi hiljem uuesti. Probleemi püsimisel võta palun ühendust oma teenusepakkujaga."
+		"Mobile-ID Certificates Not Activated",
+		"eid_view.mobile_id_errors.not_active"
 	],
 
 	USER_CANCELLED: [
 		410,
-		"Mobile-Id Cancelled",
-		"Katkestasid hääletamise."
+		"Mobile-ID Cancelled",
+		"eid_view.mobile_id_errors.sign_cancelled"
 	],
 
 	SIGNATURE_HASH_MISMATCH: [
 		410,
-		"Mobile-Id Signature Hash Mismatch",
-		"Mobiil-Id-lt tulnud allkirjakinnitus ei vastanud turvanõuetele. Palun proovi uuesti."
+		"Mobile-ID Signature Hash Mismatch",
+		"eid_view.mobile_id_errors.sign_hash_mismatch"
 	],
 
 	PHONE_ABSENT: [
 		410,
-		"Mobile-Id Phone Absent",
-		"Telefon on välja lülitatud või ei ole leviulatuses."
+		"Mobile-ID Phone Absent",
+		"eid_view.mobile_id_errors.sign_phone_absent"
 	],
 
 	DELIVERY_ERROR: [
 		410,
-		"Mobile-Id Delivery Error",
-		"Telefon ei ole allkirjastamiseks tehniliselt sobiv või on võrgu töö ajutiselt häiritud."
+		"Mobile-ID Delivery Error",
+		"eid_view.mobile_id_errors.sign_delivery_error"
 	],
 
 	SIM_ERROR: [
 		410,
-		"Mobile-Id SIM Application Error",
-		"SIM-kaardi rakenduse viga. Proovi palun uuesti. Probleemi püsimisel võta palun ühendust oma teenusepakkujaga."
+		"Mobile-ID SIM Application Error",
+		"eid_view.mobile_id_errors.sim_error"
 	],
 
 	// Custom responses:
 	INVALID_SIGNATURE: [
 		410,
-		"Invalid Mobile-Id Signature",
-		"Hääletamine ebaõnnestus, sest digiallkiri ei vasta sertifikaadile."
+		"Invalid Mobile-ID Signature",
+		"eid_view.mobile_id_errors.sign_invalid_signature"
 	]
 }
 
@@ -102,40 +96,46 @@ var SMART_ID_ERRORS = {
 	// Initiation responses:
 	ACCOUNT_NOT_FOUND: [
 		422,
-		"Not a Smart-Id User",
-		"Sellel isikukoodil ei tundu olevat Smart-Id-d."
+		"Not a Smart-ID User",
+		"eid_view.smart_id_errors.not_found"
 	],
 
 	// Session responses:
 	USER_REFUSED: [
 		410,
-		"Smart-Id Cancelled",
-		"Katkestasid hääletamise."
+		"Smart-ID Cancelled",
+		"eid_view.smart_id_errors.sign_cancelled"
 	],
 
 	TIMEOUT: [
 		410,
-		"Smart-Id Timeout",
-		"Hääletamine võttis liiga kaua. Palun proovi uuesti."
+		"Smart-ID Timeout",
+		"eid_view.smart_id_errors.sign_timeout"
+	],
+
+	NO_SUITABLE_CERTIFICATE: [
+		410,
+		"No Smart-ID Certificate",
+		"eid_view.smart_id_errors.sign_no_suitable_certificate"
 	],
 
 	DOCUMENT_UNUSABLE: [
 		410,
-		"Smart-Id Certificate Unusable",
-		"Smart-Id sertifikaat ei ole kasutatav. Palun võta meiega ühendust."
+		"Smart-ID Certificate Unusable",
+		"eid_view.smart_id_errors.document_unusable"
 	],
 
 	WRONG_VC: [
 		410,
-		"Wrong Smart-Id Verification Code Chosen",
-		"Kahjuks ei olnud valitud kinnituskood õige. Palun proovi uuesti. "
+		"Wrong Smart-ID Verification Code Chosen",
+		"eid_view.smart_id_errors.wrong_vc"
 	],
 
 	// Custom responses:
 	INVALID_SIGNATURE: [
 		410,
-		"Invalid Smart-Id Signature",
-		"Hääletamine ebaõnnestus, sest digiallkirja ei vasta sertifikaadile."
+		"Invalid Smart-ID Signature",
+		"eid_view.smart_id_errors.sign_invalid_signature"
 	]
 }
 
@@ -143,6 +143,7 @@ exports.router = Router({mergeParams: true})
 exports.router.use(require("root/lib/eid").parseSignatureBody)
 
 exports.router.post("/", assertVoting, next(function*(req, res) {
+	var {t} = req
 	var {school} = req
 	var {budget} = req
 	var method = getRequestEidMethod(req)
@@ -153,7 +154,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 	var ideaId = req.body.idea_id || req.query.idea_id
 
 	if (ideaId == null) throw new HttpError(422, "Idea Missing", {
-		description: "Ära unusta ideed valimast!"
+		description: t("budget_page.voting.errors.idea_missing")
 	})
 
 	var idea = yield ideasDb.read(sql`
@@ -163,10 +164,10 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 	`)
 
 	if (idea == null) throw new HttpError(422, "Invalid Idea", {
-		description: "Ei leidnud valitud ideed."
+		description: t("budget_page.voting.errors.invalid_idea")
 	})
 
-	var signable = `Hääletan idee "${idea.title}" poolt.`
+	var signable = t("budget_page.voting.signable")
 
 	switch (method) {
 		case "id-card":
@@ -174,10 +175,10 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 
 			if (voteToken == null) {
 				cert = Certificate.parse(req.body)
-				if (err = validateCertificate(cert)) throw err
+				if (err = validateCertificate(t, cert)) throw err
 
 				;[country, personalId] = getCertificatePersonalId(cert)
-				if (err = yield validateVoter(budget, country, personalId)) throw err
+				if (err = yield validateVoter(t, budget, country, personalId)) throw err
 
 				var token = Crypto.randomBytes(16)
 				xades = newXades(cert, signable)
@@ -204,14 +205,14 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 				var vote = votings.delete(Buffer.from(voteToken || "", "hex"))
 
 				if (!vote) throw new HttpError(404, "Vote Not Found", {
-					description: "Kahjuks hääletamine aegus. Palun proovi uuesti."
+					description: t("budget_page.voting.errors.voting_expired")
 				})
 
 				xades = vote.xades
 
 				if (!xades.certificate.hasSigned(xades.signable, req.body))
 					throw new HttpError(409, "Invalid Signature", {
-						description: "Digiallkiri ei vasta sertifikaadile."
+						description: t("eid_view.id_card_errors.sign_invalid_signature")
 					})
 
 				xades.setSignature(req.body)
@@ -231,25 +232,25 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			personalId = req.body.personalId
 
 			// Early double validation to prevent possible misuse.
-			if (err = yield validateVoter(budget, "EE", personalId)) throw err
+			if (err = yield validateVoter(t, budget, "EE", personalId)) throw err
 
-			// Log Mobile-Id requests to confirm SK's billing.
+			// Log Mobile-ID requests to confirm SK's billing.
 			logger.info(
-				"Requesting Mobile-Id certificate for %s and %s.",
+				"Requesting Mobile-ID certificate for %s and %s.",
 				phoneNumber,
 				personalId
 			)
 
 			cert = yield mobileId.readCertificate(phoneNumber, personalId)
-			if (err = validateCertificate(cert)) throw err
+			if (err = validateCertificate(t, cert)) throw err
 
 			;[country, personalId] = getCertificatePersonalId(cert)
-			if (err = yield validateVoter(budget, country, personalId)) throw err
+			if (err = yield validateVoter(t, budget, country, personalId)) throw err
 
 			xades = newXades(cert, signable)
 
 			logger.info(
-				"Signing via Mobile-Id for %s and %s.",
+				"Signing via Mobile-ID for %s and %s.",
 				phoneNumber,
 				personalId
 			)
@@ -280,24 +281,24 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			personalId = req.body.personalId
 
 			// Early double validation to prevent possible misuse.
-			if (err = yield validateVoter(budget, "EE", personalId)) throw err
+			if (err = yield validateVoter(t, budget, "EE", personalId)) throw err
 
-			// Log Smart-Id requests to confirm SK's billing.
-			logger.info("Requesting Smart-Id certificate for %s.", personalId)
+			// Log Smart-ID requests to confirm SK's billing.
+			logger.info("Requesting Smart-ID certificate for %s.", personalId)
 
 			cert = yield smartId.certificate("PNOEE-" + personalId)
 			cert = yield waitForSmartIdSession(90, cert)
 			if (cert == null) throw new SmartIdError("TIMEOUT")
-			if (err = validateCertificate(cert)) throw err
+			if (err = validateCertificate(t, cert)) throw err
 
 			;[country, personalId] = getCertificatePersonalId(cert)
-			if (err = yield validateVoter(budget, country, personalId)) throw err
+			if (err = yield validateVoter(t, budget, country, personalId)) throw err
 
 			xades = newXades(cert, signable)
 
-			// The Smart-Id API returns any signing errors only when its status is
+			// The Smart-ID API returns any signing errors only when its status is
 			// queried, not when signing is initiated.
-			logger.info("Signing via Smart-Id for %s.", personalId)
+			logger.info("Signing via Smart-ID for %s.", personalId)
 			var session = yield smartId.sign(cert, xades.signableHash)
 
 			verificationCode = SmartId.verification(xades.signableHash)
@@ -335,7 +336,9 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 		res.setHeader("Content-Type", "application/json")
 		res.write("\n")
 	}
-}), function(err, _req, res, next) {
+}), function(err, req, res, next) {
+	var {t} = req
+
 	if (err instanceof HttpError) {
 		res.statusCode = err.code
 		res.statusMessage = err.message
@@ -356,10 +359,10 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			res.json({
 				code: res.statusCode,
 				message: res.statusMessage,
-				description: MOBILE_ID_ERRORS[code][2]
+				description: t(MOBILE_ID_ERRORS[code][2])
 			})
 		}
-		else throw new HttpError(500, "Unknown Mobile-Id Error", {error: err})
+		else throw new HttpError(500, "Unknown Mobile-ID Error", {error: err})
 	}
 	else if (err instanceof SmartIdError) {
 		if (err.code in SMART_ID_ERRORS) {
@@ -369,15 +372,15 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			res.json({
 				code: res.statusCode,
 				message: res.statusMessage,
-				description: SMART_ID_ERRORS[err.code][2]
+				description: t(SMART_ID_ERRORS[err.code][2])
 			})
 		}
-		else throw new HttpError(500, "Unknown Smart-Id Error", {error: err})
+		else throw new HttpError(500, "Unknown Smart-ID Error", {error: err})
 	}
 	else next(err)
 })
 
-function* validateVoter(budget, country, personalId) {
+function* validateVoter(t, budget, country, personalId) {
 	var voter = yield votersDb.read(sql`
 		SELECT * FROM voters
 		WHERE budget_id = ${budget.id}
@@ -386,23 +389,24 @@ function* validateVoter(budget, country, personalId) {
 	`)
 
 	if (voter == null) return new HttpError(422, "Not a Permitted Voter", {
-		description: "Sa ei ole lubatud hääletajate seas. Uuri lisainfot oma õpetajalt."
+		description: t("budget_page.voting.errors.not_permitted")
 	})
 
 	return null
 }
 
 function assertVoting(req, _res, next) {
+	var {t} = req
 	var {budget} = req
 
 	if (!(budget.voting_starts_at && new Date >= budget.voting_starts_at))
 		throw new HttpError(403, "Voting Not Yet Started", {
-			description: "Hääletamine pole veel alanud."
+			description: t("budget_page.voting.errors.not_started")
 		})
 
 	if (!(budget.voting_ends_at == null || new Date < budget.voting_ends_at))
 		throw new HttpError(403, "Voting Ended", {
-			description: "Hääletamine läbi."
+			description: t("budget_page.voting.errors.ended")
 		})
 
 	next()

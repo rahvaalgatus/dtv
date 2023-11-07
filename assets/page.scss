@@ -116,6 +116,7 @@ main section {
 .section-paragraph {
 	line-height: 1.5;
 	text-align: justify;
+	white-space: pre-line;
 
 	a { @extend .link-button; }
 	strong { font-weight: bold; }
@@ -281,6 +282,7 @@ ul.section-list {
 
 	p {
 		margin-bottom: 0.5rem;
+		white-space: pre-line;
 
 		code {
 			background: #efefef;
@@ -430,41 +432,66 @@ textarea.budget-input {
 		&:focus { outline: 1px dashed currentcolor; }
 	}
 
-	.account a,
-	.account button {
-		border-radius: 0.3rem;
-		border: 1px dashed transparent;
-		font-size: 1.5rem;
-		display: inline-block;
-		padding: 0 1rem;
-		outline-offset: 0.2rem;
-		background: transparent;
-		height: 3rem;
-
-		&:focus {
-			outline: none;
-			border-color: currentcolor;
-		}
-
-		&:hover {
-			border-style: solid;
-			border-color: currentcolor;
-		}
-
-		&.selected:focus {
-			border: 1px dashed $blue;
-		}
-
-		& + li {
-			margin-left: 1rem;
-		}
-	}
-
-	.account {
+	.account-menu {
 		float: right;
 
-		.account-name { font-weight: bold; }
 		form { display: inline-block; }
+
+		.account-name,
+		.signin-button,
+		.signout-button {
+			border-radius: 0.3rem;
+			border: 1px dashed transparent;
+			font-size: 1.5rem;
+			display: inline-block;
+			padding: 0 1rem;
+			outline-offset: 0.2rem;
+			background: transparent;
+			height: 3rem;
+			margin-left: 0.2rem;
+
+			&:focus {
+				outline: none;
+				border-color: currentcolor;
+			}
+
+			&:hover {
+				border-style: solid;
+				border-color: currentcolor;
+			}
+
+			&.selected:focus {
+				border: 1px dashed $blue;
+			}
+		}
+
+		.account-name { font-weight: bold; }
+	}
+
+	#language-form {
+		display: inline-block;
+		margin-left: 1rem;
+
+		img {
+			display: block;
+			border-radius: 0.2rem;
+		}
+
+		button {
+			transition: opacity 0.3s;
+			vertical-align: middle;
+			outline-offset: 0.2rem;
+
+			&:not(:disabled) { opacity: 0.5; }
+			&:hover { opacity: 1; }
+
+			&:focus {
+				opacity: 1;
+				outline: 1px dashed currentcolor;
+			}
+
+			& + button { margin-left: 1rem; }
+		}
 	}
 }
 
@@ -483,6 +510,13 @@ textarea.budget-input {
 		font-family: $headline-font;
 		font-weight: 900;
 		line-height: 1.2;
+	}
+
+	.context,
+	h1 a {
+		outline-offset: 0.2rem;
+
+		&:focus { outline: 1px dashed currentcolor; }
 	}
 
 	menu {
@@ -645,6 +679,7 @@ textarea.budget-input {
 			.yellow-button {
 				font-weight: 900;
 				width: 100%;
+				white-space: pre-line;
 			}
 
 			@media only screen and (max-width: 759px) {
@@ -700,6 +735,7 @@ textarea.budget-input {
 					min-width: 28rem;
 
 					text-align: left;
+					white-space: pre-line;
 					padding: 3.5rem 4rem 3rem 3rem;
 					background-image: url("/assets/yellow-button-arrow.svg");
 					background-repeat: no-repeat;
@@ -1170,12 +1206,20 @@ textarea.budget-input {
 
 	#voters {
 		.voted-column { text-align: center; }
-		tfoot .voted-column { text-align: left; }
+
+		tfoot .voted-column {
+			text-align: left;
+			white-space: pre-line;
+		}
 	}
 }
 
 #paper-votes-page main {
 	#paper-votes {
+		th {
+			white-space: nowrap;
+		}
+
 		.edit-button {
 			@extend .link-button;
 			display: inline-block;
@@ -1261,6 +1305,10 @@ textarea.budget-input {
 }
 
 #account-page main {
+	#header p {
+		margin-top: 1rem;
+	}
+
 	#account-form {
 		label[for=name] {
 			input {

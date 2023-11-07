@@ -12,21 +12,17 @@ var {Form} = Page
 exports = module.exports = CreatePage
 exports.BudgetForm = BudgetForm
 
-function CreatePage(attrs) {
-	var {req} = attrs
-	var {school} = attrs
-	var {budget} = attrs
-	var {voters} = attrs
-
+function CreatePage({req, t, school, budget, voters}) {
 	return <SchoolPage
+		title={t("create_budget_page.title")}
 		page="create-budget"
 		class="update-budget-page"
-		req={attrs.req}
+		req={req}
 		school={school}
 	>
 		<SchoolHeader school={school}>
 			<a href={Paths.schoolPath(school)} class="context">{school.name}</a>
-			<h1>Uus eelarve hääletus</h1>
+			<h1>{t("create_budget_page.title")}</h1>
 		</SchoolHeader>
 
 		<Section>
@@ -40,11 +36,8 @@ function CreatePage(attrs) {
 	</SchoolPage>
 }
 
-function BudgetForm(attrs) {
-	var {req} = attrs
-	var {school} = attrs
-	var {budget} = attrs
-	var {voters} = attrs
+function BudgetForm({req, school, budget, voters}) {
+	var {t} = req
 	var votedCounts = _.countBy(voters, "has_voted")
 
 	var path = budget.id
@@ -59,7 +52,7 @@ function BudgetForm(attrs) {
 		class="budget-form"
 	>
 		<label for="title" class="budget-field">
-			<span class="label">Eelarve hääletuse pealkiri</span>
+			<span class="label">{t("create_budget_page.form.title_label")}</span>
 
 			<input
 				type="text"
@@ -71,12 +64,11 @@ function BudgetForm(attrs) {
 		</label>
 
 		<label for="description" class="budget-field">
-			<span class="label">Sissejuhatav tekst</span>
+			<span class="label">
+				{t("create_budget_page.form.description_label")}
+			</span>
 
-			<p>
-				Sissejuhatavat teksti kuvatakse sõltumata, kas hääletus on alanud
-				või lõppenud.
-			</p>
+			<p>{t("create_budget_page.form.description_description")}</p>
 
 			<textarea name="description" class="budget-input">
 				{budget.description}
@@ -84,12 +76,8 @@ function BudgetForm(attrs) {
 		</label>
 
 		<label for="voting_starts_on" class="budget-field">
-			<span class="label">Hääletamise algus</span>
-
-			<p>
-				Ideid saab lisada ja muuta kuni hääletamise alguseni.<br />
-				Vali kuupäev kalendrist või selle puudumisel sisesta see formaadis <code>2021-01-31</code>.
-			</p>
+			<span class="label">{t("create_budget_page.form.start_label")}</span>
+			<p>{Jsx.html(t("create_budget_page.form.start_description"))}</p>
 
 			<input
 				name="voting_starts_on"
@@ -104,12 +92,8 @@ function BudgetForm(attrs) {
 		</label>
 
 		<label for="voting_ends_on" class="budget-field">
-			<span class="label">Hääletamise lõpp</span>
-
-			<p>
-				Hääletada saab südaööni ehk kl 23:59ni.<br />
-				Vali kuupäev kalendrist või selle puudumisel sisesta see formaadis <code>2021-01-31</code>.
-			</p>
+			<span class="label">{t("create_budget_page.form.end_label")}</span>
+			<p>{Jsx.html(t("create_budget_page.form.end_description"))}</p>
 
 			<input
 				name="voting_ends_on"
@@ -125,20 +109,13 @@ function BudgetForm(attrs) {
 
 		{/* The id on <label> is for linking from the paper-votes page. */}
 		<label id="voters" for="voters" class="budget-field">
-			<span class="label">Ideede esitajad ja hääletajad</span>
-
-			<p>
-				Kõik hääletajad saavad pakkuda välja ka uusi ideid. Kõik ülejäänud
-				küll näevad ideid ja hääletust, kuid osaleda ei saa.
-				Õpetajad saavad alati ideid lisada ja hääletada.
-				<br />
-				Eralda isikukoodid reavahedega.
-			</p>
+			<span class="label">{t("create_budget_page.form.voters_title")}</span>
+			<p>{t("create_budget_page.form.voters_description")}</p>
 
 			<textarea
 				name="voters"
 				class="budget-input"
-				placeholder="Ideede esitajate ja hääletajate isikukoodid"
+				placeholder={t("create_budget_page.form.voters_placeholder")}
 			>
 				{voters.map((voter) => voter.personal_id).join("\n")}
 			</textarea>
@@ -149,9 +126,12 @@ function BudgetForm(attrs) {
 			>
 				<thead>
 					<tr>
-						<th>Isikukood</th>
-						<th>Nimi</th>
-						<th class="voted-column">Hääletanud</th>
+						<th>{t("create_budget_page.voters.personal_id_column")}</th>
+						<th>{t("create_budget_page.voters.name_column")}</th>
+
+						<th class="voted-column">
+							{t("create_budget_page.voters.voted_column")}
+						</th>
 					</tr>
 				</thead>
 
@@ -167,17 +147,18 @@ function BudgetForm(attrs) {
 					<tr>
 						<td colspan="2" />
 
-						<td class="voted-column">
-							Hääletanud on {votedCounts.true || 0}.<br />
-							Hääletamata veel {votedCounts.false || 0}.
-						</td>
+						<td class="voted-column">{t("create_budget_page.voters.total", {
+							votedCount: votedCounts.true || 0,
+							unvotedCount: votedCounts.false || 0
+						})}</td>
 					</tr>
 				</tfoot>
 			</table> : null}
 		</label>
 
-		<SchoolButton school={school} type="submit">
-			{budget.id ? "Muuda hääletust" : "Lisa uus eelarve hääletus"}
-		</SchoolButton>
+		<SchoolButton school={school} type="submit">{budget.id
+			? t("create_budget_page.form.update_button")
+			: t("create_budget_page.form.create_button")
+		}</SchoolButton>
 	</Form>
 }

@@ -8,16 +8,14 @@ var {SchoolForm} = require("./create_page")
 var {Section} = Page
 var {Heading} = Page
 
-module.exports = function(attrs) {
-	var {req} = attrs
-	var {school} = attrs
-	var {teachers} = attrs
+module.exports = function({req, school, teachers}) {
+	var {t} = req
 	var schoolPath = Paths.schoolPath(school)
 
 	return <SchoolPage
 		page="update-school"
 		class="update-school-page"
-		req={attrs.req}
+		req={req}
 		school={school}
 	>
 		<SchoolHeader school={school}>
@@ -29,19 +27,17 @@ module.exports = function(attrs) {
 		</Section>
 
 		<Section>
-			<Heading>Õpetajad</Heading>
+			<Heading>{t("update_school_page.teachers.title")}</Heading>
 
 			<p class="section-paragraph">
-				Õpetajatel on õigus muuta kooli nime ja loetelu õpilastest, kes on
-				lubatud esitama ideid või nende poolt hääletada. Õpetajad saavad ka
-				alati lisada ideid. Õpetajate lisamiseks palun võta meiega ühendust.
+				{t("update_school_page.teachers.description")}
 			</p>
 
 			<table id="teachers" class="budget-table">
 				<thead>
 					<tr>
-						<th>Isikukood</th>
-						<th>Nimi</th>
+						<th>{t("update_school_page.teachers.personal_id_column")}</th>
+						<th>{t("update_school_page.teachers.name_column")}</th>
 					</tr>
 				</thead>
 

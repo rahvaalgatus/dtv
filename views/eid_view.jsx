@@ -4,22 +4,23 @@ var {javascript} = require("root/lib/jsx")
 var SIGNABLE_TYPE = "application/vnd.rahvaalgatus.signable"
 module.exports = EidView
 
-var HWCRYPTO_ERRORS = {
-	NO_CERTIFICATES: "Lugeja ei leia Id-kaarti või Id-kaart aegunud.",
-	NO_IMPLEMENTATION: "Id-kaardi tarkvara või pistikprogramm puudu.",
-	NOT_ALLOWED: "Id-kaardi kasutamine pole turvalise ühenduse puudumise tõttu võimalik.",
-	TECHNICAL_ERROR: "Tehniline viga.",
-	USER_CANCEL: "Katkestasid."
-}
-
 function EidView(attrs) {
 	var {req} = attrs
+	var {t} = req
 	var {formId} = attrs
 	var {action} = attrs // "auth" or "sign"
 	var {idCardAuthenticationUrl} = attrs
 	var {pending} = attrs
 	var {submit} = attrs
 	var {personalId} = attrs
+
+	var HWCRYPTO_ERRORS = {
+		NO_CERTIFICATES: t("eid_view.id_card_errors.no_certificates"),
+		NO_IMPLEMENTATION: t("eid_view.id_card_errors.no_implementation"),
+		NOT_ALLOWED: t("eid_view.id_card_errors.not_allowed"),
+		TECHNICAL_ERROR: t("eid_view.id_card_errors.technical_error"),
+		USER_CANCEL: t("eid_view.id_card_errors.user_cancel")
+	}
 
 	return <div class="eid-view">
 		<input
@@ -53,8 +54,8 @@ function EidView(attrs) {
 			>
 				<img
 					src="/assets/id-card-title.svg"
-					title="Id-kaart"
-					alt="Id-kaart"
+					title={t("eid_view.tabs.id_card")}
+					alt={t("eid_view.tabs.id_card")}
 				/>
 			</label> : null}
 
@@ -64,8 +65,8 @@ function EidView(attrs) {
 			>
 				<img
 					src="/assets/mobile-id-title.svg"
-					title="Mobiil-Id"
-					alt="Mobiil-Id"
+					title={t("eid_view.tabs.mobile_id")}
+					alt={t("eid_view.tabs.mobile_id")}
 				/>
 			</label>
 
@@ -75,8 +76,8 @@ function EidView(attrs) {
 			>
 				<img
 					src="/assets/smart-id-title.svg"
-					title="Smart-Id"
-					alt="Smart-Id"
+					title={t("eid_view.tabs.smart_id")}
+					alt={t("eid_view.tabs.smart_id")}
 				/>
 			</label>
 		</div>
@@ -95,7 +96,7 @@ function EidView(attrs) {
 
 		<fieldset id="mobile-id-tab">
 			<label>
-				<span>Telefoninumber</span>
+				<span>{t("eid_view.mobile_id.phone_number")}</span>
 
 				<input
 					type="tel"
@@ -105,7 +106,7 @@ function EidView(attrs) {
 			</label>
 
 			<label>
-				<span class="label">Isikukood</span>
+				<span>{t("eid_view.mobile_id.personal_id")}</span>
 
 				<input
 					type="text"
@@ -117,21 +118,16 @@ function EidView(attrs) {
 				/>
 			</label>
 
-			<button class="blue-button">
-				{submit}
-			</button>
+			<button class="blue-button">{submit}</button>
 
 			<output>
-				<noscript>
-					Mobiil-ID kaudu sisselogimine vajab kahjuks JavaScripti.
-					Palun lülita see brauseris ajutiselt sisse.
-				</noscript>
+				<noscript>{t("eid_view.mobile_id.no_javascript")}</noscript>
 			</output>
 		</fieldset>
 
 		<fieldset id="smart-id-tab">
 			<label>
-				<span class="label">Isikukood</span>
+				<span>{t("eid_view.smart_id.personal_id")}</span>
 
 				<input
 					type="text"
@@ -148,10 +144,7 @@ function EidView(attrs) {
 			</button>
 
 			<output>
-				<noscript>
-					Mobiil-ID kaudu sisselogimine vajab kahjuks JavaScripti.
-					Palun lülita see brauseris ajutiselt sisse.
-				</noscript>
+				<noscript>{t("eid_view.smart_id.no_javascript")}</noscript>
 			</output>
 		</fieldset>
 
@@ -309,7 +302,7 @@ function EidView(attrs) {
           body: JSON.stringify(serializeForm(form))
         }).then(assertOk).then(function(res) {
           var code = res.headers.get("X-Verification-Code")
-          notice("Kinnituskood: " + code)
+          notice(${t("eid_view.verification_code")} + ": " + code)
 
           return res.json().then(function(obj) {
 						notice(obj.description || obj.message)
