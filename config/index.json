@@ -1,10 +1,11 @@
 {
 	"cookieSecret": null,
-	"cookieDomain": "demokraatia.rahvaalgatus.ee",
-	"sessionCookieName": "demokraatia_session_token",
 	"csrfCookieName": "demokraatia_csrf_token",
+	"csrfCookieDomain": "demokraatia.rahvaalgatus.ee",
 	"languageCookieName": "language",
 	"languageCookieDomain": null,
+	"sessionCookieName": "demokraatia_session_token",
+	"sessionCookieDomain": "demokraatia.rahvaalgatus.ee",
 	"adminPersonalIds": [],
 
 	"idCardAuthenticationUrl": null,

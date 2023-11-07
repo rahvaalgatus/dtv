@@ -322,7 +322,7 @@ exports.router.delete("/:id", next(function*(req, res) {
 	if (req.session.id == session.id) res.clearCookie(Config.sessionCookieName, {
 		httpOnly: true,
 		secure: req.secure,
-		domain: Config.cookieDomain
+		domain: Config.sessionCookieDomain
 	})
 
 	var to = req.headers.referer
@@ -447,7 +447,7 @@ function signIn(token, req, res) {
 	res.cookie(Config.sessionCookieName, token.toString("hex"), {
 		httpOnly: true,
 		secure: req.secure,
-		domain: Config.cookieDomain,
+		domain: Config.sessionCookieDomain,
 		maxAge: 365 * 86400 * 1000
 	})
 }
