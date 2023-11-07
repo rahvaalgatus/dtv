@@ -217,8 +217,9 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 
 				xades.setSignature(req.body)
 
-				console.info("Requesting timemark for %s.", vote.voter_personal_id)
-				xades.setOcspResponse(yield hades.timemark(xades))
+				console.info("Requesting timestamp for %s.", vote.voter_personal_id)
+				xades.setTimestamp(yield hades.timestamp(xades))
+				xades.setOcspResponse(yield hades.ocsp(xades.certificate))
 
 				yield replaceVote(vote)
 				var budgetPath = Paths.budgetPath(school, budget) + "?voted=true#thanks"
@@ -325,7 +326,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			path: "vote.txt",
 			type: "text/plain",
 			hash: _.sha256(signable)
-		}], {policy: "bdoc"})
+		}])
 	}
 
 	function respondWithVerificationCode(verificationCode, res) {
@@ -434,8 +435,9 @@ function* waitForMobileIdSignature(school, budget, vote, sessionId, res) {
 
 		xades.setSignature(signatureHash)
 
-		console.info("Requesting timemark for %s.", vote.voter_personal_id)
-		xades.setOcspResponse(yield hades.timemark(xades))
+		console.info("Requesting timestamp for %s.", vote.voter_personal_id)
+		xades.setTimestamp(yield hades.timestamp(xades))
+		xades.setOcspResponse(yield hades.ocsp(xades.certificate))
 
 		yield replaceVote(vote)
 
@@ -465,8 +467,9 @@ function* waitForSmartIdSignature(school, budget, vote, session, res) {
 
 		xades.setSignature(signatureHash)
 
-		console.info("Requesting timemark for %s.", vote.voter_personal_id)
-		xades.setOcspResponse(yield hades.timemark(xades))
+		console.info("Requesting timestamp for %s.", vote.voter_personal_id)
+		xades.setTimestamp(yield hades.timestamp(xades))
+		xades.setOcspResponse(yield hades.ocsp(xades.certificate))
 
 		yield replaceVote(vote)
 

@@ -12,7 +12,7 @@
 	"mobileIdPassword": null,
 	"smartIdUser": null,
 	"smartIdPassword": null,
-	"timemarkUrl": null,
+	"timestampUrl": null,
 
 	"issuers": [[
 		"C=EE",

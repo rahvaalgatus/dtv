@@ -2,7 +2,7 @@
 	"cookieSecret": "py8mG85TczmKTQYtoCPa8nkjnkuKHEjB",
 	"cookieDomain": "demokraatia.rahvaalgatus.test",
 	"idCardAuthenticationUrl": "",
-	"timemarkUrl": "http://demo.sk.ee/ocsp",
+	"timestampUrl": "http://demo.sk.ee/tsa",
 	"adminPersonalIds": ["EE30303039914"],
 
 	"issuers": [[
