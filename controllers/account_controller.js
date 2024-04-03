@@ -21,7 +21,7 @@ function parse(obj) {
 
 function assertAccount(req, _res, next) {
 	if (req.account == null) throw new HttpError(401, {
-		description: "Palun logi lehe nägemiseks sisse."
+		description: req.t("401_error_page.description")
 	})
 
 	next()
