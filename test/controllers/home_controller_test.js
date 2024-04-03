@@ -66,10 +66,24 @@ describe("HomeController", function() {
 			res.statusMessage.must.equal("Language Updated")
 			res.headers.location.must.equal("/")
 
-			var languageCookie = parseCookies(res.headers["set-cookie"]).language
+			var cookies = parseCookies(res.headers["set-cookie"])
+			var languageCookie = cookies[Config.languageCookieName]
 			languageCookie.value.must.equal("en")
+			languageCookie.must.have.property("domain", null)
 			languageCookie.maxAge.must.equal(365 * 86400)
 			languageCookie.httpOnly.must.be.true()
+		})
+
+		it("must ignore invalid language", function*() {
+			var res = yield this.request("/language", {
+				method: "PUT",
+				form: {language: "69"}
+			})
+
+			res.statusCode.must.equal(303)
+			res.statusMessage.must.equal("Unknown Language")
+			res.headers.location.must.equal("/")
+			res.headers.must.not.have.property("set-cookie")
 		})
 
 		it("must set the language cookie on separate domain", function*() {
@@ -84,7 +98,8 @@ describe("HomeController", function() {
 			res.statusMessage.must.equal("Language Updated")
 			res.headers.location.must.equal("/")
 
-			var languageCookie = parseCookies(res.headers["set-cookie"]).language
+			var cookies = parseCookies(res.headers["set-cookie"])
+			var languageCookie = cookies[Config.languageCookieName]
 			languageCookie.value.must.equal("en")
 			languageCookie.domain.must.equal("rahvaalgatus.test")
 			languageCookie.maxAge.must.equal(365 * 86400)
@@ -104,7 +119,8 @@ describe("HomeController", function() {
 			res.statusMessage.must.equal("Language Updated")
 			res.headers.location.must.equal("/")
 
-			var languageCookies = parseCookies(res.headers["set-cookie"]).language
+			var cookies = parseCookies(res.headers["set-cookie"])
+			var languageCookies = cookies[Config.languageCookieName]
 			languageCookies.must.be.an.array()
 			languageCookies.must.have.length(2)
 
