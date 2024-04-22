@@ -148,7 +148,7 @@
 		"et": "Aitäh hääletamast!"
 	},
 	"budgeting_help_page.animation.description": {
-		"en": "How to promote participatory budgeting in schools to students? A short and engaging video will help here, explaining what inclusive budgeting is, why it is needed and why you should participate in it. In addition to being shown in class, the video can also be used, for example, on the school's intranet, social media or on school screens.",
+		"en": "How to promote participatory budgeting in schools to students? A short and engaging video will help here, explaining what participatory budgeting is, why it is needed and why you should participate in it. In addition to being shown in class, the video can also be used, for example, on the school's intranet, social media or on school screens.",
 		"et": "Kuidas koolide kaasavat eelarvestamist õpilastele reklaamida? Siin tuleb abiks lühike ja kaasahaarav video, kus selgitatakse, mis on kaasav eelarvestamine, miks seda vaja on ning miks selles osalema peaks. Videot võib kasutada lisaks tunnis näitamisele ka näiteks kooli siseveebis, sotsiaalmeedias või kooli ekraanidel."
 	},
 	"budgeting_help_page.animation.title": {
@@ -188,7 +188,7 @@
 		"et": "Õppe­vahendid"
 	},
 	"budgeting_help_page.info.description": {
-		"en": "Are you thinking of implementing inclusive budgeting in your school? Our information session organised in the spring of 2022 will help you better orient yourself in this exciting topic:",
+		"en": "Are you thinking of implementing participatory budgeting in your school? Our information session organised in the spring of 2022 will help you better orient yourself in this exciting topic:",
 		"et": "Oled mõtlemas oma koolis kaasavat eelarvestamist läbi viia? Meie 2022. aasta kevadel korraldatud infotund aitab sul selles põnevas teemas paremini orienteeruda:"
 	},
 	"budgeting_help_page.info.title": {
@@ -220,7 +220,7 @@
 		"et": "Võimalusel jagab kohaliku omavalitsuse esindaja kaasava eelarvestamise kogemust teie kohalikus omavalitsuses."
 	},
 	"budgeting_help_page.workshop.list.3": {
-		"en": "Transparency International Estonia’s video lecture on democracy, corruption, civic engagement and inclusive budgeting. Where does it come from, why, what and where has it been done in the world and in Estonia.",
+		"en": "Transparency International Estonia’s video lecture on democracy, corruption, civic engagement and participatory budgeting. Where does it come from, why, what and where has it been done in the world and in Estonia.",
 		"et": "Korruptsioonivaba Eesti videoloeng demokraatiast, korruptsioonist, kodanikuaktiivsusest ning kaasavast eelarvestamisest. Kust see pärineb, miks, mida ja kus selle abil maailmas ning Eestis ära tehtud on."
 	},
 	"budgeting_help_page.workshop.list.4": {
@@ -252,8 +252,8 @@
 		"et": "avatud (kooli)valitsemisest;\nkogukonnana otsustamisest ja enda elu puudutavates otsustes osalemisest;\nvajalike digipädevuste arendamisest."
 	},
 	"budgeting_page.body.outro": {
-		"en": "An impact study conducted in the first three schools revealed a 15% increase in the number of students actively participating in school life. Moreover, there was a 19% increase in the number of students who believe that the school consistently or frequently includes students in making important decisions.\n\nThe programme also led to a 70% increase in the number of students who understand school budgeting to a sufficient or high degree. Furthermore, students came to appreciate the opportunity to influence the school budget as a prerequisite for a more democratic school environment.\n\nThe participatory budgeting in schools is organised by the  <a href=\"https://kogu.ee\">Estonian Cooperation Assembly</a> and <a href=\"https://transparency.ee\">Transparency International Estonia</a>. The <a href=\"https://www.norden.ee\">Nordic Council of Ministers</a> (2020/21), <a href=\"https://integratsioon.ee\">Integration Foundation</a> (Fall 2021), <a href=\"https://acf.ee\">Active Citizens Fund</a> (Fall 2021-June 2023) and <a href=\"https://eeagentuur.ee\">Erasmus+ and the European Solidarity Corps Agency</a> from the Erasmus+ program (June 2023-June 2024) have contributed as project financiers.",
-		"et": "Eesmärk on, et õpilased lihtsalt ei õpiks koolis teoreetiliselt, mis on demokraatia, vaid saaksid ka päriselulise kaasa rääkimise ja koos otsustamise kogemuse. See loob eeldused tugevama kogukonna ja kodanikuühiskonna arenguks.\n\nKoolide kaasavat eelarvestamist veavad eest <a href=\"https://kogu.ee\">Eesti Koostöö Kogu</a> ja <a href=\"https://transparency.ee\">Korruptsioonivaba Eesti</a>. Oma õla projektirahastajatena on alla pannud <a href=\"https://www.norden.ee\">Põhjamaade Ministrite Nõukogu</a> (2020/21), <a href=\"https://integratsioon.ee\">Integratsiooni SA</a> (2021 sügis), <a href=\"https://acf.ee\">Aktiivsete Kodanike Fond</a> (2021 sügis-2023 juuni) ning <a href=\"https://eeagentuur.ee\">Erasmus+ ja Euroopa Solidaarsuskorpuse agentuur</a> Erasmus+ programmist (2023 juuni-2024 juuni)."
+		"en": "An impact study conducted in the first three schools revealed a 15% increase in the number of students actively participating in school life. Moreover, there was a 19% increase in the number of students who believe that the school consistently or frequently includes students in making important decisions.\n\nThe programme also led to a 70% increase in the number of students who understand school budgeting to a sufficient or high degree. Furthermore, students came to appreciate the opportunity to influence the school budget as a prerequisite for a more democratic school environment.\n\nThe participatory budgeting in schools is organised by the  <a href=\"https://kogu.ee\">Estonian Cooperation Assembly</a> and <a href=\"https://transparency.ee\">Transparency International Estonia</a>. The <a href=\"https://www.norden.ee\">Nordic Council of Ministers</a> (2020/21), <a href=\"https://integratsioon.ee\">Integration Foundation</a> (Fall 2021), <a href=\"https://acf.ee\">Active Citizens Fund</a> (Fall 2021-June 2023) and <a href=\"https://eeagentuur.ee\">Erasmus+ and the European Solidarity Corps Agency</a> from the Erasmus+ program (June 2023-June 2024) have contributed as project financiers. Funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the European Education and Culture Executive Agency (EACEA). Neither the European Union nor EACEA can be held responsible for them.\n\n\nRead more about participatory budgeting from the youth field magazine Mihus: <a href=\"https://mihus.mitteformaalne.ee/koolide-kaasav-eelarve-annab-avapaugu-kodanikuks-sirgumisel/\">Participatory budgeting kickstarts citizen development</a>. ",
+		"et": "Eesmärk on, et õpilased lihtsalt ei õpiks koolis teoreetiliselt, mis on demokraatia, vaid saaksid ka päriselulise kaasa rääkimise ja koos otsustamise kogemuse. See loob eeldused tugevama kogukonna ja kodanikuühiskonna arenguks.\n\nKoolide kaasavat eelarvestamist veavad eest <a href=\"https://kogu.ee\">Eesti Koostöö Kogu</a> ja <a href=\"https://transparency.ee\">Korruptsioonivaba Eesti</a>. Oma õla projektirahastajatena on alla pannud <a href=\"https://www.norden.ee\">Põhjamaade Ministrite Nõukogu</a> (2020/21), <a href=\"https://integratsioon.ee\">Integratsiooni SA</a> (2021 sügis), <a href=\"https://acf.ee\">Aktiivsete Kodanike Fond</a> (2021 sügis-2023 juuni) ning <a href=\"https://eeagentuur.ee\">Erasmus+ ja Euroopa Solidaarsuskorpuse agentuur</a> Erasmus+ programmist (2023 juuni-2024 juuni). Rahastatud Euroopa Liidu poolt. Avaldatud seisukohad ja arvamused on ainult autori(te) omad ega pruugi kajastada Euroopa Liidu või Euroopa Hariduse ja Kultuuri Rakendusameti (EACEA) seisukohti ja arvamusi. Euroopa Liit ega EACEA nende eest ei vastuta.\n\nLoe kaasavast eelarvest pikemalt noortevaldkonna ajakirjast Mihus: <a href=\"https://mihus.mitteformaalne.ee/koolide-kaasav-eelarve-annab-avapaugu-kodanikuks-sirgumisel/\">Koolide kaasav eelarve annab avapaugu kodanikuks sirgumisel</a>. "
 	},
 	"budgeting_page.header.description": {
 		"en": "The <a class=\"link-button\" href=\"https://kogu.ee\">Estonian Cooperation Assembly</a> has been organising the Participatory School Budget programme since 2020 in collaboration with  <a class=\"link-button\" href=\"https://www.transparency.ee\">Transparency International Estonia</a>. This is the first large-scale initiative in Estonia, where students can develop, present and (digitally) vote for their ideas, which will be implemented by the school.",
@@ -540,7 +540,7 @@
 		"et": "Mobiil-ID-lt tulnud sisselogimise kinnitus ei vastanud turvanõuetele. Palun proovi uuesti."
 	},
 	"eid_view.mobile_id_errors.auth_invalid_signature": {
-		"en": "Sign-in failed because the digital signature does not match the certificate.",
+		"en": "Signing in failed because the digital signature does not match the certificate.",
 		"et": "Sisselogimine ebaõnnestus, sest digiallkirja ei vasta sertifikaadile."
 	},
 	"eid_view.mobile_id_errors.auth_phone_absent": {
@@ -584,8 +584,8 @@
 		"et": "Allkirjastamine võttis liiga kaua aega. Palun proovi uuesti."
 	},
 	"eid_view.mobile_id_errors.sim_error": {
-		"en": "Error in phone SIM application. Please try again. If the problem persists, contact your service provider.",
-		"et": "SIM-kaardi rakenduse viga. Proovi palun uuesti. Probleemi püsimisel võta palun ühendust oma teenusepakkujaga."
+		"en": "Error in the phone SIM application. Please try again. If the problem persists, contact your telecom provider.",
+		"et": "SIM-kaardi rakenduse viga. Proovi palun uuesti. Probleemi püsimisel võta palun ühendust oma telekomiga."
 	},
 	"eid_view.smart_id.no_javascript": {
 		"en": "Unfortunately using Smart ID requires JavaScript.\nPlease enable it temporarily.",
@@ -612,7 +612,7 @@
 		"et": "Smart-ID konto on küll olemas, aga ei paista sobilik autentimiseks."
 	},
 	"eid_view.smart_id_errors.auth_timeout": {
-		"en": "It took too long to log in. Please try again.",
+		"en": "Signing in took too long. Please try again.",
 		"et": "Sisselogimine võttis liiga kaua. Palun proovi uuesti."
 	},
 	"eid_view.smart_id_errors.document_unusable": {
