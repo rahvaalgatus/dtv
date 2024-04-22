@@ -83,6 +83,12 @@ function IndexPage({req, t, schools}) {
 						alt="Erasmus+ ja Euroopa Solidaarsuskorpuse agentuur"
 					/>
 				</a>
+				{" "}
+				<img
+					src="/assets/cofunded_by_eu.svg"
+					title="Kaasrahastanud Euroopa Liit"
+					alt="Kaasrahastanud Euroopa Liit"
+				/>
 			</div>
 		</Section>
 
