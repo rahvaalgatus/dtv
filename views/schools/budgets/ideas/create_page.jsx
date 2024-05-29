@@ -90,6 +90,12 @@ function IdeaForm({req, t, school, idea, action, method, submit}) {
 
 		<label for="author_names" class="budget-field">
 			<span class="label">{t("create_idea_page.form.author_names_label")}</span>
+
+			<p>
+				{idea.image_type ? <img src={ideaPath + "/image"} /> : null}
+				{t("create_idea_page.form.author_names_description")}
+			</p>
+
 			<input
 				name="author_names"
 				class="budget-input"

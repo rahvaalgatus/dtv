@@ -14,6 +14,7 @@ module.exports = function({req, school, budget, idea}) {
 
 	return <IdeaPage
 		req={req}
+		account={account}
 		school={school}
 		budget={budget}
 		idea={idea}
@@ -35,7 +36,7 @@ module.exports = function({req, school, budget, idea}) {
 	</IdeaPage>
 }
 
-function IdeaPage({req, school, budget, idea, editable}, children) {
+function IdeaPage({req, account, school, budget, idea, editable}, children) {
 	var {t} = req
 	var ideaPath = Paths.ideaPath(school, idea)
 
@@ -58,7 +59,10 @@ function IdeaPage({req, school, budget, idea, editable}, children) {
 			</a>
 
 			<h1>{idea.title}</h1>
-			<span class="subtitle author-names">{idea.author_names}</span>
+
+			{account ? <span class="subtitle author-names">
+				{idea.author_names}
+			</span> : null}
 
 			{editable ? <menu>
 				<a href={`${ideaPath}/edit`} style={headerButtonStyle}>

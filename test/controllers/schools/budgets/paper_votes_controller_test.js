@@ -4,11 +4,11 @@ var ValidIdea = require("root/test/valid_idea")
 var ValidBudget = require("root/test/valid_budget")
 var schoolsDb = require("root/db/schools_db")
 var budgetsDb = require("root/db/budgets_db")
-var teachersDb = require("root/db/teachers_db")
 var votersDb = require("root/db/voters_db")
 var paperVotesDb = require("root/db/paper_votes_db")
 var ideasDb = require("root/db/ideas_db")
 var parseDom = require("root/lib/dom").parse
+var {createTeacher} = require("root/test/fixtures")
 var outdent = require("root/lib/outdent")
 var sql = require("sqlate")
 
@@ -154,11 +154,3 @@ describe("PaperVotesController", function() {
 		})
 	})
 })
-
-function createTeacher(school, account) {
-	return teachersDb.create({
-		school_id: school.id,
-		country: account.country,
-		personal_id: account.personal_id
-	})
-}

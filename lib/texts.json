@@ -355,6 +355,10 @@
 		"en": "Voted",
 		"et": "Hääletanud"
 	},
+	"create_idea_page.form.author_names_description": {
+		"en": "Names are visible only to signed-in people.",
+		"et": "Nimed on nähtavad vaid sisseloginud inimestele."
+	},
 	"create_idea_page.form.author_names_label": {
 		"en": "Author Names",
 		"et": "Autorite nimed"

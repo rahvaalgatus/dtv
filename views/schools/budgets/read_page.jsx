@@ -17,6 +17,7 @@ var linkify = require("root/lib/linkify")
 exports = module.exports = ReadPage
 
 function ReadPage({req, t, l10n, school, budget, ideas, votesByIdea, thank}) {
+	var {account} = req
 	var {roles} = req
 
 	var headerButtonStyle = serializeStyle({
@@ -62,6 +63,7 @@ function ReadPage({req, t, l10n, school, budget, ideas, votesByIdea, thank}) {
 			) return <VotingSection
 				req={req}
 				l10n={l10n}
+				account={account}
 				school={school}
 				budget={budget}
 				roles={roles}
@@ -75,6 +77,7 @@ function ReadPage({req, t, l10n, school, budget, ideas, votesByIdea, thank}) {
 			) return <ResultsSection
 				l10n={l10n}
 				req={req}
+				account={account}
 				school={school}
 				budget={budget}
 				ideas={ideas}
@@ -82,6 +85,7 @@ function ReadPage({req, t, l10n, school, budget, ideas, votesByIdea, thank}) {
 			/>
 
 			return <IdeasSection
+				account={account}
 				l10n={l10n}
 				school={school}
 				budget={budget}
@@ -92,7 +96,7 @@ function ReadPage({req, t, l10n, school, budget, ideas, votesByIdea, thank}) {
 	</SchoolPage>
 }
 
-function IdeasSection({l10n, school, budget, roles, ideas}) {
+function IdeasSection({l10n, account, school, budget, roles, ideas}) {
 	var {t} = l10n
 
 	return <Section id="viewable-ideas-section">
@@ -121,7 +125,9 @@ function IdeasSection({l10n, school, budget, roles, ideas}) {
 					<a href={Paths.ideaPath(school, idea)}>{idea.title}</a>
 				</h3>
 
-				<span class="idea-author-names">{idea.author_names}</span>
+				{account ? <span class="idea-author-names">
+					{idea.author_names}
+				</span> : null}
 			</li>
 		})}</ul>
 	</Section>
@@ -207,7 +213,9 @@ function VotingSection({
 							<VoteCountView t={t} count={voteCount} max={maxVoteCount} />
 						: null}
 
-						<span class="idea-author-names">{idea.author_names}</span>
+						{account ? <span class="idea-author-names">
+							{idea.author_names}
+						</span> : null}
 					</label>
 				</li>
 			})}</ul>
@@ -229,7 +237,7 @@ function VotingSection({
 	</Section>
 }
 
-function ResultsSection({l10n, school, budget, ideas, votesByIdea}) {
+function ResultsSection({l10n, account, school, budget, ideas, votesByIdea}) {
 	var {t} = l10n
 	var maxVoteCount = _.max(_.values(votesByIdea))
 	var voteCount = _.sum(_.values(votesByIdea))
@@ -263,7 +271,10 @@ function ResultsSection({l10n, school, budget, ideas, votesByIdea}) {
 				</h3>
 
 				<VoteCountView t={t} count={voteCount} max={maxVoteCount} />
-				<span class="idea-author-names">{idea.author_names}</span>
+
+				{account ? <span class="idea-author-names">
+					{idea.author_names}
+				</span> : null}
 			</li>
 		})}</ul>
 	</Section>

@@ -11,6 +11,7 @@ var LdapAttributes = require("undersign/lib/ldap_attributes")
 var fetchDefaults = require("fetch-defaults")
 var accountsDb = require("root/db/accounts_db")
 var sessionsDb = require("root/db/sessions_db")
+var teachersDb = require("root/db/teachers_db")
 var EMPTY_BUFFER = new Buffer(0)
 var NO_PARAMS = Buffer.from("0500", "hex")
 var nextSerialNumber = Math.floor(10000 * Math.random())
@@ -133,6 +134,19 @@ exports.newCertificate = function(opts) {
 		tbsCertificate: unsignedCertificate,
 		signatureAlgorithm: signatureAlgorithm,
 		signature: {unused: 0, data: signature}
+	})
+}
+
+exports.createSession = function*(account) {
+	var session = new ValidSession({account_id: account.id})
+	return _.assign(yield sessionsDb.create(session), {token: session.token})
+}
+
+exports.createTeacher = function(school, account) {
+	return teachersDb.create({
+		school_id: school.id,
+		country: account.country,
+		personal_id: account.personal_id
 	})
 }
 

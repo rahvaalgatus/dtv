@@ -1,10 +1,16 @@
 var Paths = require("root/lib/paths")
+var DateFns = require("date-fns")
+var ValidAccount = require("root/test/valid_account")
 var ValidSchool = require("root/test/valid_school")
 var ValidBudget = require("root/test/valid_budget")
+var ValidIdea = require("root/test/valid_idea")
+var accountsDb = require("root/db/accounts_db")
 var schoolsDb = require("root/db/schools_db")
 var budgetsDb = require("root/db/budgets_db")
-var teachersDb = require("root/db/teachers_db")
 var votersDb = require("root/db/voters_db")
+var ideasDb = require("root/db/ideas_db")
+var {createSession} = require("root/test/fixtures")
+var {createTeacher} = require("root/test/fixtures")
 var outdent = require("root/lib/outdent")
 var sql = require("sqlate")
 
@@ -99,15 +105,144 @@ describe("SchoolBudgetsController", function() {
 	})
 
 	describe("GET /:id", function() {
-		it("must render given no ideas", function*() {
-			var school = yield schoolsDb.create(new ValidSchool)
+		describe("given budget before voting", function() {
+			beforeEach(function*() {
+				this.school = yield schoolsDb.create(new ValidSchool)
 
-			var budget = yield budgetsDb.create(new ValidBudget({
-				school_id: school.id
-			}))
+				this.budget = yield budgetsDb.create(new ValidBudget({
+					school_id: this.school.id
+				}))
+			})
 
-			var res = yield this.request(Paths.budgetPath(school, budget))
-			res.statusCode.must.equal(200)
+			it("must render given no ideas", function*() {
+				var res = yield this.request(Paths.budgetPath(this.school, this.budget))
+				res.statusCode.must.equal(200)
+			})
+
+			it("must render idea author names if signed in", function*() {
+				var idea = yield ideasDb.create(new ValidIdea({
+					budget_id: this.budget.id,
+					account_id: (yield accountsDb.create(new ValidAccount)).id,
+					author_names: "John Smithes"
+				}))
+
+				var account = yield accountsDb.create(new ValidAccount)
+
+				var res = yield this.request(
+					Paths.budgetPath(this.school, this.budget),
+					{session: yield createSession(account)}
+				)
+
+				res.statusCode.must.equal(200)
+				res.body.must.include(idea.author_names)
+			})
+
+			it("must not render idea author names if not signed in", function*() {
+				var idea = yield ideasDb.create(new ValidIdea({
+					budget_id: this.budget.id,
+					account_id: (yield accountsDb.create(new ValidAccount)).id,
+					author_names: "John Smithes"
+				}))
+
+				var res = yield this.request(Paths.budgetPath(this.school, this.budget))
+				res.statusCode.must.equal(200)
+				res.body.must.not.include(idea.author_names)
+			})
+		})
+
+		describe("given budget in voting", function() {
+			beforeEach(function*() {
+				this.school = yield schoolsDb.create(new ValidSchool)
+
+				this.budget = yield budgetsDb.create(new ValidBudget({
+					school_id: this.school.id,
+					voting_starts_at: DateFns.startOfDay(new Date),
+					voting_ends_at: DateFns.endOfDay(new Date)
+				}))
+			})
+
+
+			it("must render given no ideas", function*() {
+				var res = yield this.request(Paths.budgetPath(this.school, this.budget))
+				res.statusCode.must.equal(200)
+			})
+
+			it("must render idea author names if signed in", function*() {
+				var idea = yield ideasDb.create(new ValidIdea({
+					budget_id: this.budget.id,
+					account_id: (yield accountsDb.create(new ValidAccount)).id,
+					author_names: "John Smithes"
+				}))
+
+				var account = yield accountsDb.create(new ValidAccount)
+
+				var res = yield this.request(
+					Paths.budgetPath(this.school, this.budget),
+					{session: yield createSession(account)}
+				)
+
+				res.statusCode.must.equal(200)
+				res.body.must.include(idea.author_names)
+			})
+
+			it("must not render idea author names if not signed in", function*() {
+				var idea = yield ideasDb.create(new ValidIdea({
+					budget_id: this.budget.id,
+					account_id: (yield accountsDb.create(new ValidAccount)).id,
+					author_names: "John Smithes"
+				}))
+
+				var res = yield this.request(Paths.budgetPath(this.school, this.budget))
+				res.statusCode.must.equal(200)
+				res.body.must.not.include(idea.author_names)
+			})
+		})
+
+		describe("given budget after voting", function() {
+			beforeEach(function*() {
+				this.school = yield schoolsDb.create(new ValidSchool)
+
+				this.budget = yield budgetsDb.create(new ValidBudget({
+					school_id: this.school.id,
+					voting_starts_at: DateFns.startOfDay(new Date),
+					voting_ends_at: new Date
+				}))
+			})
+
+			it("must render given no ideas", function*() {
+				var res = yield this.request(Paths.budgetPath(this.school, this.budget))
+				res.statusCode.must.equal(200)
+			})
+
+			it("must render idea author names if signed in", function*() {
+				var idea = yield ideasDb.create(new ValidIdea({
+					budget_id: this.budget.id,
+					account_id: (yield accountsDb.create(new ValidAccount)).id,
+					author_names: "John Smithes"
+				}))
+
+				var account = yield accountsDb.create(new ValidAccount)
+
+				var res = yield this.request(
+					Paths.budgetPath(this.school, this.budget),
+					{session: yield createSession(account)}
+				)
+
+				res.statusCode.must.equal(200)
+				res.body.must.include(idea.author_names)
+			})
+
+			it("must not render idea author names if not signed in", function*() {
+				var idea = yield ideasDb.create(new ValidIdea({
+					budget_id: this.budget.id,
+					account_id: (yield accountsDb.create(new ValidAccount)).id,
+					author_names: "John Smithes"
+				}))
+
+				var res = yield this.request(Paths.budgetPath(this.school, this.budget))
+				res.statusCode.must.equal(200)
+				res.body.must.not.include(idea.author_names)
+			})
 		})
 	})
 
@@ -194,11 +329,3 @@ describe("SchoolBudgetsController", function() {
 		})
 	})
 })
-
-function createTeacher(school, account) {
-	return teachersDb.create({
-		school_id: school.id,
-		country: account.country,
-		personal_id: account.personal_id
-	})
-}

@@ -1,4 +1,3 @@
-var _ = require("root/lib/underscore")
 var Paths = require("root/lib/paths")
 var ValidSchool = require("root/test/valid_school")
 var ValidBudget = require("root/test/valid_budget")
@@ -10,6 +9,7 @@ var budgetsDb = require("root/db/budgets_db")
 var teachersDb = require("root/db/teachers_db")
 var ideasDb = require("root/db/ideas_db")
 var accountsDb = require("root/db/accounts_db")
+var {createTeacher} = require("root/test/fixtures")
 var sql = require("sqlate")
 var outdent = require("root/lib/outdent")
 var LOGO_SIZE_LIMIT = 128
@@ -416,17 +416,3 @@ describe("SchoolsController", function() {
 		})
 	})
 })
-
-function createTeacher(school, account) {
-	function newTeacher(account) {
-		return {
-			school_id: school.id,
-			country: account.country,
-			personal_id: account.personal_id
-		}
-	}
-
-	return teachersDb.create(
-		_.isArray(account) ? account.map(newTeacher) : newTeacher(account)
-	)
-}
