@@ -104,18 +104,10 @@ function SchoolButton(attrs, children) {
 			: null
 	})
 
-	if (attrs.href) return <a
-		href={attrs.href}
-		class={klass}
-		style={style}
-	>
+	if (attrs.href) return <a href={attrs.href} class={klass} style={style}>
 		{children}
 	</a>
-	else return <button
-		type={attrs.type}
-		class={klass}
-		style={style}
-	>
+	else return <button type={attrs.type} class={klass} style={style}>
 		{children}
 	</button>
 }
