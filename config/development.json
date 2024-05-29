@@ -1,5 +1,6 @@
 {
 	"cookieSecret": "py8mG85TczmKTQYtoCPa8nkjnkuKHEjB",
+	"csrfCookieDomain": "demokraatia.rahvaalgatus.test",
 	"sessionCookieDomain": "demokraatia.rahvaalgatus.test",
 	"idCardAuthenticationUrl": "",
 	"timestampUrl": "http://demo.sk.ee/tsa",
