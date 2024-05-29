@@ -210,7 +210,7 @@ exports.router.post("/", next(function*(req, res) {
 
 		case "mobile-id":
 			var phoneNumber = ensureAreaCode(req.body.phoneNumber)
-			personalId = req.body.personalId
+			personalId = String(req.body.personalId).trim()
 
 			// Log Mobile-ID requests to confirm SK's billing.
 			logger.info(
@@ -248,7 +248,7 @@ exports.router.post("/", next(function*(req, res) {
 			break
 
 		case "smart-id":
-			personalId = req.body.personalId
+			personalId = String(req.body.personalId).trim()
 
 			// Log Smart-Id requests to confirm SK's billing.
 			logger.info("Authenticating via Smart-Id for %s.", personalId)

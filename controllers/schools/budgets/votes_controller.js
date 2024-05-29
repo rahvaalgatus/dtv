@@ -230,7 +230,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 
 		case "mobile-id":
 			var phoneNumber = ensureAreaCode(req.body.phoneNumber)
-			personalId = req.body.personalId
+			personalId = String(req.body.personalId).trim()
 
 			// Early double validation to prevent possible misuse.
 			if (err = yield validateVoter(t, budget, "EE", personalId)) throw err
@@ -279,7 +279,7 @@ exports.router.post("/", assertVoting, next(function*(req, res) {
 			break
 
 		case "smart-id":
-			personalId = req.body.personalId
+			personalId = String(req.body.personalId).trim()
 
 			// Early double validation to prevent possible misuse.
 			if (err = yield validateVoter(t, budget, "EE", personalId)) throw err
