@@ -36,6 +36,7 @@
 		"must": ">= 0.13.0 < 0.14",
 		"livereload": ">= 0.6 < 0.7",
 		"jsdom": ">= 9 < 10",
+		"sinon": ">= 1 < 2",
 		"form-data": "",
 		"tough-cookie": ">= 2 < 3"
 	},

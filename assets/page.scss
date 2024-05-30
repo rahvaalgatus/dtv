@@ -1060,6 +1060,15 @@ textarea.budget-input {
 }
 
 #budget-page main {
+	.warning-paragraph {
+		background-color: #fffbd6;
+		padding: 1.5rem 1.5rem;
+		border-radius: 1rem;
+		margin-left: -1.5rem;
+		margin-right: -1.5rem;
+		font-weight: 600;
+	}
+
 	#budget-description {
 		white-space: pre-line;
 	}

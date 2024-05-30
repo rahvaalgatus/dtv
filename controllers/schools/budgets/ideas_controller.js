@@ -7,11 +7,13 @@ var {isValidImageType} = require("root/lib/image")
 var {assertAccount} = require("../../schools_controller")
 var sql = require("sqlate")
 exports.router = Router({mergeParams: true})
+exports.assertUnexpiredBudget = assertUnexpiredBudget
 
 exports.router.get("/new",
 	assertAccount,
 	assertNotVoting,
 	assertTeacherOrVoter,
+	assertUnexpiredBudget,
 	function(_req, res) {
 	res.render("schools/budgets/ideas/create_page.jsx")
 })
@@ -20,6 +22,7 @@ exports.router.post("/",
 	assertAccount,
 	assertNotVoting,
 	assertTeacherOrVoter,
+	assertUnexpiredBudget,
 	next(function*(req, res) {
 	var {account} = req
 	var {budget} = req
@@ -73,6 +76,7 @@ exports.router.get("/:id/edit",
 	assertAccount,
 	assertAuthor,
 	assertNotVoting,
+	assertUnexpiredBudget,
 	function(req, res) {
 	var {idea} = req
 	res.render("schools/budgets/ideas/update_page.jsx", {idea})
@@ -82,6 +86,7 @@ exports.router.put("/:id",
 	assertAccount,
 	assertAuthor,
 	assertNotVoting,
+	assertUnexpiredBudget,
 	next(function*(req, res) {
 	var {account} = req
 	var {idea} = req
@@ -128,4 +133,19 @@ function assertNotVoting(req, _res, next) {
 function assertTeacherOrVoter(req, _res, next) {
 	if (req.roles.includes("teacher") || req.roles.includes("voter")) next()
 	else throw new HttpError(403, "Not Permitted to Create Ideas")
+}
+
+function assertUnexpiredBudget(req, _res, next) {
+	var {budget} = req
+
+	if (budget.expired_at == null && budget.anonymized_at == null) next()
+
+	else if (budget.anonymized_at)
+		throw new HttpError(403, "Cannot Edit Anonymized Budget", {
+			description: req.t("update_budget_page.cannot_edit_anonymized_budget")
+		})
+
+	else throw new HttpError(403, "Cannot Edit Expired Budget", {
+		description: req.t("update_budget_page.cannot_edit_expiring_budget")
+	})
 }

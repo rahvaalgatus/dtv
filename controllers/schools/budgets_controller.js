@@ -5,6 +5,7 @@ var HttpError = require("standard-http-error")
 var DateFns = require("date-fns")
 var {assertAccount} = require("../schools_controller")
 var {assertTeacher} = require("../schools_controller")
+var {assertUnexpiredBudget} = require("./budgets/ideas_controller")
 var {cleanPersonalId} = require("root/lib/account")
 var votersDb = require("root/db/voters_db")
 var votesDb = require("root/db/votes_db")
@@ -88,38 +89,18 @@ exports.router.get("/:id", next(function*(req, res) {
 		AND personal_id = ${account.personal_id}
 	`) : null
 
-	var votesByIdea = _.mapValues(_.indexBy(yield votesDb.search(sql`
-		WITH merged_votes AS (
-			SELECT vote.idea_id
-			FROM votes AS vote
-
-			LEFT JOIN paper_votes AS paper_vote
-			ON paper_vote.budget_id = vote.budget_id
-			AND paper_vote.voter_country = vote.voter_country
-			AND paper_vote.voter_personal_id = vote.voter_personal_id
-
-			WHERE vote.budget_id = ${budget.id}
-			AND paper_vote.voter_personal_id IS NULL
-
-			UNION ALL
-
-			SELECT idea_id FROM paper_votes
-			WHERE budget_id = ${budget.id}
-		)
-
-		SELECT idea_id, COUNT(*) AS count
-		FROM merged_votes
-		GROUP BY idea_id
-	`), "idea_id"), (votes) => votes.count)
-
 	var ideas = yield ideasDb.search(sql`
 		SELECT
-			id, budget_id, account_id, title, description, author_names,
+			id, budget_id, account_id, title, description, author_names, vote_count,
 			created_at, updated_at, image_type
 
 		FROM ideas
 		WHERE budget_id = ${budget.id}
 	`)
+
+	var votesByIdea = budget.anonymized_at
+		? _.mapValues(_.indexBy(ideas, "id"), (idea) => idea.vote_count)
+		: yield votesDb.countVotesByIdea(budget.id)
 
 	res.render("schools/budgets/read_page.jsx", {
 		voter,
@@ -132,6 +113,7 @@ exports.router.get("/:id", next(function*(req, res) {
 exports.router.put("/:id",
 	assertAccount,
 	assertTeacher,
+	assertUnexpiredBudget,
 	next(function*(req, res) {
 	var {t} = req
 	var {budget} = req
@@ -151,6 +133,7 @@ exports.router.put("/:id",
 exports.router.get("/:id/edit",
 	assertAccount,
 	assertTeacher,
+	assertUnexpiredBudget,
 	next(function*(req, res) {
 	var {budget} = req
 

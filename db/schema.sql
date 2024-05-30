@@ -70,7 +70,7 @@ CREATE TABLE ideas (
 	account_id INTEGER NOT NULL,
 	title TEXT NOT NULL,
 	description TEXT NOT NULL,
-	author_names TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')), image BLOB, image_type TEXT,
+	author_names TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')), image BLOB, image_type TEXT, vote_count INTEGER,
 
 	FOREIGN KEY (budget_id) REFERENCES budgets (id),
 	FOREIGN KEY (account_id) REFERENCES accounts (id),
@@ -83,6 +83,8 @@ CREATE TABLE ideas (
 	CONSTRAINT image_type_length CHECK (length(image_type) > 0),
 	CONSTRAINT image_with_type CHECK ((image IS NULL) = (image_type IS NULL)),
 
+	CONSTRAINT vote_count_nonnegative CHECK (vote_count >= 0),
+	
 	CONSTRAINT created_at_format
 	CHECK (created_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z'),
 
@@ -153,7 +155,7 @@ CREATE TABLE budgets (
 	description TEXT,
 	created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
 	voting_starts_at TEXT,
-	voting_ends_at TEXT,
+	voting_ends_at TEXT, expired_at TEXT, anonymized_at TEXT,
 
 	FOREIGN KEY (school_id) REFERENCES schools (id),
 
@@ -162,6 +164,12 @@ CREATE TABLE budgets (
 
 	CONSTRAINT created_at_format
 	CHECK (created_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z'),
+
+	CONSTRAINT expired_at_format CHECK (expired_at GLOB '*-*-*T*:*:*Z'),
+	CONSTRAINT anonymized_at_format CHECK (anonymized_at GLOB '*-*-*T*:*:*Z'),
+
+	CONSTRAINT expired_if_anonymized
+	CHECK (anonymized_at IS NULL OR expired_at IS NOT NULL),
 
 	CONSTRAINT voting_starts_at_format
 	CHECK (voting_starts_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z'),
@@ -197,4 +205,6 @@ INSERT INTO migrations VALUES('20210118145358');
 INSERT INTO migrations VALUES('20210118155512');
 INSERT INTO migrations VALUES('20221205000000');
 INSERT INTO migrations VALUES('20221205000010');
+INSERT INTO migrations VALUES('20240529204122');
+INSERT INTO migrations VALUES('20240529224400');
 COMMIT;

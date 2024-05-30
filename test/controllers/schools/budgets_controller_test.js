@@ -13,6 +13,7 @@ var {createSession} = require("root/test/fixtures")
 var {createTeacher} = require("root/test/fixtures")
 var outdent = require("root/lib/outdent")
 var sql = require("sqlate")
+var {t} = new (require("root/lib/l10n"))("et")
 
 describe("SchoolBudgetsController", function() {
 	require("root/test/web")()
@@ -61,7 +62,7 @@ describe("SchoolBudgetsController", function() {
 
 			res.headers.location.must.equal(Paths.budgetPath(school, budget))
 
-			budget.must.eql({
+			budget.must.eql(new ValidBudget({
 				id: budget.id,
 				school_id: school.id,
 				title: "Hogwarts Wand Fest",
@@ -69,7 +70,7 @@ describe("SchoolBudgetsController", function() {
 				created_at: budget.created_at,
 				voting_starts_at: new Date(2015, 5, 18),
 				voting_ends_at: new Date(2015, 5, 22)
-			})
+			}))
 
 			yield votersDb.search(sql`SELECT * FROM voters`).must.then.eql([
 				{budget_id: budget.id, country: "EE", personal_id: "38706180001"},
@@ -105,6 +106,188 @@ describe("SchoolBudgetsController", function() {
 	})
 
 	describe("GET /:id", function() {
+		it("must not warn if budget neither expired nor anonymized", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id
+			}))
+
+			var res = yield this.request(Paths.budgetPath(school, budget))
+			res.statusCode.must.equal(200)
+			res.body.must.not.include(t("budget_page.budget_expired"))
+			res.body.must.not.include(t("budget_page.budget_anonymized"))
+		})
+
+		it("must not warn if budget expired", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date
+			}))
+
+			var res = yield this.request(Paths.budgetPath(school, budget))
+			res.statusCode.must.equal(200)
+			res.body.must.include(t("budget_page.budget_expired"))
+			res.body.must.not.include(t("budget_page.budget_anonymized"))
+		})
+
+		it("must not warn if budget anonymized", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date,
+				anonymized_at: new Date
+			}))
+
+			var res = yield this.request(Paths.budgetPath(school, budget))
+			res.statusCode.must.equal(200)
+			res.body.must.not.include(t("budget_page.budget_expired"))
+			res.body.must.include(t("budget_page.budget_anonymized"))
+		})
+
+		describe("given budget before voting", function() {
+			beforeEach(function*() {
+				this.school = yield schoolsDb.create(new ValidSchool)
+
+				this.budget = yield budgetsDb.create(new ValidBudget({
+					school_id: this.school.id
+				}))
+			})
+
+			it("must render given no ideas", function*() {
+				var res = yield this.request(Paths.budgetPath(this.school, this.budget))
+				res.statusCode.must.equal(200)
+			})
+
+			it("must render idea author names if signed in", function*() {
+				var idea = yield ideasDb.create(new ValidIdea({
+					budget_id: this.budget.id,
+					account_id: (yield accountsDb.create(new ValidAccount)).id,
+					author_names: "John Smithes"
+				}))
+
+				var account = yield accountsDb.create(new ValidAccount)
+
+				var res = yield this.request(
+					Paths.budgetPath(this.school, this.budget),
+					{session: yield createSession(account)}
+				)
+
+				res.statusCode.must.equal(200)
+				res.body.must.include(idea.author_names)
+			})
+
+			it("must not render idea author names if not signed in", function*() {
+				var idea = yield ideasDb.create(new ValidIdea({
+					budget_id: this.budget.id,
+					account_id: (yield accountsDb.create(new ValidAccount)).id,
+					author_names: "John Smithes"
+				}))
+
+				var res = yield this.request(Paths.budgetPath(this.school, this.budget))
+				res.statusCode.must.equal(200)
+				res.body.must.not.include(idea.author_names)
+			})
+		})
+
+		describe("given budget in voting", function() {
+			beforeEach(function*() {
+				this.school = yield schoolsDb.create(new ValidSchool)
+
+				this.budget = yield budgetsDb.create(new ValidBudget({
+					school_id: this.school.id,
+					voting_starts_at: DateFns.startOfDay(new Date),
+					voting_ends_at: DateFns.endOfDay(new Date)
+				}))
+			})
+
+
+			it("must render given no ideas", function*() {
+				var res = yield this.request(Paths.budgetPath(this.school, this.budget))
+				res.statusCode.must.equal(200)
+			})
+
+			it("must render idea author names if signed in", function*() {
+				var idea = yield ideasDb.create(new ValidIdea({
+					budget_id: this.budget.id,
+					account_id: (yield accountsDb.create(new ValidAccount)).id,
+					author_names: "John Smithes"
+				}))
+
+				var account = yield accountsDb.create(new ValidAccount)
+
+				var res = yield this.request(
+					Paths.budgetPath(this.school, this.budget),
+					{session: yield createSession(account)}
+				)
+
+				res.statusCode.must.equal(200)
+				res.body.must.include(idea.author_names)
+			})
+
+			it("must not render idea author names if not signed in", function*() {
+				var idea = yield ideasDb.create(new ValidIdea({
+					budget_id: this.budget.id,
+					account_id: (yield accountsDb.create(new ValidAccount)).id,
+					author_names: "John Smithes"
+				}))
+
+				var res = yield this.request(Paths.budgetPath(this.school, this.budget))
+				res.statusCode.must.equal(200)
+				res.body.must.not.include(idea.author_names)
+			})
+		})
+
+		describe("given budget after voting", function() {
+			beforeEach(function*() {
+				this.school = yield schoolsDb.create(new ValidSchool)
+
+				this.budget = yield budgetsDb.create(new ValidBudget({
+					school_id: this.school.id,
+					voting_starts_at: DateFns.startOfDay(new Date),
+					voting_ends_at: new Date
+				}))
+			})
+
+			it("must render given no ideas", function*() {
+				var res = yield this.request(Paths.budgetPath(this.school, this.budget))
+				res.statusCode.must.equal(200)
+			})
+
+			it("must render idea author names if signed in", function*() {
+				var idea = yield ideasDb.create(new ValidIdea({
+					budget_id: this.budget.id,
+					account_id: (yield accountsDb.create(new ValidAccount)).id,
+					author_names: "John Smithes"
+				}))
+
+				var account = yield accountsDb.create(new ValidAccount)
+
+				var res = yield this.request(
+					Paths.budgetPath(this.school, this.budget),
+					{session: yield createSession(account)}
+				)
+
+				res.statusCode.must.equal(200)
+				res.body.must.include(idea.author_names)
+			})
+
+			it("must not render idea author names if not signed in", function*() {
+				var idea = yield ideasDb.create(new ValidIdea({
+					budget_id: this.budget.id,
+					account_id: (yield accountsDb.create(new ValidAccount)).id,
+					author_names: "John Smithes"
+				}))
+
+				var res = yield this.request(Paths.budgetPath(this.school, this.budget))
+				res.statusCode.must.equal(200)
+				res.body.must.not.include(idea.author_names)
+			})
+		})
+
 		describe("given budget before voting", function() {
 			beforeEach(function*() {
 				this.school = yield schoolsDb.create(new ValidSchool)
@@ -310,6 +493,45 @@ describe("SchoolBudgetsController", function() {
 			res.statusMessage.must.equal("Not a Teacher")
 			yield budgetsDb.read(budget.id).must.then.eql(budget)
 		})
+
+		it("must err if budget expired", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+			yield createTeacher(school, this.account)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date
+			}))
+
+			var res = yield this.request(Paths.budgetPath(school, budget), {
+				method: "PUT",
+				form: {name: "Hogwarts"}
+			})
+
+			res.statusCode.must.equal(403)
+			res.statusMessage.must.equal("Cannot Edit Expired Budget")
+			yield budgetsDb.read(budget.id).must.then.eql(budget)
+		})
+
+		it("must err if budget anonymized", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+			yield createTeacher(school, this.account)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date,
+				anonymized_at: new Date
+			}))
+
+			var res = yield this.request(Paths.budgetPath(school, budget), {
+				method: "PUT",
+				form: {name: "Hogwarts"}
+			})
+
+			res.statusCode.must.equal(403)
+			res.statusMessage.must.equal("Cannot Edit Anonymized Budget")
+			yield budgetsDb.read(budget.id).must.then.eql(budget)
+		})
 	})
 
 	describe("GET /:id/edit", function() {
@@ -326,6 +548,35 @@ describe("SchoolBudgetsController", function() {
 
 			var res = yield this.request(Paths.updateBudgetPath(school, budget))
 			res.statusCode.must.equal(200)
+		})
+
+		it("must err if budget expired", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+			yield createTeacher(school, this.account)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date
+			}))
+
+			var res = yield this.request(Paths.updateBudgetPath(school, budget))
+			res.statusCode.must.equal(403)
+			res.statusMessage.must.equal("Cannot Edit Expired Budget")
+		})
+
+		it("must not warn if budget anonymized", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+			yield createTeacher(school, this.account)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date,
+				anonymized_at: new Date
+			}))
+
+			var res = yield this.request(Paths.updateBudgetPath(school, budget))
+			res.statusCode.must.equal(403)
+			res.statusMessage.must.equal("Cannot Edit Anonymized Budget")
 		})
 	})
 })

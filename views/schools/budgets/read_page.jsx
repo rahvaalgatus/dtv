@@ -33,7 +33,11 @@ function ReadPage({req, t, l10n, school, budget, ideas, votesByIdea, thank}) {
 			<a href={Paths.schoolPath(school)} class="context">{school.name}</a>
 			<h1>{budget.title}</h1>
 
-			{roles.includes("teacher") ? <menu>
+			{(
+				roles.includes("teacher") &&
+				budget.expired_at == null &&
+				budget.anonymized_at == null
+			) ? <menu>
 				<a
 					href={Paths.updateBudgetPath(school, budget)}
 					style={headerButtonStyle}
@@ -49,6 +53,14 @@ function ReadPage({req, t, l10n, school, budget, ideas, votesByIdea, thank}) {
 				</a>
 			</menu> : null}
 		</SchoolHeader>
+
+		{budget.expired_at || budget.anonymized_at ? <Section>
+			{budget.anonymized_at ? <p class="warning-paragraph section-paragraph">
+				{t("budget_page.budget_anonymized")}
+			</p> : <p class="warning-paragraph section-paragraph">
+				{t("budget_page.budget_expired")}
+			</p>}
+		</Section> : null}
 
 		{budget.description ? <Section>
 			<p id="budget-description" class="section-paragraph">

@@ -17,6 +17,7 @@ var {getCertificatePersonalId} = require("root/lib/eid")
 var {getCertificatePersonName} = require("root/lib/eid")
 var {waitForSession} = require("root/lib/eid")
 var {getNormalizedMobileIdErrorCode} = require("root/lib/eid")
+var {assertUnexpiredBudget} = require("./ideas_controller")
 var ideasDb = require("root/db/ideas_db")
 var votersDb = require("root/db/voters_db")
 var votesDb = require("root/db/votes_db")
@@ -140,6 +141,7 @@ var SMART_ID_ERRORS = {
 }
 
 exports.router = Router({mergeParams: true})
+exports.router.use(assertUnexpiredBudget)
 exports.router.use(require("root/lib/eid").parseSignatureBody)
 
 exports.router.post("/", assertVoting, next(function*(req, res) {

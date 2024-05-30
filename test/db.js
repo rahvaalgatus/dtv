@@ -7,6 +7,7 @@ exports = module.exports = function() {
 
 exports.delete = function*() {
 	yield sqlite(sql`DELETE FROM paper_votes`)
+	yield sqlite(sql`DELETE FROM votes`)
 	yield sqlite(sql`DELETE FROM voters`)
 	yield sqlite(sql`DELETE FROM ideas`)
 	yield sqlite(sql`DELETE FROM budgets`)

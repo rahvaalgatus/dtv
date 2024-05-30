@@ -39,6 +39,14 @@
 		"en": "Budget not found.",
 		"et": "Eelarvet ei leitud."
 	},
+	"budget_page.budget_anonymized": {
+		"en": null,
+		"et": "Eelarve hääletamise lõpust on möödunud rohkem kui kaks nädalat ning eelarvega seotud isikuandmed on tänaseks anonüümitud."
+	},
+	"budget_page.budget_expired": {
+		"en": null,
+		"et": "Eelarve hääletamise lõpust on möödunud rohkem kui nädal. Enam eelarvet muuta ei saa ning hääletajate andmed anonüümitakse nädala sees."
+	},
 	"budget_page.ideas.create_button": {
 		"en": "Propose a New Idea",
 		"et": "Esita uus idee"
@@ -810,6 +818,14 @@
 	"title": {
 		"en": "Democracy Workbook",
 		"et": "Demokraatia töövihik"
+	},
+	"update_budget_page.cannot_edit_anonymized_budget": {
+		"en": null,
+		"et": "Eelarve hääletamise lõpust on möödunud rohkem kui kaks nädalat ning eelarvet enam muuta ei saa. Ideedele antud hääled on tänaseks anonüümitud."
+	},
+	"update_budget_page.cannot_edit_expiring_budget": {
+		"en": null,
+		"et": "Eelarve lõpust on möödunud rohkem kui nädal. Enam eelarvet muuta ei saa ning hääletajate andmed kustutatakse nädala sees."
 	},
 	"update_budget_page.title": {
 		"en": "Edit {title}",

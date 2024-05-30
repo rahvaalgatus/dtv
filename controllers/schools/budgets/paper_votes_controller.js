@@ -3,6 +3,7 @@ var Router = require("express").Router
 var HttpError = require("standard-http-error")
 var {assertAccount} = require("../../schools_controller")
 var {assertTeacher} = require("../../schools_controller")
+var {assertUnexpiredBudget} = require("./ideas_controller")
 var ideasDb = require("root/db/ideas_db")
 var votersDb = require("root/db/voters_db")
 var paperVotesDb = require("root/db/paper_votes_db")
@@ -10,7 +11,7 @@ var next = require("co-next")
 var sql = require("sqlate")
 
 exports.router = Router({mergeParams: true})
-exports.router.use(assertAccount, assertTeacher)
+exports.router.use(assertAccount, assertTeacher, assertUnexpiredBudget)
 
 exports.router.get("/", next(function*(req, res) {
 	var {budget} = req

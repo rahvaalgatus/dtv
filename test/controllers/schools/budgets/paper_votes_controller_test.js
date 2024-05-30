@@ -21,12 +21,11 @@ describe("PaperVotesController", function() {
 	describe("GET /", function() {
 		it("must render given no paper votes", function*() {
 			var school = yield schoolsDb.create(new ValidSchool)
+			yield createTeacher(school, this.account)
 
 			var budget = yield budgetsDb.create(new ValidBudget({
 				school_id: school.id
 			}))
-
-			yield createTeacher(school, this.account)
 
 			var res = yield this.request(Paths.paperVotesPath(school, budget))
 			res.statusCode.must.equal(200)
@@ -34,6 +33,35 @@ describe("PaperVotesController", function() {
 			var dom = parseDom(res.body)
 			var table = dom.body.querySelector("#paper-votes")
 			table.rows.length.must.equal(1)
+		})
+
+		it("must err if budget expired", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+			yield createTeacher(school, this.account)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date
+			}))
+
+			var res = yield this.request(Paths.paperVotesPath(school, budget))
+			res.statusCode.must.equal(403)
+			res.statusMessage.must.equal("Cannot Edit Expired Budget")
+		})
+
+		it("must err if budget anonymized", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+			yield createTeacher(school, this.account)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date,
+				anonymized_at: new Date
+			}))
+
+			var res = yield this.request(Paths.paperVotesPath(school, budget))
+			res.statusCode.must.equal(403)
+			res.statusMessage.must.equal("Cannot Edit Anonymized Budget")
 		})
 	})
 
@@ -151,6 +179,41 @@ describe("PaperVotesController", function() {
 			var dom = parseDom(res.body)
 			var el = dom.querySelector("main .description")
 			el.textContent.must.include("38706180001")
+		})
+
+		it("must err if budget expired", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+			yield createTeacher(school, this.account)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date
+			}))
+
+			var res = yield this.request(Paths.paperVotesPath(school, budget), {
+				method: "PUT"
+			})
+
+			res.statusCode.must.equal(403)
+			res.statusMessage.must.equal("Cannot Edit Expired Budget")
+		})
+
+		it("must err if budget expired", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+			yield createTeacher(school, this.account)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date,
+				anonymized_at: new Date
+			}))
+
+			var res = yield this.request(Paths.paperVotesPath(school, budget), {
+				method: "PUT"
+			})
+
+			res.statusCode.must.equal(403)
+			res.statusMessage.must.equal("Cannot Edit Anonymized Budget")
 		})
 	})
 })

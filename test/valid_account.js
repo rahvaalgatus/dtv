@@ -1,6 +1,6 @@
 var _ = require("root/lib/underscore")
 
-module.exports = function(attrs) {
+exports = module.exports = function(attrs) {
 	var createdAt = new Date
 	var country = attrs && attrs.country || "EE"
 
@@ -13,12 +13,14 @@ module.exports = function(attrs) {
 	return _.assign({
 		created_at: createdAt,
 		updated_at: createdAt,
-		country: country,
+		country,
 		personal_id: personalId,
-		name: name,
+		name,
 		official_name: personalId == null ? null : name
 	}, attrs)
 }
+
+exports.randomPersonalId = randomPersonalId
 
 function randomPersonalId() {
 	return _.padLeft(String(Math.floor(Math.random() * 1e11)), 11, "1")
