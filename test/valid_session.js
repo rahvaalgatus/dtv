@@ -8,6 +8,7 @@ module.exports = function(attrs) {
 		created_at: new Date,
 		token_sha256: _.sha256(token),
 		method: "id-card",
+		last_used_on: null,
 		deleted_at: null
 	}, attrs)
 

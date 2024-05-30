@@ -11,12 +11,13 @@ exports = module.exports = function(attrs) {
 	var name = attrs && attrs.name || "John " + _.uniqueId()
 
 	return _.assign({
-		created_at: createdAt,
-		updated_at: createdAt,
 		country,
 		personal_id: personalId,
 		name,
-		official_name: personalId == null ? null : name
+		official_name: personalId == null ? null : name,
+		created_at: createdAt,
+		updated_at: createdAt,
+		anonymized_at: null
 	}, attrs)
 }
 

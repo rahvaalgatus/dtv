@@ -1,11 +1,11 @@
 CREATE TABLE accounts (
 	id INTEGER PRIMARY KEY NOT NULL,
-	country TEXT NOT NULL,
-	personal_id TEXT NOT NULL,
-	name TEXT NOT NULL,
-	official_name TEXT NOT NULL,
+	country TEXT,
+	personal_id TEXT,
+	name TEXT,
+	official_name TEXT,
 	created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-	updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+	updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')), anonymized_at TEXT,
 
 	CONSTRAINT name_length CHECK (length(name) > 0)
 	CONSTRAINT official_name_length CHECK (length(official_name) > 0),
@@ -15,6 +15,18 @@ CREATE TABLE accounts (
 
 	CONSTRAINT created_at_format
 	CHECK (created_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z'),
+
+	CONSTRAINT anonymized_at_format CHECK (anonymized_at GLOB '*-*-*T*:*:*Z'),
+	
+	CONSTRAINT personal_id_xor_anonymized
+	CHECK ((personal_id IS NULL) != (anonymized_at IS NULL)),
+
+	CONSTRAINT country_and_personal_id_and_name CHECK (
+		(country IS NULL) +
+		(personal_id IS NULL) +
+		(name IS NULL) +
+		(official_name IS NULL) IN (0, 4)
+	),
 
 	CONSTRAINT updated_at_format
 	CHECK (updated_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z')
@@ -27,7 +39,7 @@ CREATE TABLE sessions (
 	method TEXT NOT NULL,
 	created_ip TEXT,
 	created_user_agent TEXT,
-	deleted_at TEXT,
+	deleted_at TEXT, last_used_on TEXT,
 
 	FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE,
 
@@ -36,6 +48,9 @@ CREATE TABLE sessions (
 	CONSTRAINT created_at_format
 	CHECK (created_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z'),
 
+	CONSTRAINT last_used_on_format
+	CHECK (last_used_on GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
+	
 	CONSTRAINT deleted_at_format
 	CHECK (deleted_at GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*Z')
 );
@@ -207,4 +222,6 @@ INSERT INTO migrations VALUES('20221205000000');
 INSERT INTO migrations VALUES('20221205000010');
 INSERT INTO migrations VALUES('20240529204122');
 INSERT INTO migrations VALUES('20240529224400');
+INSERT INTO migrations VALUES('20240529224410');
+INSERT INTO migrations VALUES('20240529224420');
 COMMIT;

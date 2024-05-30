@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 var DateFns = require("date-fns")
+var accountsDb = require("root/db/accounts_db")
 var budgetsDb = require("root/db/budgets_db")
 var ideasDb = require("root/db/ideas_db")
 var votesDb = require("root/db/votes_db")
@@ -10,10 +11,12 @@ var {logger} = require("root")
 module.exports = anonymize
 
 function* anonymize() {
+	var now = new Date
+
 	var expiringBudgets = yield budgetsDb.search(sql`
 		SELECT school.name AS school_name, budget.* FROM budgets AS budget
 		JOIN schools AS school ON school.id = budget.school_id
-		WHERE budget.voting_ends_at <= ${DateFns.addDays(new Date, -7)}
+		WHERE budget.voting_ends_at <= ${DateFns.addDays(now, -7)}
 		AND budget.expired_at IS NULL
 	`)
 
@@ -25,17 +28,17 @@ function* anonymize() {
 			budget.id
 		)
 
-		yield budgetsDb.update(budget, {expired_at: new Date})
+		yield budgetsDb.update(budget, {expired_at: now})
 	})
 
 	var expiredBudgets = yield budgetsDb.search(sql`
 		SELECT school.name AS school_name, budget.* FROM budgets AS budget
 		JOIN schools AS school ON school.id = budget.school_id
-		WHERE budget.expired_at <= ${DateFns.addDays(new Date, -7)}
+		WHERE budget.expired_at <= ${DateFns.addDays(now, -7)}
 		AND budget.anonymized_at IS NULL
 	`)
 
-	for (var i = 0; i < expiredBudgets.length; ++i) {
+	for (let i = 0; i < expiredBudgets.length; ++i) {
 		let budget = expiredBudgets[i]
 
 		logger.info(
@@ -46,7 +49,7 @@ function* anonymize() {
 		)
 
 		yield sqlite.transactAsync(function*() {
-			yield budgetsDb.update(budget, {anonymized_at: new Date})
+			yield budgetsDb.update(budget, {anonymized_at: now})
 
 			var ideas = yield ideasDb.search(sql`
 				SELECT * FROM ideas WHERE budget_id = ${budget.id}
@@ -63,6 +66,48 @@ function* anonymize() {
 			yield sqlite(sql`DELETE FROM votes WHERE budget_id = ${budget.id}`)
 
 			yield sqlite(sql`DELETE FROM paper_votes WHERE budget_id = ${budget.id}`)
+		})
+	}
+
+	var unusedAccounts = yield accountsDb.search(sql`
+		WITH accounts_with_last_used_on AS (
+			SELECT account.*, MAX(session.last_used_on) AS last_used_on
+			FROM accounts AS account
+			JOIN sessions AS session ON session.account_id = account.id
+			GROUP BY account.id
+		)
+
+		SELECT * FROM accounts_with_last_used_on
+		WHERE last_used_on <= ${DateFns.addYears(now, -1)}
+	`)
+
+	for (let i = 0; i < unusedAccounts.length; ++i) {
+		var account = unusedAccounts[i]
+		logger.info("Anonymizing account %d…", account.id)
+
+		yield sqlite.transactAsync(function*() {
+			yield accountsDb.update(account.id, {
+				country: null,
+				personal_id: null,
+				name: null,
+				official_name: null,
+				anonymized_at: now
+			})
+
+			yield sqlite(sql`
+				UPDATE sessions SET
+					created_ip = NULL,
+					created_user_agent = NULL,
+					deleted_at = ${now}
+
+				WHERE account_id = ${account.id}
+			`)
+
+			yield sqlite(sql`
+				DELETE FROM teachers
+				WHERE country = ${account.country}
+				AND personal_id = ${account.personal_id}
+			`)
 		})
 	}
 }
