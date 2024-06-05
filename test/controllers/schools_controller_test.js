@@ -124,6 +124,7 @@ describe("SchoolsController", function() {
 
 		describe("as admin", function() {
 			require("root/test/fixtures").adminAccount()
+			require("root/test/time")()
 
 			it("must create school", function*() {
 				var res = yield this.request(Paths.schoolsPath, {
@@ -160,9 +161,24 @@ describe("SchoolsController", function() {
 				}))
 
 				yield teachersDb.search(sql`SELECT * FROM teachers`).must.then.eql([
-					{school_id: school.id, country: "EE", personal_id: "38706180001"},
-					{school_id: school.id, country: "EE", personal_id: "38706180002"},
-					{school_id: school.id, country: "EE", personal_id: "38706180003"}
+					{
+						school_id: school.id,
+						country: "EE",
+						personal_id: "38706180001",
+						created_at: new Date
+					},
+					{
+						school_id: school.id,
+						country: "EE",
+						personal_id: "38706180002",
+						created_at: new Date
+					},
+					{
+						school_id: school.id,
+						country: "EE",
+						personal_id: "38706180003",
+						created_at: new Date
+					}
 				])
 			})
 		})
@@ -300,14 +316,23 @@ describe("SchoolsController", function() {
 
 		describe("as admin", function() {
 			require("root/test/fixtures").adminAccount()
+			require("root/test/time")()
 
 			it("must update school and teachers", function*() {
 				var school = yield schoolsDb.create(new ValidSchool)
 
-				var teacherA = yield accountsDb.create(new ValidAccount)
-				var teacherB = yield accountsDb.create(new ValidAccount)
-				yield createTeacher(school, teacherA)
-				yield createTeacher(school, teacherB)
+				yield teachersDb.create({
+					school_id: school.id,
+					country: "EE",
+					personal_id: "38706180000"
+				})
+
+				var teacherB = yield teachersDb.create({
+					school_id: school.id,
+					country: "EE",
+					personal_id: "38706180002",
+					created_at: new Date(2015, 5, 18, 13, 37, 42, 666)
+				})
 
 				var res = yield this.request(Paths.schoolPath(school), {
 					method: "PUT",
@@ -336,11 +361,44 @@ describe("SchoolsController", function() {
 					description: "Magical."
 				})
 
-				yield teachersDb.search(sql`SELECT * FROM teachers`).must.then.eql([
-					{school_id: school.id, country: "EE", personal_id: "38706180001"},
-					{school_id: school.id, country: "EE", personal_id: "38706180002"},
-					{school_id: school.id, country: "EE", personal_id: "38706180003"}
+				yield teachersDb.search(sql`
+					SELECT * FROM teachers ORDER BY personal_id ASC
+				`).must.then.eql([
+					{
+						school_id: school.id,
+						country: "EE",
+						personal_id: "38706180001",
+						created_at: new Date
+					},
+					teacherB,
+					{
+						school_id: school.id,
+						country: "EE",
+						personal_id: "38706180003",
+						created_at: new Date
+					}
 				])
+			})
+
+			it("must remove all teachers if none given", function*() {
+				var school = yield schoolsDb.create(new ValidSchool)
+
+				yield teachersDb.create({
+					school_id: school.id,
+					country: "EE",
+					personal_id: "38706180001"
+				})
+
+				var res = yield this.request(Paths.schoolPath(school), {
+					method: "PUT",
+					form: {teachers: ""}
+				})
+
+				res.statusCode.must.equal(303)
+				res.statusMessage.must.equal("School Updated")
+
+				yield schoolsDb.read(school.id).must.then.eql(school)
+				yield teachersDb.search(sql`SELECT * FROM teachers`).must.then.eql([])
 			})
 
 			it("must not remove teachers from other schools", function*() {
@@ -363,9 +421,15 @@ describe("SchoolsController", function() {
 				res.statusMessage.must.equal("School Updated")
 
 				yield schoolsDb.read(school.id).must.then.eql(school)
+
 				yield teachersDb.search(sql`SELECT * FROM teachers`).must.then.eql([
 					otherTeacher,
-					{school_id: school.id, country: "EE", personal_id: "38706180001"},
+					{
+						school_id: school.id,
+						country: "EE",
+						personal_id: "38706180001",
+						created_at: new Date
+					},
 				])
 			})
 

@@ -27,7 +27,12 @@ exports.router.post("/", assertAccount, assertAdmin, next(function*(req, res) {
 	var school = yield schoolsDb.create(parseAsAdmin(req.body, req.files))
 
 	var teachers = parseTeacherPersonalIds(req.body.teachers)
-	teachers.forEach((teacher) => teacher.school_id = school.id)
+
+	teachers.forEach((teacher) => {
+		teacher.school_id = school.id
+		teacher.created_at = new Date
+	})
+
 	yield teachersDb.create(teachers)
 
 	res.statusMessage = "School Created"
@@ -127,13 +132,30 @@ exports.router.put(SCHOOL_PATH,
 
 
 	if ("teachers" in req.body && isAdmin(account)) {
+		var teachers = parseTeacherPersonalIds(req.body.teachers)
+
+		// SQLite v3.28 used currently doesn't support multiple tuples in an `IN`
+		// query. Sometime after v3.28 and before v3.46 it became possible.
 		yield teachersDb.execute(sql`
 			DELETE FROM teachers WHERE school_id = ${school.id}
+
+			AND NOT (${teachers.length ? concatSql(_.intersperse(teachers.map((t) =>
+				sql`country = ${t.country} AND personal_id = ${t.personal_id}`
+			), sql` OR `)) : sql`false`})
 		`)
 
-		var teachers = parseTeacherPersonalIds(req.body.teachers)
-		teachers.forEach((teacher) => teacher.school_id = school.id)
-		yield teachersDb.create(teachers)
+		var now = new Date
+
+		if (teachers.length) yield teachersDb.execute(sql`
+			INSERT INTO teachers (school_id, country, personal_id, created_at)
+			VALUES ${sql.csv(teachers.map((teacher) => sql.tuple([
+				school.id,
+				teacher.country,
+				teacher.personal_id,
+				now
+			])))}
+			ON CONFLICT (school_id, country, personal_id) DO NOTHING
+		`)
 	}
 
 	res.statusMessage = "School Updated"
@@ -223,4 +245,8 @@ function parseTeacherPersonalIds(personalIds) {
 	personalIds = _.uniq(personalIds.trim().split(/\s+/g).map(cleanPersonalId))
 	personalIds = personalIds.filter(Boolean)
 	return personalIds.map((id) => ({country: "EE", personal_id: id}))
+}
+
+function concatSql(sqls) {
+	return sql.apply(null, [_.fill(new Array(sqls.length + 1), "")].concat(sqls))
 }

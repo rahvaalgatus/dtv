@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var DateFns = require("date-fns")
 var accountsDb = require("root/db/accounts_db")
+var teachersDb = require("root/db/teachers_db")
 var budgetsDb = require("root/db/budgets_db")
 var ideasDb = require("root/db/ideas_db")
 var votesDb = require("root/db/votes_db")
@@ -109,6 +110,38 @@ function* anonymize() {
 				AND personal_id = ${account.personal_id}
 			`)
 		})
+	}
+
+	var expiredTeachers = yield teachersDb.search(sql`
+		SELECT school.name AS school_name, teacher.*
+		FROM teachers AS teacher
+		JOIN schools AS school ON school.id = teacher.school_id
+
+		LEFT JOIN accounts AS account ON (
+			account.country,
+			account.personal_id
+		) = (teacher.country, teacher.personal_id)
+
+		WHERE teacher.created_at <= ${DateFns.addYears(now, -1)}
+		AND account.id IS NULL
+	`)
+
+	for (let i = 0; i < expiredTeachers.length; ++i) {
+		var teacher = expiredTeachers[i]
+
+		logger.info(
+			"Removing %s's teacher %s:%s…",
+			teacher.school_name,
+			teacher.country,
+			teacher.personal_id
+		)
+
+		yield sqlite(sql`
+			DELETE FROM teachers
+			WHERE school_id = ${teacher.school_id}
+			AND country = ${teacher.country}
+			AND personal_id = ${teacher.personal_id}
+		`)
 	}
 }
 

@@ -109,18 +109,6 @@ CREATE TABLE ideas (
 );
 CREATE INDEX index_ideas_on_account_id
 ON ideas (account_id);
-CREATE TABLE teachers (
-	school_id INTEGER NOT NULL,
-	country TEXT NOT NULL,
-	personal_id TEXT NOT NULL,
-
-	PRIMARY KEY (school_id, country, personal_id),
-	FOREIGN KEY (school_id) REFERENCES schools (id),
-
-	CONSTRAINT country_format CHECK (country GLOB '[A-Z][A-Z]'),
-	CONSTRAINT personal_id_length CHECK (length(personal_id) > 0),
-	CONSTRAINT personal_id_format CHECK (personal_id NOT GLOB '*[^0-9]*')
-);
 CREATE TABLE votes (
 	budget_id INTEGER NOT NULL,
 	idea_id INTEGER NOT NULL,
@@ -200,6 +188,20 @@ CREATE UNIQUE INDEX index_ideas_on_budget_and_id
 ON ideas (budget_id, id);
 CREATE UNIQUE INDEX index_paper_votes_on_budget_and_voter
 ON paper_votes (budget_id, voter_country, voter_personal_id);
+CREATE TABLE IF NOT EXISTS "teachers" (
+	school_id INTEGER NOT NULL,
+	country TEXT NOT NULL,
+	personal_id TEXT NOT NULL,
+	created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+
+	PRIMARY KEY (school_id, country, personal_id),
+	FOREIGN KEY (school_id) REFERENCES schools (id),
+
+	CONSTRAINT country_format CHECK (country GLOB '[A-Z][A-Z]'),
+	CONSTRAINT personal_id_length CHECK (length(personal_id) > 0),
+	CONSTRAINT personal_id_format CHECK (personal_id NOT GLOB '*[^0-9]*'),
+	CONSTRAINT created_at_format CHECK (created_at GLOB '*-*-*T*:*:*Z')
+);
 
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
@@ -224,4 +226,5 @@ INSERT INTO migrations VALUES('20240529204122');
 INSERT INTO migrations VALUES('20240529224400');
 INSERT INTO migrations VALUES('20240529224410');
 INSERT INTO migrations VALUES('20240529224420');
+INSERT INTO migrations VALUES('20240605082920');
 COMMIT;

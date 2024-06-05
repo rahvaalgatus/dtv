@@ -331,7 +331,7 @@ describe("anonymize", function() {
 			yield teachersDb.search(sql`SELECT * FROM teachers`).must.then.be.empty()
 		})
 
-		it("must nto delete others teachers", function*() {
+		it("must not delete others teachers", function*() {
 			var account = yield accountsDb.create(new ValidAccount)
 
 			yield sessionsDb.create(new ValidSession({
@@ -342,6 +342,52 @@ describe("anonymize", function() {
 			var school = yield schoolsDb.create(new ValidSchool)
 			var otherAccount = yield accountsDb.create(new ValidAccount)
 			var teacher = yield createTeacher(school, otherAccount)
+
+			yield anonymize()
+			yield teachersDb.read(sql`SELECT * FROM teachers`).must.then.eql(teacher)
+		})
+	})
+
+	describe("given teachers", function() {
+		it("must delete teachers without accounts created a year ago", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+
+			yield teachersDb.create({
+				school_id: school.id,
+				country: "EE",
+				personal_id: "38706180001",
+				created_at: DateFns.addYears(new Date, -1)
+			})
+
+			yield anonymize()
+			yield teachersDb.search(sql`SELECT * FROM teachers`).must.then.be.empty()
+		})
+
+		// Teachers with unused accounts are handled by account-expiration.
+		it("must not delete teachers with accounts created a year ago", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+			var account = yield accountsDb.create(new ValidAccount)
+
+			var teacher = yield teachersDb.create({
+				school_id: school.id,
+				country: account.country,
+				personal_id: account.personal_id,
+				created_at: DateFns.addYears(new Date, -1)
+			})
+
+			yield anonymize()
+			yield teachersDb.read(sql`SELECT * FROM teachers`).must.then.eql(teacher)
+		})
+
+		it("must not delete teachers created earlier than a year", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+
+			var teacher = yield teachersDb.create({
+				school_id: school.id,
+				country: "EE",
+				personal_id: "38706180001",
+				created_at: DateFns.addMilliseconds(DateFns.addDays(new Date, -7), 1)
+			})
 
 			yield anonymize()
 			yield teachersDb.read(sql`SELECT * FROM teachers`).must.then.eql(teacher)
