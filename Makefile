@@ -34,6 +34,7 @@ RSYNC_OPTS = \
 	--exclude "/node_modules/co-mocha/***" \
 	--exclude "/node_modules/must/***" \
 	--exclude "/node_modules/jsdom/***" \
+	--exclude "/node_modules/sinon/***" \
 	--exclude "/node_modules/sqlite3/***"
 
 export ENV
