@@ -54,7 +54,10 @@ function ReadPage({req, t, l10n, school, budget, ideas, votesByIdea, thank}) {
 			</menu> : null}
 		</SchoolHeader>
 
-		{budget.expired_at || budget.anonymized_at ? <Section>
+		{(
+			roles.includes("teacher") &&
+			(budget.expired_at || budget.anonymized_at)
+		) ? <Section>
 			{budget.anonymized_at ? <p class="warning-paragraph section-paragraph">
 				{t("budget_page.budget_anonymized")}
 			</p> : <p class="warning-paragraph section-paragraph">

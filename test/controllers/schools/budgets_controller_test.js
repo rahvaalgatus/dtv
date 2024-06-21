@@ -106,20 +106,26 @@ describe("SchoolBudgetsController", function() {
 	})
 
 	describe("GET /:id", function() {
-		it("must not warn if budget neither expired nor anonymized", function*() {
+		it("must not warn if budget neither expired nor anonymized if teacher", function*() {
 			var school = yield schoolsDb.create(new ValidSchool)
 
 			var budget = yield budgetsDb.create(new ValidBudget({
 				school_id: school.id
 			}))
 
-			var res = yield this.request(Paths.budgetPath(school, budget))
+			var account = yield accountsDb.create(new ValidAccount)
+			yield createTeacher(school, account)
+
+			var res = yield this.request(Paths.budgetPath(school, budget), {
+				session: yield createSession(account)
+			})
+
 			res.statusCode.must.equal(200)
 			res.body.must.not.include(t("budget_page.budget_expired"))
 			res.body.must.not.include(t("budget_page.budget_anonymized"))
 		})
 
-		it("must not warn if budget expired", function*() {
+		it("must not warn if budget expired if not signed in", function*() {
 			var school = yield schoolsDb.create(new ValidSchool)
 
 			var budget = yield budgetsDb.create(new ValidBudget({
@@ -129,11 +135,50 @@ describe("SchoolBudgetsController", function() {
 
 			var res = yield this.request(Paths.budgetPath(school, budget))
 			res.statusCode.must.equal(200)
+			res.body.must.not.include(t("budget_page.budget_expired"))
+			res.body.must.not.include(t("budget_page.budget_anonymized"))
+		})
+
+		it("must not warn if budget expired if signed in", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date
+			}))
+
+			var account = yield accountsDb.create(new ValidAccount)
+
+			var res = yield this.request(Paths.budgetPath(school, budget), {
+				session: yield createSession(account)
+			})
+
+			res.statusCode.must.equal(200)
+			res.body.must.not.include(t("budget_page.budget_expired"))
+			res.body.must.not.include(t("budget_page.budget_anonymized"))
+		})
+
+		it("must warn if budget expired if teacher", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date
+			}))
+
+			var account = yield accountsDb.create(new ValidAccount)
+			yield createTeacher(school, account)
+
+			var res = yield this.request(Paths.budgetPath(school, budget), {
+				session: yield createSession(account)
+			})
+
+			res.statusCode.must.equal(200)
 			res.body.must.include(t("budget_page.budget_expired"))
 			res.body.must.not.include(t("budget_page.budget_anonymized"))
 		})
 
-		it("must not warn if budget anonymized", function*() {
+		it("must not warn if budget anonymized if not signed in", function*() {
 			var school = yield schoolsDb.create(new ValidSchool)
 
 			var budget = yield budgetsDb.create(new ValidBudget({
@@ -143,6 +188,47 @@ describe("SchoolBudgetsController", function() {
 			}))
 
 			var res = yield this.request(Paths.budgetPath(school, budget))
+			res.statusCode.must.equal(200)
+			res.body.must.not.include(t("budget_page.budget_expired"))
+			res.body.must.not.include(t("budget_page.budget_anonymized"))
+		})
+
+		it("must not warn if budget anonymized if signed in", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date,
+				anonymized_at: new Date
+			}))
+
+			var account = yield accountsDb.create(new ValidAccount)
+
+			var res = yield this.request(Paths.budgetPath(school, budget), {
+				session: yield createSession(account)
+			})
+
+			res.statusCode.must.equal(200)
+			res.body.must.not.include(t("budget_page.budget_expired"))
+			res.body.must.not.include(t("budget_page.budget_anonymized"))
+		})
+
+		it("must warn if budget anonymized if teacher", function*() {
+			var school = yield schoolsDb.create(new ValidSchool)
+
+			var budget = yield budgetsDb.create(new ValidBudget({
+				school_id: school.id,
+				expired_at: new Date,
+				anonymized_at: new Date
+			}))
+
+			var account = yield accountsDb.create(new ValidAccount)
+			yield createTeacher(school, account)
+
+			var res = yield this.request(Paths.budgetPath(school, budget), {
+				session: yield createSession(account)
+			})
+
 			res.statusCode.must.equal(200)
 			res.body.must.not.include(t("budget_page.budget_expired"))
 			res.body.must.include(t("budget_page.budget_anonymized"))
