@@ -101,6 +101,26 @@ config/tsl/ee_test.xml:
 	mkdir -p config/tsl
 	wget "https://open-eid.github.io/test-TL/EE_T.xml" -O "$@"
 
+test/fixtures: test/fixtures/john_rsa.pub
+test/fixtures: test/fixtures/eid_2007_rsa.pub
+test/fixtures: test/fixtures/esteid_2011_rsa.pub
+test/fixtures: test/fixtures/esteid_2015_rsa.pub
+test/fixtures: test/fixtures/esteid_2018_ecdsa.pub
+test/fixtures: test/fixtures/eid_2016_rsa.pub
+test/fixtures: test/fixtures/eid_2021e_ecdsa.pub
+
+test/fixtures/%_rsa.key:
+	openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out "$@"
+
+test/fixtures/%_rsa.pub: test/fixtures/%_rsa.key
+	openssl rsa -pubout -in "$<" -out "$@"
+
+test/fixtures/%_ecdsa.key:
+	openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:prime256v1 -out "$@"
+
+test/fixtures/%_ecdsa.pub: test/fixtures/%_ecdsa.key
+	openssl ec -in "$<" -pubout -out "$@"
+
 tmp:
 	mkdir -p tmp
 
@@ -128,3 +148,6 @@ production/diff: production
 .PHONY: test spec autotest autospec
 .PHONY: shrinkwrap rebuild
 .PHONY: deploy production production/diff
+
+.PRECIOUS: test/fixtures/%_rsa.key
+.PRECIOUS: test/fixtures/%_ecdsa.key
