@@ -1,3 +1,5 @@
+def trim: sub("\\A\\s+"; "") | sub("\\s+\\Z"; "");
+
 .table.rows |
 
 (.[0].c | map(.v)) as $header |
@@ -12,5 +14,6 @@ map(.c | {
 	value: {et: .[$et_column].v?, en: .[$en_column].v?}
 }) |
 
-map(select(.key | test("\\A\\s*\\Z") | not)) |
+map(select(.key | test("\\A\\S\\Z") | not)) |
+map(.value |= map_values(if type == "string" then trim else . end)) |
 from_entries
