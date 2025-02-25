@@ -300,8 +300,8 @@
 		"et": "Sissejuhatav tekst"
 	},
 	"create_budget_page.form.end_description": {
-		"en": "Voting is open until midnight — until 23:59.\nSelect a date from the calendar or, in its absence, enter it in the format <code>2021-01-31</code>.",
-		"et": "Hääletada saab südaööni ehk kl 23:59ni.\nVali kuupäev kalendrist või selle puudumisel sisesta see formaadis <code>2021-01-31</code>."
+		"en": "Voting is open until midnight — until 23:59.\nSelect a date from the calendar or, in its absence, enter it in the format <code>2021-01-31</code>. Two weeks after the end date of the vote, the data of the voters will be deleted (number of votes given will remain).",
+		"et": "Hääletada saab südaööni ehk kl 23:59ni.\nVali kuupäev kalendrist või selle puudumisel sisesta see formaadis <code>2021-01-31</code>. Kaks nädalat pärast hääletuse lõppu kustutatakse automaatselt hääletajate andmed (häälte arv jääb alles)."
 	},
 	"create_budget_page.form.end_error": {
 		"en": "The vote end date doesn't seem to be in the correct format.",
@@ -380,8 +380,8 @@
 		"et": "Kirjeldus"
 	},
 	"create_idea_page.form.image_description": {
-		"en": "JPEG, PNG, or GIF image with a size of up to 5 MiB.",
-		"et": "JPEG, PNG või GIF formaadis pilt suurusega kuni 5 MiB."
+		"en": "JPEG, PNG, or GIF image with a size of up to 5 MiB. As this is public internet space, we recommend not to add full names or faces of pupils.",
+		"et": "JPEG, PNG või GIF formaadis pilt suurusega kuni 5 MiB. Kuna tegemist on avaliku ruumiga, soovitame võimalusel pildile mitte panna õpilaste täisnimesid ja nägusid."
 	},
 	"create_idea_page.form.image_label": {
 		"en": "Image",
@@ -688,12 +688,12 @@
 		"et": "Siin saab kooli esindaja üles laadida kaasava eelarvestamise ideid ning õpilased saavad nende poolt digihääletada."
 	},
 	"home_page.exercises.elections_button": {
-		"en": "Student\nElections",
-		"et": "Õpilasesinduse\nvalimine"
+		"en": "Get started with digital elections",
+		"et": "Alusta digitaalsete valimistega"
 	},
 	"home_page.exercises.elections_description": {
-		"en": "This secure online environment can be used for student council or class president e-voting.",
-		"et": "Siin saab korraldada turvalises veebikeskkonnas õpilasesinduste hääletusi."
+		"en": "Create your own digital election using Mobile-ID, Smart-ID and ID-card to vote. It is well suited for conducting elections for class president, student council and youth council.",
+		"et": "Loo enda digivalimine, kasutades hääletamiseks Mobiil-ID, Smart-ID ja ID-kaarti. Sobib hästi nii klassipresidendi, õpilasesinduse kui ka noortevolikogu valimiste tegemiseks."
 	},
 	"home_page.exercises.signing_button": {
 		"en": "Practice\nDigital Signing",
@@ -716,8 +716,8 @@
 		"et": "Harjutused"
 	},
 	"home_page.header.elections_button": {
-		"en": "Student\nElections",
-		"et": "Õpilasesinduse\nvalimine"
+		"en": "Create Your Own Digital Elections",
+		"et": "Loo oma digivalimised"
 	},
 	"home_page.header.signing_button": {
 		"en": "Practice\nDigital Signing",
